@@ -4668,7 +4668,7 @@ Transform:
   m_GameObject: {fileID: 1266047070}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.98500013, y: -0.24499989, z: -0.25}
+  m_LocalPosition: {x: 0.92, y: -0.24499989, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4796,7 +4796,7 @@ MonoBehaviour:
   playerMover: {fileID: 1266047072}
   boardManager: {fileID: 1294733952}
   tileEffectSystem: {fileID: 1294733954}
-  state: 2
+  state: 0
 --- !u!114 &1294733954
 MonoBehaviour:
   m_ObjectHideFlags: 0
