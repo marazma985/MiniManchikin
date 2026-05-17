@@ -9,6 +9,7 @@ public sealed class BattleSystem : MonoBehaviour
 
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private PlayerInventory playerInventory;
+    [SerializeField] private CardSystem cardSystem;
     [SerializeField] private DiceSystem diceSystem;
     [SerializeField] private Sprite playerSprite;
     [SerializeField] private BattleModalView battleModalView;
@@ -19,6 +20,7 @@ public sealed class BattleSystem : MonoBehaviour
 
     private BattleModalData currentBattleData;
     private EnemyData currentEnemy;
+    private EnemyModifier currentEnemyModifier;
     private Action battleCompleted;
     private BattlePhase phase;
     private int currentBattleDiceBonus;
@@ -83,6 +85,7 @@ public sealed class BattleSystem : MonoBehaviour
 
         battleCompleted = onBattleCompleted;
         currentEnemy = enemy;
+        currentEnemyModifier = SelectRandomModifier(enemy);
         currentBattleDiceBonus = 0;
         temporaryCardPowerBonus = 0;
         temporaryEscapeBonus = 0;
@@ -226,26 +229,134 @@ public sealed class BattleSystem : MonoBehaviour
 
     private void ApplyPenalty()
     {
-        if (currentEnemy == null || currentEnemy.PenaltyValue <= 0)
+        if (currentEnemy == null)
             return;
 
-        switch (currentEnemy.PenaltyType)
-        {
-            case MonsterPenaltyType.LoseHp:
-                if (playerInventory != null && playerInventory.TryBreakArmorForHpLoss())
-                {
-                    Debug.Log($"{currentEnemy.EnemyName} HP loss penalty was prevented by armor.");
-                    break;
-                }
+        var penaltyEffects = currentEnemy.PenaltyEffects;
+        if (penaltyEffects == null || penaltyEffects.Count == 0)
+            return;
 
-                playerStats.TakeDamage(currentEnemy.PenaltyValue);
-                Debug.Log($"{currentEnemy.EnemyName} penalty applied: lose {currentEnemy.PenaltyValue} HP.");
+        for (var i = 0; i < penaltyEffects.Count; i++)
+            ApplyPenaltyEffect(penaltyEffects[i]);
+    }
+
+    private void ApplyPenaltyEffect(EffectData effect)
+    {
+        if (effect == null)
+        {
+            Debug.LogWarning($"{currentEnemy.EnemyName} has a missing penalty effect.");
+            return;
+        }
+
+        switch (effect.EffectType)
+        {
+            case EffectType.HpRestore:
+                ApplyHpPenalty(effect.Value);
                 break;
-            case MonsterPenaltyType.LoseLevel:
-                playerStats.SetLevel(playerStats.Level - currentEnemy.PenaltyValue);
-                Debug.Log($"{currentEnemy.EnemyName} penalty applied: lose {currentEnemy.PenaltyValue} level.");
+            case EffectType.Level:
+                ApplyLevelPenalty(effect.Value);
+                break;
+            case EffectType.RemoveCard:
+                ApplyRemoveCardPenalty(effect.Value);
+                break;
+            default:
+                Debug.LogWarning($"{currentEnemy.EnemyName} has unsupported penalty effect '{effect.EffectType}'.");
                 break;
         }
+    }
+
+    private void ApplyHpPenalty(int value)
+    {
+        if (value >= 0)
+        {
+            Debug.LogWarning($"{currentEnemy.EnemyName} HP penalty requires negative HpRestore value.");
+            return;
+        }
+
+        var damage = -value;
+        if (playerInventory != null && playerInventory.TryBreakArmorForHpLoss())
+        {
+            Debug.Log($"{currentEnemy.EnemyName} HP loss penalty was prevented by armor.");
+            return;
+        }
+
+        playerStats.TakeDamage(damage);
+        Debug.Log($"{currentEnemy.EnemyName} penalty applied: lose {damage} HP.");
+    }
+
+    private void ApplyLevelPenalty(int value)
+    {
+        if (value >= 0)
+        {
+            Debug.LogWarning($"{currentEnemy.EnemyName} level penalty requires negative Level value.");
+            return;
+        }
+
+        var levelLoss = -value;
+        playerStats.SetLevel(playerStats.Level + value);
+        Debug.Log($"{currentEnemy.EnemyName} penalty applied: lose {levelLoss} level.");
+    }
+
+    private void ApplyRemoveCardPenalty(int value)
+    {
+        if (cardSystem == null)
+        {
+            Debug.LogWarning($"{currentEnemy.EnemyName} cannot remove a card because CardSystem is not assigned.");
+            return;
+        }
+
+        var removeCount = Mathf.Max(1, value);
+        for (var i = 0; i < removeCount; i++)
+        {
+            if (cardSystem.RemoveRandomCard(Rarity.Common))
+            {
+                Debug.Log($"{currentEnemy.EnemyName} penalty applied: remove random common card.");
+                continue;
+            }
+
+            Debug.LogWarning($"{currentEnemy.EnemyName} penalty could not remove a common card.");
+            return;
+        }
+    }
+
+    private EnemyModifier SelectRandomModifier(EnemyData enemy)
+    {
+        if (enemy == null || enemy.Modifiers == null || enemy.Modifiers.Count == 0)
+            return null;
+
+        var validModifiers = new List<EnemyModifier>();
+        for (var i = 0; i < enemy.Modifiers.Count; i++)
+        {
+            if (enemy.Modifiers[i] != null)
+                validModifiers.Add(enemy.Modifiers[i]);
+        }
+
+        if (validModifiers.Count == 0)
+            return null;
+
+        var selectedIndex = UnityEngine.Random.Range(0, validModifiers.Count + 1);
+        if (selectedIndex == 0)
+            return null;
+
+        var modifier = validModifiers[selectedIndex - 1];
+        Debug.Log($"{enemy.EnemyName} modifier selected: {modifier.ModifierName}.");
+        return modifier;
+    }
+
+    private static int GetModifierPower(EnemyModifier modifier)
+    {
+        if (modifier == null || modifier.Effects == null)
+            return 0;
+
+        var power = 0;
+        for (var i = 0; i < modifier.Effects.Count; i++)
+        {
+            var effect = modifier.Effects[i];
+            if (effect != null && effect.EffectType == EffectType.Power)
+                power += effect.Value;
+        }
+
+        return power;
     }
 
     private void CompleteBattle()
@@ -253,6 +364,7 @@ public sealed class BattleSystem : MonoBehaviour
         battleModalView.Hide();
         currentBattleData = null;
         currentEnemy = null;
+        currentEnemyModifier = null;
         phase = BattlePhase.None;
         currentBattleDiceBonus = 0;
         temporaryCardPowerBonus = 0;
@@ -302,9 +414,17 @@ public sealed class BattleSystem : MonoBehaviour
 
         var enemyEntries = new List<BattlePowerEntry>
         {
-            new BattlePowerEntry("Monster level", enemy.Level),
-            new BattlePowerEntry("Monster bonuses", enemy.BonusPower)
+            new BattlePowerEntry("Base monster level", enemy.BaseLevel)
         };
+
+        var modifierPower = GetModifierPower(currentEnemyModifier);
+        if (currentEnemyModifier != null)
+        {
+            var modifierName = string.IsNullOrEmpty(currentEnemyModifier.ModifierName)
+                ? "Modifier"
+                : $"Modifier: {currentEnemyModifier.ModifierName}";
+            enemyEntries.Add(new BattlePowerEntry(modifierName, modifierPower));
+        }
 
         return new BattleModalData
         {

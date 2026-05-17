@@ -12,7 +12,7 @@ public sealed class EnemyData : ScriptableObject
     [SerializeField, Min(0)] private int bonusPower;
     [SerializeField] private MonsterPenaltyType penaltyType;
     [SerializeField, Min(0)] private int penaltyValue = 1;
-    [SerializeField] private List<EffectData> modifiers = new List<EffectData>();
+    [SerializeField] private List<EnemyModifier> modifiers = new List<EnemyModifier>();
     [SerializeField] private List<EffectData> penaltyEffects = new List<EffectData>();
 
     public string EnemyId => enemyId;
@@ -23,7 +23,7 @@ public sealed class EnemyData : ScriptableObject
     public int BonusPower => bonusPower;
     public MonsterPenaltyType PenaltyType => penaltyType;
     public int PenaltyValue => penaltyValue;
-    public IReadOnlyList<EffectData> Modifiers => modifiers;
+    public IReadOnlyList<EnemyModifier> Modifiers => modifiers;
     public IReadOnlyList<EffectData> PenaltyEffects => penaltyEffects;
 
     private void OnValidate()
@@ -32,7 +32,7 @@ public sealed class EnemyData : ScriptableObject
         bonusPower = Mathf.Max(0, bonusPower);
         penaltyValue = Mathf.Max(0, penaltyValue);
         if (modifiers == null)
-            modifiers = new List<EffectData>();
+            modifiers = new List<EnemyModifier>();
         if (penaltyEffects == null)
             penaltyEffects = new List<EffectData>();
     }

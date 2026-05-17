@@ -65,6 +65,30 @@ public sealed class CardSystem : MonoBehaviour
         return true;
     }
 
+    public bool RemoveRandomCard(Rarity rarity)
+    {
+        var matchingCards = new List<CardData>();
+        for (var i = 0; i < hand.Count; i++)
+        {
+            var card = hand[i];
+            if (card != null && card.Rarity == rarity)
+                matchingCards.Add(card);
+        }
+
+        if (matchingCards.Count == 0)
+        {
+            Debug.LogWarning($"Cannot remove random {rarity} card. No matching cards in hand.");
+            return false;
+        }
+
+        var cardToRemove = matchingCards[UnityEngine.Random.Range(0, matchingCards.Count)];
+        if (!RemoveCard(cardToRemove))
+            return false;
+
+        Debug.Log($"Removed random {rarity} card: {cardToRemove.CardName}.");
+        return true;
+    }
+
     public bool UseCard(CardData card)
     {
         if (card == null || !hand.Contains(card))

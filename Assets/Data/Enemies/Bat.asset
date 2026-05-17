@@ -15,7 +15,27 @@ MonoBehaviour:
   enemyId: bat
   enemyName: Bat
   enemySprite: {fileID: 8647823593821616703, guid: 3d921c4b23c6b6e4a9a256f7bcb37db3, type: 3}
-  level: 2
+  baseLevel: 2
   bonusPower: 1
   penaltyType: 1
   penaltyValue: 1
+  modifiers:
+  - modifierName: Fast
+    effects:
+    - effectType: 0
+      value: 1
+      contentId:
+      rarityFilter: 0
+      targetTileType: 0
+      useNearestMatchingTile: 0
+      useRandomTarget: 0
+      isInstant: 0
+  penaltyEffects:
+  - effectType: 6
+    value: 1
+    contentId:
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 1
+    isInstant: 0

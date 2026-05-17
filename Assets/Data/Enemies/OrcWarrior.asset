@@ -12,10 +12,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbdbc750bd4b4b2d968668d1615120fa, type: 3}
   m_Name: OrcWarrior
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  enemyId: orc_warrior
-  enemyName: Orc Warrior
+  enemyId: orc
+  enemyName: Orc
   enemySprite: {fileID: -7998678513828511344, guid: b6d906db9f9a3e1439aa1f2aa2d46493, type: 3}
-  level: 5
+  baseLevel: 5
   bonusPower: 1
   penaltyType: 0
   penaltyValue: 2
+  modifiers:
+  - modifierName: Axe
+    effects:
+    - effectType: 0
+      value: 2
+      contentId:
+      rarityFilter: 0
+      targetTileType: 0
+      useNearestMatchingTile: 0
+      useRandomTarget: 0
+      isInstant: 0
+  - modifierName: Rage
+    effects:
+    - effectType: 0
+      value: 2
+      contentId:
+      rarityFilter: 0
+      targetTileType: 0
+      useNearestMatchingTile: 0
+      useRandomTarget: 0
+      isInstant: 0
+  penaltyEffects:
+  - effectType: 3
+    value: -1
+    contentId:
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 0
+    isInstant: 0

@@ -15,7 +15,19 @@ MonoBehaviour:
   enemyId: slime
   enemyName: Slime
   enemySprite: {fileID: -7282886668606283007, guid: 8ce4dd051ace01e4e81ec1d6e0aaf60d, type: 3}
-  level: 1
+  baseLevel: 1
   bonusPower: 0
   penaltyType: 0
   penaltyValue: 1
+  modifiers:
+  - modifierName: Large
+    effects:
+    - effectType: 0
+      value: 1
+      contentId:
+      rarityFilter: 0
+      targetTileType: 0
+      useNearestMatchingTile: 0
+      useRandomTarget: 0
+      isInstant: 0
+  penaltyEffects: []
