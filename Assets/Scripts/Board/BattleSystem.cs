@@ -10,6 +10,7 @@ public sealed class BattleSystem : MonoBehaviour
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private PlayerInventory playerInventory;
     [SerializeField] private CardSystem cardSystem;
+    [SerializeField] private RewardSystem rewardSystem;
     [SerializeField] private DiceSystem diceSystem;
     [SerializeField] private Sprite playerSprite;
     [SerializeField] private BattleModalView battleModalView;
@@ -38,6 +39,7 @@ public sealed class BattleSystem : MonoBehaviour
         None,
         WaitingForResolve,
         WaitingForEscapeRoll,
+        WaitingForReward,
         WaitingForClose
     }
 
@@ -174,6 +176,12 @@ public sealed class BattleSystem : MonoBehaviour
             return;
         }
 
+        if (phase == BattlePhase.WaitingForReward)
+        {
+            Debug.LogWarning("Choose a reward to complete the battle.");
+            return;
+        }
+
         if (phase != BattlePhase.WaitingForResolve)
             return;
 
@@ -181,8 +189,17 @@ public sealed class BattleSystem : MonoBehaviour
         {
             playerStats.SetLevel(playerStats.Level + 1);
             Debug.Log($"Battle won: {currentBattleData.PlayerName} defeated {currentBattleData.EnemyName}. Level is now {playerStats.Level}.");
-            battleModalView.UpdateState("Player won", "Close");
-            phase = BattlePhase.WaitingForClose;
+            if (rewardSystem != null && rewardSystem.ShowBattleRewards(HandleRewardAccepted))
+            {
+                battleModalView.UpdateState("Player won. Choose reward", "Choose Reward");
+                phase = BattlePhase.WaitingForReward;
+            }
+            else
+            {
+                battleModalView.UpdateState("Player won", "Close");
+                phase = BattlePhase.WaitingForClose;
+            }
+
             BattleStateChanged?.Invoke();
         }
         else
@@ -377,6 +394,12 @@ public sealed class BattleSystem : MonoBehaviour
         onCompleted?.Invoke();
     }
 
+    private void HandleRewardAccepted()
+    {
+        Debug.Log("Battle reward accepted. Completing battle.");
+        CompleteBattle();
+    }
+
     private EnemyData SelectRandomEnemy()
     {
         if (enemies == null || enemies.Count == 0)
@@ -474,6 +497,8 @@ public sealed class BattleSystem : MonoBehaviour
         {
             case BattlePhase.WaitingForEscapeRoll:
                 return "Roll Escape";
+            case BattlePhase.WaitingForReward:
+                return "Choose Reward";
             case BattlePhase.WaitingForClose:
                 return "Close";
             default:
