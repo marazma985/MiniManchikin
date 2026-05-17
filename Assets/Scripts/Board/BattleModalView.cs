@@ -27,7 +27,7 @@ public sealed class BattleModalView : MonoBehaviour
             return;
 
         SetText(playerNameText, data.PlayerName);
-        SetImage(playerPortraitImage, data.PlayerSprite);
+        // Player portrait is a static scene UI image and should not be overwritten per battle.
         SetText(playerPowerText, FormatEntries(data.PlayerPowerEntries));
         SetText(playerTotalText, $"Total: {data.PlayerTotalPower}");
 
