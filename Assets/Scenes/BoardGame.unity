@@ -5579,6 +5579,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardSystem
   playerStats: {fileID: 1266047073}
   battleSystem: {fileID: 1294733955}
+  turnSystem: {fileID: 1294733953}
+  boardManager: {fileID: 1294733952}
   hand:
   - {fileID: 11400000, guid: eedd5d3b66e8c6b4e9525f0100b0c7d9, type: 2}
   - {fileID: 11400000, guid: e33a2d9231754534bbfa024ea8f79f63, type: 2}

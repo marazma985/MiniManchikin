@@ -8,6 +8,8 @@ public sealed class CardSystem : MonoBehaviour
 
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private BattleSystem battleSystem;
+    [SerializeField] private TurnSystem turnSystem;
+    [SerializeField] private BoardManager boardManager;
     [SerializeField] private List<CardData> hand = new List<CardData>(MaxHandSize);
 
     public event Action<IReadOnlyList<CardData>> OnHandChanged;
@@ -169,6 +171,8 @@ public sealed class CardSystem : MonoBehaviour
 
                 Debug.LogWarning($"Card '{card.CardName}' effect '{effect.EffectType}' can only be applied during battle.");
                 return false;
+            case EffectType.ChangePosition:
+                return CanApplyChangePosition(card, effect);
             default:
                 Debug.LogWarning($"Card '{card.CardName}' has unsupported effect type '{effect.EffectType}'.");
                 return false;
@@ -200,8 +204,51 @@ public sealed class CardSystem : MonoBehaviour
                 return battleSystem.AddTemporaryCardPower(effect.Value);
             case EffectType.EscapeBonus:
                 return battleSystem.AddTemporaryEscapeBonus(effect.Value);
+            case EffectType.ChangePosition:
+                return ApplyChangePosition(effect);
             default:
                 return false;
         }
+    }
+
+    private bool CanApplyChangePosition(CardData card, EffectData effect)
+    {
+        if (battleSystem != null && battleSystem.IsBattleActive)
+        {
+            Debug.LogWarning($"Card '{card.CardName}' cannot move the player during battle.");
+            return false;
+        }
+
+        if (turnSystem == null || boardManager == null)
+        {
+            Debug.LogWarning($"Card '{card.CardName}' requires TurnSystem and BoardManager for movement.");
+            return false;
+        }
+
+        if (!turnSystem.CanRoll)
+        {
+            Debug.LogWarning($"Card '{card.CardName}' can only move the player while waiting for a roll.");
+            return false;
+        }
+
+        if (!effect.UseNearestMatchingTile)
+        {
+            Debug.LogWarning($"Card '{card.CardName}' movement effect requires nearest matching tile targeting.");
+            return false;
+        }
+
+        if (boardManager.TryGetForwardDistanceToNearestTileType(effect.TargetTileType, out _))
+            return true;
+
+        Debug.LogWarning($"Card '{card.CardName}' could not find a {effect.TargetTileType} tile.");
+        return false;
+    }
+
+    private bool ApplyChangePosition(EffectData effect)
+    {
+        if (!boardManager.TryGetForwardDistanceToNearestTileType(effect.TargetTileType, out var steps))
+            return false;
+
+        return turnSystem.TryMoveFixedSteps(steps);
     }
 }

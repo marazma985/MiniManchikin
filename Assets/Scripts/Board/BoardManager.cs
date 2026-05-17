@@ -54,6 +54,30 @@ public sealed class BoardManager : MonoBehaviour
         currentIndex = cyclePath && tiles.Count > 0 ? WrapIndex(index) : Mathf.Max(0, index);
     }
 
+    public bool TryGetForwardDistanceToNearestTileType(TileType tileType, out int steps)
+    {
+        steps = 0;
+
+        if (tiles.Count == 0)
+            return false;
+
+        var maxSteps = cyclePath ? tiles.Count : tiles.Count - currentIndex - 1;
+        for (var step = 1; step <= maxSteps; step++)
+        {
+            var tile = GetTile(currentIndex + step);
+            if (tile == null)
+                continue;
+
+            if (tile.TileType != tileType)
+                continue;
+
+            steps = step;
+            return true;
+        }
+
+        return false;
+    }
+
     [ContextMenu("Collect Child Tiles")]
     public void CollectChildTiles()
     {
