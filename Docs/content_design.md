@@ -233,7 +233,7 @@ Items should contain:
 
 \- rarity
 
-\- equipmentSlot
+\- ItemType
 
 \- effects (List<EffectData>)
 
