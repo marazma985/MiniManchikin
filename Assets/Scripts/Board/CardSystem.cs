@@ -5,14 +5,10 @@ using UnityEngine;
 public sealed class CardSystem : MonoBehaviour
 {
     private const int MaxHandSize = 3;
-    private const string SmallHealCardId = "small_heal";
-    private const string ShieldCardId = "shield";
-    private const string LuckyHitCardId = "lucky_hit";
 
     [SerializeField] private PlayerStats playerStats;
+    [SerializeField] private BattleSystem battleSystem;
     [SerializeField] private List<CardData> hand = new List<CardData>(MaxHandSize);
-
-    private readonly Dictionary<string, ICardEffect> effectsByCardId = new Dictionary<string, ICardEffect>();
 
     public event Action<IReadOnlyList<CardData>> OnHandChanged;
 
@@ -59,21 +55,12 @@ public sealed class CardSystem : MonoBehaviour
         if (card == null || !hand.Contains(card))
             return false;
 
-        Debug.Log($"Card used: {card.CardName}");
-
         if (!ResolveCard(card))
             return false;
 
+        Debug.Log($"Card used: {card.CardName}");
         RemoveCard(card);
         return true;
-    }
-
-    public void RegisterEffect(string cardId, ICardEffect effect)
-    {
-        if (string.IsNullOrWhiteSpace(cardId) || effect == null)
-            return;
-
-        effectsByCardId[cardId] = effect;
     }
 
     private void OnValidate()
@@ -89,11 +76,6 @@ public sealed class CardSystem : MonoBehaviour
         NotifyHandChanged();
     }
 
-    private void Awake()
-    {
-        InitializeEffects();
-    }
-
     private void NotifyHandChanged()
     {
         OnHandChanged?.Invoke(hand);
@@ -101,27 +83,125 @@ public sealed class CardSystem : MonoBehaviour
 
     private bool ResolveCard(CardData card)
     {
-        if (string.IsNullOrWhiteSpace(card.CardId))
+        if (!CanUseCardInCurrentContext(card))
+            return false;
+
+        if (!CanApplyAllEffects(card))
+            return false;
+
+        if (!ApplyAllEffects(card))
+            return false;
+
+        if (battleSystem != null && battleSystem.IsBattleActive)
+            battleSystem.RefreshCurrentBattleView($"Card applied: {card.CardName}");
+
+        return true;
+    }
+
+    private bool CanUseCardInCurrentContext(CardData card)
+    {
+        var isBattleActive = battleSystem != null && battleSystem.IsBattleActive;
+        switch (card.UsageContext)
         {
-            Debug.LogWarning($"Card '{card.CardName}' has no card id.");
+            case UsageContext.BattleOnly:
+                if (isBattleActive)
+                    return true;
+
+                Debug.LogWarning($"Card '{card.CardName}' can only be used during battle.");
+                return false;
+            case UsageContext.BoardOnly:
+                if (!isBattleActive)
+                    return true;
+
+                Debug.LogWarning($"Card '{card.CardName}' can only be used outside battle.");
+                return false;
+            case UsageContext.Anywhere:
+                return true;
+            default:
+                Debug.LogWarning($"Card '{card.CardName}' has unsupported usage context '{card.UsageContext}'.");
+                return false;
+        }
+    }
+
+    private bool CanApplyAllEffects(CardData card)
+    {
+        if (card.Effects == null || card.Effects.Count == 0)
+        {
+            Debug.LogWarning($"Card '{card.CardName}' has no effects.");
             return false;
         }
 
-        if (effectsByCardId.Count == 0)
-            InitializeEffects();
+        for (var i = 0; i < card.Effects.Count; i++)
+        {
+            if (!CanApplyEffect(card, card.Effects[i]))
+                return false;
+        }
 
-        if (effectsByCardId.TryGetValue(card.CardId, out var effect))
-            return effect.Resolve(card);
-
-        Debug.LogWarning($"No card effect registered for card id '{card.CardId}'.");
-        return false;
+        return true;
     }
 
-    private void InitializeEffects()
+    private bool CanApplyEffect(CardData card, EffectData effect)
     {
-        effectsByCardId.Clear();
-        RegisterEffect(SmallHealCardId, new SmallHealCardEffect(playerStats));
-        RegisterEffect(ShieldCardId, new ShieldCardEffect());
-        RegisterEffect(LuckyHitCardId, new LuckyHitCardEffect());
+        if (effect == null)
+        {
+            Debug.LogWarning($"Card '{card.CardName}' has a missing effect.");
+            return false;
+        }
+
+        switch (effect.EffectType)
+        {
+            case EffectType.HpRestore:
+                if (playerStats != null && effect.Value > 0)
+                    return true;
+
+                Debug.LogWarning($"Card '{card.CardName}' cannot apply HP restore effect.");
+                return false;
+            case EffectType.Level:
+                if (playerStats != null && effect.Value != 0)
+                    return true;
+
+                Debug.LogWarning($"Card '{card.CardName}' cannot apply level effect.");
+                return false;
+            case EffectType.Power:
+            case EffectType.EscapeBonus:
+                if (battleSystem != null && battleSystem.IsBattleActive && effect.Value > 0)
+                    return true;
+
+                Debug.LogWarning($"Card '{card.CardName}' effect '{effect.EffectType}' can only be applied during battle.");
+                return false;
+            default:
+                Debug.LogWarning($"Card '{card.CardName}' has unsupported effect type '{effect.EffectType}'.");
+                return false;
+        }
+    }
+
+    private bool ApplyAllEffects(CardData card)
+    {
+        for (var i = 0; i < card.Effects.Count; i++)
+        {
+            if (!ApplyEffect(card.Effects[i]))
+                return false;
+        }
+
+        return true;
+    }
+
+    private bool ApplyEffect(EffectData effect)
+    {
+        switch (effect.EffectType)
+        {
+            case EffectType.HpRestore:
+                playerStats.Heal(effect.Value);
+                return true;
+            case EffectType.Level:
+                playerStats.SetLevel(playerStats.Level + effect.Value);
+                return true;
+            case EffectType.Power:
+                return battleSystem.AddTemporaryCardPower(effect.Value);
+            case EffectType.EscapeBonus:
+                return battleSystem.AddTemporaryEscapeBonus(effect.Value);
+            default:
+                return false;
+        }
     }
 }

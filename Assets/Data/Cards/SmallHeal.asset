@@ -16,3 +16,14 @@ MonoBehaviour:
   cardName: Small Heal
   description: Restore a small amount of HP.
   cardSprite: {fileID: 21300000, guid: 289a76fb2aefe8040a88f5e3b7cf4b1e, type: 3}
+  rarity: 0
+  usageContext: 2
+  effects:
+  - effectType: 1
+    value: 1
+    contentId: ""
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 0
+    isInstant: 0

@@ -22,6 +22,8 @@ public sealed class BattleSystem : MonoBehaviour
     private Action battleCompleted;
     private BattlePhase phase;
     private int currentBattleDiceBonus;
+    private int temporaryCardPowerBonus;
+    private int temporaryEscapeBonus;
     private bool battleDiceUsed;
 
     public event Action BattleStateChanged;
@@ -82,6 +84,8 @@ public sealed class BattleSystem : MonoBehaviour
         battleCompleted = onBattleCompleted;
         currentEnemy = enemy;
         currentBattleDiceBonus = 0;
+        temporaryCardPowerBonus = 0;
+        temporaryEscapeBonus = 0;
         battleDiceUsed = false;
         currentBattleData = CreateBattleData(enemy);
         phase = BattlePhase.WaitingForResolve;
@@ -112,6 +116,42 @@ public sealed class BattleSystem : MonoBehaviour
         Debug.Log($"Battle dice used: +{currentBattleDiceBonus}. Player total is now {currentBattleData.PlayerTotalPower}.");
         BattleStateChanged?.Invoke();
         return true;
+    }
+
+    public bool AddTemporaryCardPower(int value)
+    {
+        if (!IsBattleActive || value <= 0)
+        {
+            Debug.LogWarning("Temporary card power can only be added during an active battle.");
+            return false;
+        }
+
+        temporaryCardPowerBonus += value;
+        RefreshBattleModal($"Card power bonus added: +{value}");
+        Debug.Log($"Temporary card power bonus added: +{value}. Total temporary card power: {temporaryCardPowerBonus}.");
+        BattleStateChanged?.Invoke();
+        return true;
+    }
+
+    public bool AddTemporaryEscapeBonus(int value)
+    {
+        if (!IsBattleActive || value <= 0)
+        {
+            Debug.LogWarning("Temporary escape bonus can only be added during an active battle.");
+            return false;
+        }
+
+        temporaryEscapeBonus += value;
+        RefreshBattleModal($"Card escape bonus added: +{value}");
+        Debug.Log($"Temporary escape bonus added: +{value}. Total temporary escape bonus: {temporaryEscapeBonus}.");
+        BattleStateChanged?.Invoke();
+        return true;
+    }
+
+    public void RefreshCurrentBattleView(string status)
+    {
+        RefreshBattleModal(status);
+        BattleStateChanged?.Invoke();
     }
 
     public void ResolveCurrentBattle()
@@ -166,7 +206,7 @@ public sealed class BattleSystem : MonoBehaviour
     private void RollEscape()
     {
         var escapeRoll = diceSystem.Roll();
-        var escapeBonus = GetEquipmentEffectBonus(EffectType.EscapeBonus);
+        var escapeBonus = GetEquipmentEffectBonus(EffectType.EscapeBonus) + temporaryEscapeBonus;
         var finalEscapeValue = escapeRoll + escapeBonus;
         if (finalEscapeValue >= EscapeSuccessRoll)
         {
@@ -215,6 +255,8 @@ public sealed class BattleSystem : MonoBehaviour
         currentEnemy = null;
         phase = BattlePhase.None;
         currentBattleDiceBonus = 0;
+        temporaryCardPowerBonus = 0;
+        temporaryEscapeBonus = 0;
         battleDiceUsed = false;
         BattleStateChanged?.Invoke();
 
@@ -254,8 +296,9 @@ public sealed class BattleSystem : MonoBehaviour
         if (totalDiceBonus > 0)
             playerEntries.Add(new BattlePowerEntry("Dice bonus", totalDiceBonus));
 
-        if (cardBonus > 0)
-            playerEntries.Add(new BattlePowerEntry("Card bonuses", cardBonus));
+        var totalCardBonus = cardBonus + temporaryCardPowerBonus;
+        if (totalCardBonus > 0)
+            playerEntries.Add(new BattlePowerEntry("Card bonuses", totalCardBonus));
 
         var enemyEntries = new List<BattlePowerEntry>
         {
@@ -293,5 +336,28 @@ public sealed class BattleSystem : MonoBehaviour
     private int GetEquipmentEffectBonus(EffectType effectType)
     {
         return playerInventory != null ? playerInventory.GetTotalEffectValue(effectType) : 0;
+    }
+
+    private void RefreshBattleModal(string status)
+    {
+        if (currentEnemy == null || battleModalView == null)
+            return;
+
+        currentBattleData = CreateBattleData(currentEnemy);
+        battleModalView.Show(currentBattleData);
+        battleModalView.UpdateState(status, GetCurrentActionButtonText());
+    }
+
+    private string GetCurrentActionButtonText()
+    {
+        switch (phase)
+        {
+            case BattlePhase.WaitingForEscapeRoll:
+                return "Roll Escape";
+            case BattlePhase.WaitingForClose:
+                return "Close";
+            default:
+                return "Resolve Battle";
+        }
     }
 }

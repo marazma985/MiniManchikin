@@ -16,3 +16,14 @@ MonoBehaviour:
   cardName: Lucky Hit
   description: A lucky strike for later combat.
   cardSprite: {fileID: 21300000, guid: e181b6f62f4bd124b964dac1060b961b, type: 3}
+  rarity: 0
+  usageContext: 0
+  effects:
+  - effectType: 0
+    value: 3
+    contentId: ""
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 0
+    isInstant: 0
