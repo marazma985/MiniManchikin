@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: winged_boot
   itemName: Winged Boot
   description: Adds an escape bonus.
-  itemSprite: {fileID: 3315989666195858335, guid: cae67abcb43f30e49b676671edbc1c1e, type: 3}
+  itemSprite: {fileID: -8940632971705989291, guid: 1371ac67d0ef5184bbc1ee0aad7aade8, type: 3}
   rarity: 1
   itemType: 2
   effects:
