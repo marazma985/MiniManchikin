@@ -10,6 +10,7 @@ public sealed class PlayerInventory : MonoBehaviour
     [SerializeField] private ItemData testDagger;
     [SerializeField] private ItemData testHelmet;
     [SerializeField] private ItemData testNecklace;
+    [SerializeField] private ItemData testWingedBoot;
 
     public event Action<IReadOnlyList<ItemData>> OnEquipmentChanged;
 
@@ -72,6 +73,45 @@ public sealed class PlayerInventory : MonoBehaviour
         return equippedItems;
     }
 
+    public int GetTotalEffectValue(EffectType effectType)
+    {
+        var total = 0;
+
+        for (var i = 0; i < equippedItems.Count; i++)
+        {
+            var item = equippedItems[i];
+            if (item == null || item.Effects == null)
+                continue;
+
+            var effects = item.Effects;
+            for (var effectIndex = 0; effectIndex < effects.Count; effectIndex++)
+            {
+                var effect = effects[effectIndex];
+                if (effect != null && effect.EffectType == effectType)
+                    total += effect.Value;
+            }
+        }
+
+        return total;
+    }
+
+    public bool TryBreakArmorForHpLoss()
+    {
+        for (var i = 0; i < equippedItems.Count; i++)
+        {
+            var item = equippedItems[i];
+            if (item == null || item.ItemType != ItemType.Armor)
+                continue;
+
+            equippedItems.RemoveAt(i);
+            Debug.Log($"Armor broke and prevented HP loss: {item.ItemName}");
+            NotifyEquipmentChanged();
+            return true;
+        }
+
+        return false;
+    }
+
     [ContextMenu("Test Equip Dagger")]
     private void TestEquipDagger()
     {
@@ -88,6 +128,12 @@ public sealed class PlayerInventory : MonoBehaviour
     private void TestEquipNecklace()
     {
         TryEquip(testNecklace);
+    }
+
+    [ContextMenu("Test Equip Winged Boot")]
+    private void TestEquipWingedBoot()
+    {
+        TryEquip(testWingedBoot);
     }
 
     [ContextMenu("Test Clear Equipment")]

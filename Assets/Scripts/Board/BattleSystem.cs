@@ -8,6 +8,7 @@ public sealed class BattleSystem : MonoBehaviour
     private const int EscapeSuccessRoll = 5;
 
     [SerializeField] private PlayerStats playerStats;
+    [SerializeField] private PlayerInventory playerInventory;
     [SerializeField] private DiceSystem diceSystem;
     [SerializeField] private Sprite playerSprite;
     [SerializeField] private BattleModalView battleModalView;
@@ -165,14 +166,16 @@ public sealed class BattleSystem : MonoBehaviour
     private void RollEscape()
     {
         var escapeRoll = diceSystem.Roll();
-        if (escapeRoll >= EscapeSuccessRoll)
+        var escapeBonus = GetEquipmentEffectBonus(EffectType.EscapeBonus);
+        var finalEscapeValue = escapeRoll + escapeBonus;
+        if (finalEscapeValue >= EscapeSuccessRoll)
         {
-            Debug.Log($"Escape successful. Rolled {escapeRoll}.");
+            Debug.Log($"Escape successful. Base roll: {escapeRoll}, escape bonus: {escapeBonus}, final escape value: {finalEscapeValue}.");
             battleModalView.UpdateState("Escape successful", "Close");
         }
         else
         {
-            Debug.Log($"Escape failed. Rolled {escapeRoll}.");
+            Debug.Log($"Escape failed. Base roll: {escapeRoll}, escape bonus: {escapeBonus}, final escape value: {finalEscapeValue}.");
             ApplyPenalty();
             battleModalView.UpdateState("Escape failed. Penalty applied", "Close");
         }
@@ -189,6 +192,12 @@ public sealed class BattleSystem : MonoBehaviour
         switch (currentEnemy.PenaltyType)
         {
             case MonsterPenaltyType.LoseHp:
+                if (playerInventory != null && playerInventory.TryBreakArmorForHpLoss())
+                {
+                    Debug.Log($"{currentEnemy.EnemyName} HP loss penalty was prevented by armor.");
+                    break;
+                }
+
                 playerStats.TakeDamage(currentEnemy.PenaltyValue);
                 Debug.Log($"{currentEnemy.EnemyName} penalty applied: lose {currentEnemy.PenaltyValue} HP.");
                 break;
@@ -234,10 +243,11 @@ public sealed class BattleSystem : MonoBehaviour
 
     private BattleModalData CreateBattleData(EnemyData enemy)
     {
+        var totalEquipmentBonus = equipmentBonus + GetEquipmentEffectBonus(EffectType.Power);
         var playerEntries = new List<BattlePowerEntry>
         {
             new BattlePowerEntry("Level", playerStats.Level),
-            new BattlePowerEntry("Equipment bonus", equipmentBonus)
+            new BattlePowerEntry("Equipment bonus", totalEquipmentBonus)
         };
 
         var totalDiceBonus = diceBonus + currentBattleDiceBonus;
@@ -278,5 +288,10 @@ public sealed class BattleSystem : MonoBehaviour
     private int GetPowerDifference()
     {
         return currentBattleData == null ? 0 : currentBattleData.EnemyTotalPower - currentBattleData.PlayerTotalPower;
+    }
+
+    private int GetEquipmentEffectBonus(EffectType effectType)
+    {
+        return playerInventory != null ? playerInventory.GetTotalEffectValue(effectType) : 0;
     }
 }
