@@ -17,6 +17,8 @@ public sealed class CardView : MonoBehaviour
     {
         if (button != null)
             button.onClick.AddListener(HandleClick);
+
+        RefreshVisual();
     }
 
     private void OnDisable()
@@ -28,12 +30,17 @@ public sealed class CardView : MonoBehaviour
     public void SetCard(CardData card)
     {
         currentCard = card;
+        RefreshVisual();
+    }
 
-        if (cardImage != null)
-        {
-            cardImage.sprite = currentCard != null ? currentCard.CardSprite : null;
-            cardImage.enabled = currentCard != null && currentCard.CardSprite != null;
-        }
+    private void RefreshVisual()
+    {
+        if (cardImage == null)
+            return;
+
+        var sprite = currentCard != null ? currentCard.CardSprite : null;
+        cardImage.sprite = sprite;
+        cardImage.enabled = sprite != null;
     }
 
     private void HandleClick()

@@ -394,7 +394,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5581,10 +5581,14 @@ MonoBehaviour:
   battleSystem: {fileID: 1294733955}
   turnSystem: {fileID: 1294733953}
   boardManager: {fileID: 1294733952}
+  testSmallHeal: {fileID: 11400000, guid: eedd5d3b66e8c6b4e9525f0100b0c7d9, type: 2}
+  testExperiencePotion: {fileID: 11400000, guid: e17850df428640a8b7ce143de4944925, type: 2}
+  testTreasureMap: {fileID: 11400000, guid: ffd5f84fcf7e4e4dad8d0313eccc5c00, type: 2}
+  testMonsterContract: {fileID: 11400000, guid: c68fb2e255ca466da51bdd8e1df7651f, type: 2}
   hand:
-  - {fileID: 11400000, guid: eedd5d3b66e8c6b4e9525f0100b0c7d9, type: 2}
-  - {fileID: 11400000, guid: e33a2d9231754534bbfa024ea8f79f63, type: 2}
-  - {fileID: 11400000, guid: 383d2ea9378aad04e8d3b1db979bedb0, type: 2}
+  - {fileID: 11400000, guid: c68fb2e255ca466da51bdd8e1df7651f, type: 2}
+  - {fileID: 11400000, guid: e17850df428640a8b7ce143de4944925, type: 2}
+  - {fileID: 11400000, guid: ffd5f84fcf7e4e4dad8d0313eccc5c00, type: 2}
 --- !u!4 &1564144278
 Transform:
   m_ObjectHideFlags: 0

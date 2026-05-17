@@ -10,6 +10,10 @@ public sealed class CardSystem : MonoBehaviour
     [SerializeField] private BattleSystem battleSystem;
     [SerializeField] private TurnSystem turnSystem;
     [SerializeField] private BoardManager boardManager;
+    [SerializeField] private CardData testSmallHeal;
+    [SerializeField] private CardData testExperiencePotion;
+    [SerializeField] private CardData testTreasureMap;
+    [SerializeField] private CardData testMonsterContract;
     [SerializeField] private List<CardData> hand = new List<CardData>(MaxHandSize);
 
     public event Action<IReadOnlyList<CardData>> OnHandChanged;
@@ -35,8 +39,17 @@ public sealed class CardSystem : MonoBehaviour
 
     public bool AddCard(CardData card)
     {
-        if (card == null || hand.Count >= MaxHandSize)
+        if (card == null)
+        {
+            Debug.LogWarning("Cannot add a null card to hand.");
             return false;
+        }
+
+        if (hand.Count >= MaxHandSize)
+        {
+            Debug.LogWarning($"Cannot add card '{card.CardName}'. Hand is full ({MaxHandSize} cards).");
+            return false;
+        }
 
         hand.Add(card);
         NotifyHandChanged();
@@ -67,6 +80,9 @@ public sealed class CardSystem : MonoBehaviour
 
     private void OnValidate()
     {
+        if (hand == null)
+            hand = new List<CardData>(MaxHandSize);
+
         if (hand.Count <= MaxHandSize)
             return;
 
@@ -250,5 +266,35 @@ public sealed class CardSystem : MonoBehaviour
             return false;
 
         return turnSystem.TryMoveFixedSteps(steps);
+    }
+
+    [ContextMenu("Test Add Small Heal")]
+    private void TestAddSmallHeal()
+    {
+        AddCard(testSmallHeal);
+    }
+
+    [ContextMenu("Test Add Experience Potion")]
+    private void TestAddExperiencePotion()
+    {
+        AddCard(testExperiencePotion);
+    }
+
+    [ContextMenu("Test Add Treasure Map")]
+    private void TestAddTreasureMap()
+    {
+        AddCard(testTreasureMap);
+    }
+
+    [ContextMenu("Test Add Monster Contract")]
+    private void TestAddMonsterContract()
+    {
+        AddCard(testMonsterContract);
+    }
+
+    [ContextMenu("Test Clear Hand")]
+    private void TestClearHand()
+    {
+        SetHand(null);
     }
 }
