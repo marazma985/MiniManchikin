@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4628,6 +4628,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HudView
   playerStats: {fileID: 1266047073}
+  playerInventory: {fileID: 1266047074}
   levelText: {fileID: 446220475}
   heartImages:
   - {fileID: 1439235516}
@@ -4652,6 +4653,7 @@ GameObject:
   - component: {fileID: 1266047071}
   - component: {fileID: 1266047072}
   - component: {fileID: 1266047073}
+  - component: {fileID: 1266047074}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -4709,6 +4711,22 @@ MonoBehaviour:
   maxHp: 5
   currentHp: 5
   level: 2
+--- !u!114 &1266047074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266047070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27d72a13f6954f5a9160398a3f965b16, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
+  equippedItems: []
+  testDagger: {fileID: 11400000, guid: a29dd636a92141d5a9dc8e2281a8852b, type: 2}
+  testHelmet: {fileID: 11400000, guid: dcc0063b33c9423c85117e9ca8b5e52d, type: 2}
+  testNecklace: {fileID: 11400000, guid: 84169528f2a34673b3dd86a682253267, type: 2}
 --- !u!1 &1294733950
 GameObject:
   m_ObjectHideFlags: 0
