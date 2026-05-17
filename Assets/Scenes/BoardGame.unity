@@ -4830,6 +4830,82 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TileEffectSystem
   battleSystem: {fileID: 1294733955}
+  playerStats: {fileID: 1266047073}
+  playerInventory: {fileID: 1266047074}
+  cardSystem: {fileID: 1564144277}
+  possibleCommonCards:
+  - {fileID: 11400000, guid: eedd5d3b66e8c6b4e9525f0100b0c7d9, type: 2}
+  - {fileID: 11400000, guid: e17850df428640a8b7ce143de4944925, type: 2}
+  - {fileID: 11400000, guid: ffd5f84fcf7e4e4dad8d0313eccc5c00, type: 2}
+  - {fileID: 11400000, guid: c68fb2e255ca466da51bdd8e1df7651f, type: 2}
+  - {fileID: 11400000, guid: e33a2d9231754534bbfa024ea8f79f63, type: 2}
+  - {fileID: 11400000, guid: 383d2ea9378aad04e8d3b1db979bedb0, type: 2}
+  buffEvents:
+  - effectType: 1
+    value: 1
+    contentId:
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 0
+    isInstant: 0
+  - effectType: 1
+    value: 2
+    contentId:
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 0
+    isInstant: 0
+  - effectType: 5
+    value: 1
+    contentId:
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 1
+    isInstant: 0
+  - effectType: 3
+    value: 1
+    contentId:
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 0
+    isInstant: 0
+  debuffEvents:
+  - effectType: 1
+    value: -1
+    contentId:
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 0
+    isInstant: 0
+  - effectType: 1
+    value: -2
+    contentId:
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 0
+    isInstant: 0
+  - effectType: 3
+    value: -1
+    contentId:
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 0
+    isInstant: 0
+  - effectType: 6
+    value: 1
+    contentId:
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 1
+    isInstant: 0
 --- !u!114 &1294733955
 MonoBehaviour:
   m_ObjectHideFlags: 0
