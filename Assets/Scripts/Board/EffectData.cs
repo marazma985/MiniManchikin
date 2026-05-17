@@ -12,6 +12,7 @@ public sealed class EffectData
     [SerializeField] private bool useNearestMatchingTile;
     [SerializeField] private bool useRandomTarget;
     [SerializeField] private bool isInstant;
+    [SerializeField] private bool restoreToFull;
 
     public EffectData()
     {
@@ -31,6 +32,13 @@ public sealed class EffectData
         this.useRandomTarget = useRandomTarget;
     }
 
+    public EffectData(EffectType effectType, int value, bool restoreToFull)
+    {
+        this.effectType = effectType;
+        this.value = value;
+        this.restoreToFull = restoreToFull;
+    }
+
     public EffectType EffectType => effectType;
     public int Value => value;
     public string ContentId => contentId;
@@ -39,4 +47,5 @@ public sealed class EffectData
     public bool UseNearestMatchingTile => useNearestMatchingTile;
     public bool UseRandomTarget => useRandomTarget;
     public bool IsInstant => isInstant;
+    public bool RestoreToFull => restoreToFull;
 }

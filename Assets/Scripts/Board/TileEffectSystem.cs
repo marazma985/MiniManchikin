@@ -9,6 +9,8 @@ public sealed class TileEffectSystem : MonoBehaviour
     [SerializeField] private PlayerInventory playerInventory;
     [SerializeField] private CardSystem cardSystem;
     [SerializeField] private List<CardData> possibleCommonCards = new List<CardData>();
+    [SerializeField] private List<CardData> possibleRareCards = new List<CardData>();
+    [SerializeField] private List<ItemData> possibleRareItems = new List<ItemData>();
     [SerializeField] private List<EffectData> buffEvents = new List<EffectData>
     {
         new EffectData(EffectType.HpRestore, 1),
@@ -22,6 +24,13 @@ public sealed class TileEffectSystem : MonoBehaviour
         new EffectData(EffectType.HpRestore, -2),
         new EffectData(EffectType.Level, -1),
         new EffectData(EffectType.RemoveCard, 1, Rarity.Common, true)
+    };
+    [SerializeField] private List<EffectData> rareEvents = new List<EffectData>
+    {
+        new EffectData(EffectType.GiveItem, 1, Rarity.Rare, true),
+        new EffectData(EffectType.GiveCard, 1, Rarity.Rare, true),
+        new EffectData(EffectType.HpRestore, 0, true),
+        new EffectData(EffectType.Level, 2)
     };
 
     private readonly EffectResolver effectResolver = new EffectResolver();
@@ -102,10 +111,11 @@ public sealed class TileEffectSystem : MonoBehaviour
     private void InitializeEffects()
     {
         effectsByTileType.Clear();
-        effectResolver.Configure(playerStats, playerInventory, cardSystem, possibleCommonCards);
+        effectResolver.Configure(playerStats, playerInventory, cardSystem, possibleCommonCards, possibleRareCards, possibleRareItems);
         eventTileEffect.Configure(effectResolver, buffEvents, debuffEvents);
         buffTileEffect.Configure(effectResolver, buffEvents);
         debuffTileEffect.Configure(effectResolver, debuffEvents);
+        rareTileEffect.Configure(effectResolver, rareEvents);
         battleTileEffect.SetBattleSystem(battleSystem);
         RegisterEffect(TileType.RandomEvent, eventTileEffect);
         RegisterEffect(TileType.RareEvent, rareTileEffect);
@@ -120,6 +130,12 @@ public sealed class TileEffectSystem : MonoBehaviour
     {
         if (possibleCommonCards == null)
             possibleCommonCards = new List<CardData>();
+
+        if (possibleRareCards == null)
+            possibleRareCards = new List<CardData>();
+
+        if (possibleRareItems == null)
+            possibleRareItems = new List<ItemData>();
 
         if (buffEvents == null)
             buffEvents = new List<EffectData>();
@@ -141,6 +157,17 @@ public sealed class TileEffectSystem : MonoBehaviour
             debuffEvents.Add(new EffectData(EffectType.HpRestore, -2));
             debuffEvents.Add(new EffectData(EffectType.Level, -1));
             debuffEvents.Add(new EffectData(EffectType.RemoveCard, 1, Rarity.Common, true));
+        }
+
+        if (rareEvents == null)
+            rareEvents = new List<EffectData>();
+
+        if (rareEvents.Count == 0)
+        {
+            rareEvents.Add(new EffectData(EffectType.GiveItem, 1, Rarity.Rare, true));
+            rareEvents.Add(new EffectData(EffectType.GiveCard, 1, Rarity.Rare, true));
+            rareEvents.Add(new EffectData(EffectType.HpRestore, 0, true));
+            rareEvents.Add(new EffectData(EffectType.Level, 2));
         }
     }
 }

@@ -7,13 +7,23 @@ public sealed class EffectResolver
     private PlayerInventory playerInventory;
     private CardSystem cardSystem;
     private IReadOnlyList<CardData> possibleCommonCards;
+    private IReadOnlyList<CardData> possibleRareCards;
+    private IReadOnlyList<ItemData> possibleRareItems;
 
-    public void Configure(PlayerStats newPlayerStats, PlayerInventory newPlayerInventory, CardSystem newCardSystem, IReadOnlyList<CardData> newPossibleCommonCards)
+    public void Configure(
+        PlayerStats newPlayerStats,
+        PlayerInventory newPlayerInventory,
+        CardSystem newCardSystem,
+        IReadOnlyList<CardData> newPossibleCommonCards,
+        IReadOnlyList<CardData> newPossibleRareCards,
+        IReadOnlyList<ItemData> newPossibleRareItems)
     {
         playerStats = newPlayerStats;
         playerInventory = newPlayerInventory;
         cardSystem = newCardSystem;
         possibleCommonCards = newPossibleCommonCards;
+        possibleRareCards = newPossibleRareCards;
+        possibleRareItems = newPossibleRareItems;
     }
 
     public bool TryApply(EffectData effect, string sourceName)
@@ -27,20 +37,22 @@ public sealed class EffectResolver
         switch (effect.EffectType)
         {
             case EffectType.HpRestore:
-                return ApplyHpRestore(effect.Value, sourceName);
+                return ApplyHpRestore(effect, sourceName);
             case EffectType.Level:
                 return ApplyLevel(effect.Value, sourceName);
             case EffectType.GiveCard:
-                return ApplyGiveCard(sourceName);
+                return ApplyGiveCard(effect, sourceName);
             case EffectType.RemoveCard:
                 return ApplyRemoveCard(effect, sourceName);
+            case EffectType.GiveItem:
+                return ApplyGiveItem(effect, sourceName);
             default:
                 Debug.LogWarning($"{sourceName} has unsupported effect type '{effect.EffectType}'.");
                 return false;
         }
     }
 
-    private bool ApplyHpRestore(int value, string sourceName)
+    private bool ApplyHpRestore(EffectData effect, string sourceName)
     {
         if (playerStats == null)
         {
@@ -48,6 +60,14 @@ public sealed class EffectResolver
             return false;
         }
 
+        if (effect.RestoreToFull)
+        {
+            playerStats.Heal(playerStats.MaxHp - playerStats.CurrentHp);
+            Debug.Log($"{sourceName} fully healed the player.");
+            return true;
+        }
+
+        var value = effect.Value;
         if (value > 0)
         {
             playerStats.Heal(value);
@@ -100,7 +120,7 @@ public sealed class EffectResolver
         return true;
     }
 
-    private bool ApplyGiveCard(string sourceName)
+    private bool ApplyGiveCard(EffectData effect, string sourceName)
     {
         if (cardSystem == null)
         {
@@ -108,10 +128,11 @@ public sealed class EffectResolver
             return false;
         }
 
-        var card = GetRandomCommonCard();
+        var rarity = effect.RarityFilter;
+        var card = GetRandomCard(rarity);
         if (card == null)
         {
-            Debug.LogWarning($"{sourceName} cannot give a common card because the common card pool is empty.");
+            Debug.LogWarning($"{sourceName} cannot give a {rarity} card because the card pool is empty.");
             return false;
         }
 
@@ -121,7 +142,33 @@ public sealed class EffectResolver
             return false;
         }
 
-        Debug.Log($"{sourceName} gave common card: {card.CardName}.");
+        Debug.Log($"{sourceName} gave {rarity} card: {card.CardName}.");
+        return true;
+    }
+
+    private bool ApplyGiveItem(EffectData effect, string sourceName)
+    {
+        if (playerInventory == null)
+        {
+            Debug.LogWarning($"{sourceName} requires PlayerInventory to give an item.");
+            return false;
+        }
+
+        var rarity = effect.RarityFilter;
+        var item = GetRandomItem(rarity);
+        if (item == null)
+        {
+            Debug.LogWarning($"{sourceName} cannot give a {rarity} item because the item pool is empty.");
+            return false;
+        }
+
+        if (!playerInventory.TryEquip(item))
+        {
+            Debug.LogWarning($"{sourceName} could not give item '{item.ItemName}'.");
+            return false;
+        }
+
+        Debug.Log($"{sourceName} gave {rarity} item: {item.ItemName}.");
         return true;
     }
 
@@ -152,19 +199,37 @@ public sealed class EffectResolver
         return true;
     }
 
-    private CardData GetRandomCommonCard()
+    private CardData GetRandomCard(Rarity rarity)
     {
-        if (possibleCommonCards == null)
+        var cards = rarity == Rarity.Rare ? possibleRareCards : possibleCommonCards;
+        if (cards == null)
             return null;
 
         var validCards = new List<CardData>();
-        for (var i = 0; i < possibleCommonCards.Count; i++)
+        for (var i = 0; i < cards.Count; i++)
         {
-            var card = possibleCommonCards[i];
-            if (card != null && card.Rarity == Rarity.Common)
+            var card = cards[i];
+            if (card != null && card.Rarity == rarity)
                 validCards.Add(card);
         }
 
         return validCards.Count == 0 ? null : validCards[Random.Range(0, validCards.Count)];
+    }
+
+    private ItemData GetRandomItem(Rarity rarity)
+    {
+        var items = rarity == Rarity.Rare ? possibleRareItems : null;
+        if (items == null)
+            return null;
+
+        var validItems = new List<ItemData>();
+        for (var i = 0; i < items.Count; i++)
+        {
+            var item = items[i];
+            if (item != null && item.Rarity == rarity)
+                validItems.Add(item);
+        }
+
+        return validItems.Count == 0 ? null : validItems[Random.Range(0, validItems.Count)];
     }
 }
