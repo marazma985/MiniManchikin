@@ -192,6 +192,7 @@ public sealed class BattleSystem : MonoBehaviour
             if (rewardSystem != null && rewardSystem.ShowBattleRewards(HandleRewardAccepted))
             {
                 battleModalView.UpdateState("Player won. Choose reward", "Choose Reward");
+                battleModalView.Hide();
                 phase = BattlePhase.WaitingForReward;
             }
             else

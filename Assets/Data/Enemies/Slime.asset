@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyId: slime
   enemyName: Slime
-  enemySprite: {fileID: -7282886668606283007, guid: 8ce4dd051ace01e4e81ec1d6e0aaf60d, type: 3}
+  enemySprite: {fileID: 7069200334831452820, guid: 8a5d4b3c4b642874181a214866fb054c, type: 3}
   baseLevel: 1
   bonusPower: 0
   penaltyType: 0
@@ -24,7 +24,7 @@ MonoBehaviour:
     effects:
     - effectType: 0
       value: 1
-      contentId:
+      contentId: 
       rarityFilter: 0
       targetTileType: 0
       useNearestMatchingTile: 0

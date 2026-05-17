@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyId: orc
   enemyName: Orc
-  enemySprite: {fileID: -7998678513828511344, guid: b6d906db9f9a3e1439aa1f2aa2d46493, type: 3}
+  enemySprite: {fileID: 4361973902484248706, guid: 8a5d4b3c4b642874181a214866fb054c, type: 3}
   baseLevel: 5
   bonusPower: 1
   penaltyType: 0
@@ -24,7 +24,7 @@ MonoBehaviour:
     effects:
     - effectType: 0
       value: 2
-      contentId:
+      contentId: 
       rarityFilter: 0
       targetTileType: 0
       useNearestMatchingTile: 0
@@ -34,7 +34,7 @@ MonoBehaviour:
     effects:
     - effectType: 0
       value: 2
-      contentId:
+      contentId: 
       rarityFilter: 0
       targetTileType: 0
       useNearestMatchingTile: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
   penaltyEffects:
   - effectType: 3
     value: -1
-    contentId:
+    contentId: 
     rarityFilter: 0
     targetTileType: 0
     useNearestMatchingTile: 0
