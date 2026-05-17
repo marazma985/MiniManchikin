@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public sealed class RewardModalView : MonoBehaviour
 {
     [SerializeField] private RewardView[] rewardViews;
+    [SerializeField] private Button closeButton;
 
     public event Action<RewardData> RewardSelected;
+    public event Action CloseRequested;
 
     public void Show(IReadOnlyList<RewardData> rewards)
     {
@@ -31,6 +34,12 @@ public sealed class RewardModalView : MonoBehaviour
 
     private void Subscribe()
     {
+        if (closeButton != null)
+        {
+            closeButton.onClick.RemoveListener(HandleCloseClicked);
+            closeButton.onClick.AddListener(HandleCloseClicked);
+        }
+
         if (rewardViews == null)
             return;
 
@@ -47,6 +56,9 @@ public sealed class RewardModalView : MonoBehaviour
 
     private void Unsubscribe()
     {
+        if (closeButton != null)
+            closeButton.onClick.RemoveListener(HandleCloseClicked);
+
         if (rewardViews == null)
             return;
 
@@ -78,5 +90,10 @@ public sealed class RewardModalView : MonoBehaviour
     private void HandleRewardClicked(RewardData reward)
     {
         RewardSelected?.Invoke(reward);
+    }
+
+    private void HandleCloseClicked()
+    {
+        CloseRequested?.Invoke();
     }
 }

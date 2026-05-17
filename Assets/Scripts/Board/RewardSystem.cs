@@ -45,13 +45,19 @@ public sealed class RewardSystem : MonoBehaviour
     private void OnEnable()
     {
         if (rewardModalView != null)
+        {
             rewardModalView.RewardSelected += HandleRewardSelected;
+            rewardModalView.CloseRequested += HandleCloseRequested;
+        }
     }
 
     private void OnDisable()
     {
         if (rewardModalView != null)
+        {
             rewardModalView.RewardSelected -= HandleRewardSelected;
+            rewardModalView.CloseRequested -= HandleCloseRequested;
+        }
     }
 
     private RewardData CreateRandomReward()
@@ -143,7 +149,20 @@ public sealed class RewardSystem : MonoBehaviour
         if (!TryClaimReward(reward))
             return;
 
-        rewardModalView.Hide();
+        CompleteRewardFlow();
+    }
+
+    private void HandleCloseRequested()
+    {
+        Debug.Log("Reward skipped.");
+        CompleteRewardFlow();
+    }
+
+    private void CompleteRewardFlow()
+    {
+        if (rewardModalView != null)
+            rewardModalView.Hide();
+
         currentRewards.Clear();
 
         var onAccepted = rewardAccepted;
