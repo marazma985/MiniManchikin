@@ -20,11 +20,13 @@ This document describes the current state of the Unity 6 board game project.
 - Duplicate dice roll is blocked while not in `WaitingForRoll`.
 - `PlayerMover` moves player by dice result.
 - After movement, `TileEffectSystem` resolves current tile.
-- Turn returns to `WaitingForRoll`.
+- Non-deferred tile effects complete immediately.
+- Deferred tile effects, currently battle, complete through callback.
+- Turn returns to `WaitingForRoll` after tile resolution completes.
 
 ### Tile Effects
 
-Current effects are MVP and log only:
+Current effects:
 
 - `EventTileEffect`
 - `RareTileEffect`
@@ -32,7 +34,27 @@ Current effects are MVP and log only:
 - `BuffTileEffect`
 - `DebuffTileEffect`
 
+`EventTileEffect`, `RareTileEffect`, `BuffTileEffect`, and `DebuffTileEffect` are MVP and log only.
+
+`BattleTileEffect` is a deferred tile effect. It starts `BattleSystem` and lets the turn continue only after battle completion.
+
 `HealTileEffect` exists but is not currently mapped to a `TileType`.
+
+### Battle
+
+- `BattleSystem` exists on `BoardRoot`.
+- `BattleSystem` is referenced by `TileEffectSystem`.
+- Battle tiles start `BattleSystem` through `BattleTileEffect`.
+- `BattleModalView` exists on inactive `Board UI Canvas/Battle Modal`.
+- `BattleSystem` selects a random `EnemyData` asset.
+- Current enemy assets are `Slime`, `Bat`, and `Orc Warrior`.
+- Battle compares player total power against enemy total power.
+- Winning battle grants +1 level.
+- Losing battle asks for escape roll.
+- Escape succeeds on `5..6`.
+- Failed escape applies enemy penalty.
+- Roll dice button can be reused for battle dice when the player is short by `1..6` power.
+- Closing the battle modal completes tile resolution and allows the turn to end.
 
 ### Player Stats and HUD
 
@@ -76,15 +98,23 @@ Previously verified:
 - `Small Heal` restores 1 HP and is consumed after successful use;
 - console was clean after recent checks.
 
+Checked during documentation sync:
+- battle modal flow exists in scene and is wired to `BattleSystem`;
+- `TileEffectSystem` references `BattleSystem`;
+- roll dice button references both `TurnSystem` and `BattleSystem`;
+- main menu button `onClick` lists are empty.
+
 ## Not Implemented Yet
 
-- real tile effects;
-- actual healing from cards or tiles;
-- battle system;
+- real event/buff/debuff tile effects;
+- actual healing from tiles;
 - event windows;
 - random event table;
 - rare event table;
 - buff/debuff gameplay rules;
+- battle reward choices;
+- equipment bonus integration into real inventory;
+- card bonus integration into real battle card effects;
 - inventory gameplay model;
 - item data assets;
 - complete card effects for `Shield` and `Lucky Hit`;
@@ -92,7 +122,8 @@ Previously verified:
 - card draw/discard pile;
 - save/load;
 - animations;
-- final art.
+- final art;
+- main menu button actions.
 
 ## Known MVP Limitations
 
@@ -101,22 +132,25 @@ Previously verified:
 - Only `Small Heal` applies a real gameplay effect.
 - `Shield` and `Lucky Hit` do not apply real gameplay effects yet.
 - Inventory slots are passive visuals.
-- Battle and event tiles only log messages.
+- Event, rare event, buff, and debuff tiles only log messages.
+- Battle is functional MVP, but rewards/equipment/card integration are placeholders.
 - `HealTileEffect` exists but is not connected to current `TileType`.
+- Main menu is visual MVP; its buttons have no connected actions.
 
 ## Recommended Next Step
 
 Recommended next development step:
 
-Expand real gameplay for existing card effects.
+Expand the existing battle MVP with real reward/equipment/card integration.
 
 Suggested path:
 
-1. Define what `Shield` should protect against.
-2. Define how `Lucky Hit` participates in battle.
-3. Add the minimal supporting battle/card context needed for those effects.
-4. Keep `CardView` and `CardHandView` UI-only.
+1. Define battle victory rewards.
+2. Decide how equipment bonuses are represented outside UI slots.
+3. Define how `Shield` and `Lucky Hit` participate in battle.
+4. Add the minimal supporting battle/card context needed for those effects.
+5. Keep `CardView`, `CardHandView`, and `InventorySlotView` UI-only.
 
 Alternative next step:
 
-Implement `BattleTileEffect` as a trigger into a separate battle flow, still with placeholder UI/logging only.
+Connect main menu button actions for New Game/Exit while keeping save/load and settings as placeholders.

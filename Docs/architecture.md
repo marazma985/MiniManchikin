@@ -82,6 +82,7 @@ Current states:
 Files:
 - `Assets/Scripts/Board/TileEffectSystem.cs`
 - `Assets/Scripts/Board/ITileEffect.cs`
+- `Assets/Scripts/Board/IDeferredTileEffect.cs`
 - effect classes in `Assets/Scripts/Board/*TileEffect.cs`
 
 MonoBehaviour on `BoardRoot`.
@@ -90,7 +91,8 @@ Responsibilities:
 - receives current `BoardTile`;
 - selects effect by `TileType`;
 - calls matching `ITileEffect.Resolve(BoardTile tile)`;
-- currently all effects only write `Debug.Log`.
+- supports deferred tile effects through `IDeferredTileEffect.Resolve(BoardTile tile, Action onResolved)`;
+- completes tile resolution only after deferred effects invoke their callback.
 
 Current mapping:
 - `RandomEvent` -> `EventTileEffect`
@@ -99,7 +101,44 @@ Current mapping:
 - `Buff` -> `BuffTileEffect`
 - `Debuff` -> `DebuffTileEffect`
 
+`BattleTileEffect` starts `BattleSystem` and completes tile resolution after the battle modal flow closes.
+
 `HealTileEffect` exists for future HP-related work but is not currently mapped to `TileType`.
+
+### Battle System
+Files:
+- `Assets/Scripts/Board/BattleSystem.cs`
+- `Assets/Scripts/Board/BattleModalData.cs`
+- `Assets/Scripts/Board/BattleModalView.cs`
+- `Assets/Scripts/Board/BattlePowerEntry.cs`
+- `Assets/Scripts/Board/EnemyData.cs`
+- `Assets/Scripts/Board/MonsterPenaltyType.cs`
+
+MonoBehaviour on `BoardRoot`.
+
+Responsibilities:
+- starts a battle from `BattleTileEffect`;
+- selects a random `EnemyData` from the serialized enemy list;
+- builds modal data for player and enemy power;
+- compares player total power and enemy total power;
+- grants +1 level on win;
+- on loss, asks for an escape roll;
+- applies enemy penalty on failed escape;
+- invokes battle completion callback when the modal is closed.
+
+Current power sources:
+- player level;
+- serialized equipment bonus;
+- serialized card bonus;
+- serialized dice bonus;
+- optional battle dice bonus when the player is short by `1..6` power.
+
+Current enemy assets:
+- `Assets/Data/Enemies/Slime.asset`
+- `Assets/Data/Enemies/Bat.asset`
+- `Assets/Data/Enemies/OrcWarrior.asset`
+
+Battle is functional MVP: it uses a modal, random enemies, level rewards, escape rolls, and penalties, but it does not yet have reward selection, equipment integration, card integration, or polished battle presentation.
 
 ### PlayerStats
 File: `Assets/Scripts/Board/PlayerStats.cs`
@@ -129,6 +168,28 @@ Responsibilities:
 - subscribes to `PlayerStats` events.
 
 `InventorySlotView` only displays an empty or occupied visual state. It has no inventory gameplay logic.
+
+### Main Menu UI
+Scene: `Assets/Scenes/MainMenu.unity`
+
+Files:
+- `Assets/Scripts/UI/MainMenuSpriteButton.cs`
+- `Assets/Scripts/UI/MainMenuButtonFeedback.cs`
+- `Assets/Scripts/UI/MainMenuCursor.cs`
+- `Assets/Scripts/UI/MainMenuCursorHoverTarget.cs`
+- `Assets/Scripts/UI/MainMenuSkinSlots.cs`
+
+Responsibilities:
+- displays main menu visual layout;
+- applies sprite-based button visuals;
+- disables Continue when `continueAvailable` is false;
+- moves buttons slightly on hover;
+- shows a custom cursor and changes cursor state on hover/press.
+
+Current limitation:
+- menu button `onClick` handlers are empty in the scene;
+- no scene loading, settings, continue, save/load, or exit behavior is connected yet;
+- `MainMenuCursor` currently uses a static `Instance` bridge for hover targets. This exists in main menu UI only and should not be copied into gameplay architecture.
 
 ### Card System
 Files:
@@ -161,6 +222,7 @@ Current scene structure includes:
   - `BoardManager`
   - `TurnSystem`
   - `TileEffectSystem`
+  - `BattleSystem`
   - board tiles
   - `BoardPath_Line`
 - `DiceSystem`
@@ -172,6 +234,7 @@ Current scene structure includes:
   - `Roll Dice Button`
   - `Player HUD`
   - `CardHand`
+  - `Battle Modal`
 - `CardSystem`
   - `CardSystem`
 - `EventSystem`
@@ -189,9 +252,11 @@ Dependencies are assigned through serialized Inspector references.
 7. Movement callback fires.
 8. `TurnSystem` reads current tile from `BoardManager`.
 9. `TurnSystem` switches to `ResolvingTile`.
-10. `TileEffectSystem.ResolveTile(currentTile)` resolves effect by `TileType`.
-11. `TurnSystem` switches to `TurnEnded`.
-12. `TurnSystem` returns to `WaitingForRoll`.
+10. `TileEffectSystem.ResolveTile(currentTile, callback)` resolves effect by `TileType`.
+11. Non-deferred effects complete immediately.
+12. `BattleTileEffect` starts `BattleSystem` and waits for battle completion before invoking the callback.
+13. `TurnSystem` switches to `TurnEnded`.
+14. `TurnSystem` returns to `WaitingForRoll`.
 
 ## Implemented vs MVP
 
@@ -201,14 +266,20 @@ Implemented:
 - player movement;
 - turn orchestration;
 - tile effect dispatch;
+- deferred tile effect completion;
 - HP/level data;
 - HUD display;
 - passive inventory slot display;
 - card data, hand display, card effect dispatch;
-- `Small Heal` restores 1 HP and is consumed after use.
+- `Small Heal` restores 1 HP and is consumed after use;
+- battle modal flow from battle tiles;
+- random enemy selection from `EnemyData`;
+- battle win level-up;
+- failed escape penalties.
 
 MVP only:
-- tile effects only log messages;
+- random event, rare event, buff, and debuff tile effects only log messages;
 - `Shield` and `Lucky Hit` card effects only log messages;
 - inventory slots are visual only;
-- battle/event/buff/debuff do not apply gameplay effects yet.
+- battle does not yet grant reward choices, use equipment, or use card bonuses from real card state;
+- event/buff/debuff do not apply gameplay effects yet.

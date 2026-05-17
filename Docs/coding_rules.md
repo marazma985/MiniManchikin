@@ -13,6 +13,9 @@ These are current project rules for continuing development.
 - Prefer small focused classes with one responsibility.
 - Keep `System`, `View`, `Manager`, and `Controller` roles separate.
 
+Known current exception:
+- `MainMenuCursor` uses a static `Instance` bridge for menu hover/press targets. Treat this as existing main-menu UI glue only; do not copy this pattern into gameplay systems.
+
 ## Unity Rules
 
 - Do not use `Update()` unless there is a clear need.

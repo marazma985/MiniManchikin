@@ -9,6 +9,7 @@ Canvas children:
 - `Roll Dice Button`
 - `Player HUD`
 - `CardHand`
+- `Battle Modal`
 
 There is also an `EventSystem` in the scene.
 
@@ -23,6 +24,8 @@ Scripts:
 Responsibilities:
 - requests `TurnSystem.TryRollDice()`;
 - disables/enables itself based on `TurnState`;
+- during an active battle, requests `BattleSystem.RollBattleDice()` instead of a turn roll;
+- during an active battle, is interactable only when battle dice can be used;
 - logs dice result through `TurnSystem.DiceRolled`.
 
 The button does not directly call `DiceSystem.Roll()` or `PlayerMover.MoveSteps()`.
@@ -119,22 +122,97 @@ Card sprites:
 - `Assets/Art/Board/Cards/Shield.png`
 - `Assets/Art/Board/Cards/LuckyHit.png`
 
+## Battle Modal
+
+Object: `Board UI Canvas/Battle Modal`
+
+Script:
+- `BattleModalView`
+
+Default scene state:
+- inactive (`m_IsActive: 0`)
+
+Displays:
+- player name;
+- player portrait;
+- player power entries;
+- player total power;
+- enemy name;
+- enemy portrait;
+- enemy power entries;
+- enemy total power;
+- battle status;
+- action button label.
+
+Controls:
+- `Resolve Battle Button`
+
+Current behavior:
+- `BattleSystem` shows the modal when a battle starts;
+- the modal forwards resolve/escape/close clicks through `ResolveRequested`;
+- button text changes between `Resolve Battle`, `Roll Escape`, and `Close`;
+- the modal hides after battle completion.
+
+Current limitation:
+- battle modal is functional MVP;
+- no animations;
+- no reward choice UI;
+- no equipment or card selection UI inside battle.
+
+## Main Menu
+
+Scene: `Assets/Scenes/MainMenu.unity`
+
+Canvas:
+- `Main Menu Canvas`
+
+Main objects:
+- `Background`
+- `Game Title`
+- `Buttons`
+- `Continue Button`
+- `New Game Button`
+- `Settings Button`
+- `Exit Button`
+- `Custom Cursor`
+
+Scripts:
+- `MainMenuSpriteButton`
+- `MainMenuButtonFeedback`
+- `MainMenuCursor`
+- `MainMenuCursorHoverTarget`
+- `MainMenuSkinSlots`
+
+Current behavior:
+- sprite-based visual buttons;
+- Continue button can be locked through `continueAvailable`;
+- buttons have hover lift feedback;
+- custom cursor follows mouse and changes state on hover/press.
+
+Current limitation:
+- button `onClick` calls are empty;
+- Continue/New Game/Settings/Exit do not perform actions yet;
+- no save/load or settings UI is connected.
+
 ## Working UI Elements
 
 Currently working:
 - roll dice button starts turn;
 - roll dice button blocks duplicate roll during movement/resolution;
+- roll dice button can be reused for battle dice when battle dice is available;
 - HP hearts update from `PlayerStats`;
 - level text updates from `PlayerStats`;
 - inventory slot can show assigned icon;
 - card hand displays 3 cards;
 - card click routes through `CardSystem`;
-- `Small Heal` restores 1 HP and is consumed.
+- `Small Heal` restores 1 HP and is consumed;
+- battle modal opens from battle tiles and resolves MVP battle flow.
 
 Not implemented:
 - card animations;
 - drag-and-drop;
 - item tooltips;
-- battle UI;
+- battle reward UI;
 - event UI;
-- settings UI for board scene.
+- settings UI for board scene;
+- main menu button actions.
