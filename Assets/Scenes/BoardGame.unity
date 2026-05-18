@@ -1355,6 +1355,8 @@ MonoBehaviour:
   cardImage: {fileID: 289513849}
   button: {fileID: 289513848}
   removeButton: {fileID: 2141000003}
+  removeButtonCanvasGroup: {fileID: 2141000009}
+  removeButtonFadeDuration: 0.15
 --- !u!114 &289513848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4129,6 +4131,8 @@ MonoBehaviour:
   backgroundImage: {fileID: 1097353837}
   iconImage: {fileID: 787255042}
   removeButton: {fileID: 2141000063}
+  removeButtonCanvasGroup: {fileID: 2141000069}
+  removeButtonFadeDuration: 0.15
   item: {fileID: 0}
   itemIcon: {fileID: 0}
   emptyColor: {r: 0.22, g: 0.2, b: 0.35, a: 0.9}
@@ -4534,6 +4538,8 @@ MonoBehaviour:
   backgroundImage: {fileID: 1225239075}
   iconImage: {fileID: 887498456}
   removeButton: {fileID: 2141000083}
+  removeButtonCanvasGroup: {fileID: 2141000089}
+  removeButtonFadeDuration: 0.15
   item: {fileID: 0}
   itemIcon: {fileID: 0}
   emptyColor: {r: 0.22, g: 0.2, b: 0.35, a: 0.9}
@@ -6337,6 +6343,8 @@ MonoBehaviour:
   cardImage: {fileID: 1649539190}
   button: {fileID: 1649539189}
   removeButton: {fileID: 2141000023}
+  removeButtonCanvasGroup: {fileID: 2141000029}
+  removeButtonFadeDuration: 0.15
 --- !u!114 &1649539189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7033,6 +7041,8 @@ MonoBehaviour:
   backgroundImage: {fileID: 1907612431}
   iconImage: {fileID: 772354226}
   removeButton: {fileID: 2141000103}
+  removeButtonCanvasGroup: {fileID: 2141000109}
+  removeButtonFadeDuration: 0.15
   item: {fileID: 0}
   itemIcon: {fileID: 0}
   emptyColor: {r: 0.22, g: 0.2, b: 0.35, a: 0.9}
@@ -7826,6 +7836,8 @@ MonoBehaviour:
   cardImage: {fileID: 2132902785}
   button: {fileID: 2132902784}
   removeButton: {fileID: 2141000043}
+  removeButtonCanvasGroup: {fileID: 2141000049}
+  removeButtonFadeDuration: 0.15
 --- !u!114 &2132902784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9169,6 +9181,7 @@ GameObject:
   - component: {fileID: 2141000002}
   - component: {fileID: 2141000003}
   - component: {fileID: 2141000004}
+  - component: {fileID: 2141000009}
   m_Layer: 5
   m_Name: Remove Card Button
   m_TagString: Untagged
@@ -9278,6 +9291,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2141000000}
   m_CullTransparentMesh: 1
+--- !u!225 &2141000009
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141000000}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &2141000005
 GameObject:
   m_ObjectHideFlags: 0
@@ -9369,6 +9394,7 @@ GameObject:
   - component: {fileID: 2141000022}
   - component: {fileID: 2141000023}
   - component: {fileID: 2141000024}
+  - component: {fileID: 2141000029}
   m_Layer: 5
   m_Name: Remove Card Button
   m_TagString: Untagged
@@ -9478,6 +9504,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2141000020}
   m_CullTransparentMesh: 1
+--- !u!225 &2141000029
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141000020}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &2141000025
 GameObject:
   m_ObjectHideFlags: 0
@@ -9569,6 +9607,7 @@ GameObject:
   - component: {fileID: 2141000042}
   - component: {fileID: 2141000043}
   - component: {fileID: 2141000044}
+  - component: {fileID: 2141000049}
   m_Layer: 5
   m_Name: Remove Card Button
   m_TagString: Untagged
@@ -9678,6 +9717,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2141000040}
   m_CullTransparentMesh: 1
+--- !u!225 &2141000049
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141000040}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &2141000045
 GameObject:
   m_ObjectHideFlags: 0
@@ -9769,6 +9820,7 @@ GameObject:
   - component: {fileID: 2141000062}
   - component: {fileID: 2141000063}
   - component: {fileID: 2141000064}
+  - component: {fileID: 2141000069}
   m_Layer: 5
   m_Name: Remove Item Button
   m_TagString: Untagged
@@ -9878,6 +9930,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2141000060}
   m_CullTransparentMesh: 1
+--- !u!225 &2141000069
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141000060}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &2141000065
 GameObject:
   m_ObjectHideFlags: 0
@@ -9969,6 +10033,7 @@ GameObject:
   - component: {fileID: 2141000082}
   - component: {fileID: 2141000083}
   - component: {fileID: 2141000084}
+  - component: {fileID: 2141000089}
   m_Layer: 5
   m_Name: Remove Item Button
   m_TagString: Untagged
@@ -10078,6 +10143,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2141000080}
   m_CullTransparentMesh: 1
+--- !u!225 &2141000089
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141000080}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &2141000085
 GameObject:
   m_ObjectHideFlags: 0
@@ -10169,6 +10246,7 @@ GameObject:
   - component: {fileID: 2141000102}
   - component: {fileID: 2141000103}
   - component: {fileID: 2141000104}
+  - component: {fileID: 2141000109}
   m_Layer: 5
   m_Name: Remove Item Button
   m_TagString: Untagged
@@ -10278,6 +10356,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2141000100}
   m_CullTransparentMesh: 1
+--- !u!225 &2141000109
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141000100}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &2141000105
 GameObject:
   m_ObjectHideFlags: 0
