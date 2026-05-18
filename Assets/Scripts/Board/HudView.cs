@@ -15,6 +15,7 @@ public sealed class HudView : MonoBehaviour
 
     private void OnEnable()
     {
+        SubscribeSlots();
         Subscribe();
         RefreshAll();
     }
@@ -22,6 +23,7 @@ public sealed class HudView : MonoBehaviour
     private void OnDisable()
     {
         Unsubscribe();
+        UnsubscribeSlots();
     }
 
     public void SetPlayerStats(PlayerStats newPlayerStats)
@@ -149,9 +151,39 @@ public sealed class HudView : MonoBehaviour
 
             var item = equippedItems != null && i < equippedItems.Count ? equippedItems[i] : null;
             if (item != null)
-                slot.SetItemIcon(item.ItemSprite);
+                slot.SetItem(item);
             else
                 slot.Clear();
         }
+    }
+
+    private void SubscribeSlots()
+    {
+        if (inventorySlots == null)
+            return;
+
+        for (var i = 0; i < inventorySlots.Length; i++)
+        {
+            if (inventorySlots[i] != null)
+                inventorySlots[i].RemoveClicked += HandleInventorySlotRemoveClicked;
+        }
+    }
+
+    private void UnsubscribeSlots()
+    {
+        if (inventorySlots == null)
+            return;
+
+        for (var i = 0; i < inventorySlots.Length; i++)
+        {
+            if (inventorySlots[i] != null)
+                inventorySlots[i].RemoveClicked -= HandleInventorySlotRemoveClicked;
+        }
+    }
+
+    private void HandleInventorySlotRemoveClicked(ItemData item)
+    {
+        if (playerInventory != null)
+            playerInventory.Unequip(item);
     }
 }

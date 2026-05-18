@@ -50,13 +50,17 @@ public sealed class CardHandView : MonoBehaviour
                 continue;
 
             cardView.Clicked -= HandleCardClicked;
+            cardView.RemoveClicked -= HandleCardRemoveClicked;
 
             var card = cards != null && i < cards.Count ? cards[i] : null;
             cardView.SetCard(card);
             cardView.gameObject.SetActive(card != null);
 
             if (card != null)
+            {
                 cardView.Clicked += HandleCardClicked;
+                cardView.RemoveClicked += HandleCardRemoveClicked;
+            }
         }
     }
 
@@ -64,5 +68,11 @@ public sealed class CardHandView : MonoBehaviour
     {
         if (cardSystem != null)
             cardSystem.UseCard(card);
+    }
+
+    private void HandleCardRemoveClicked(CardData card)
+    {
+        if (cardSystem != null)
+            cardSystem.RemoveCard(card);
     }
 }
