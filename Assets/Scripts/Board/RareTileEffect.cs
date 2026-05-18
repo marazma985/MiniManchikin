@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
-public sealed class RareTileEffect : ITileEffect
+public sealed class RareTileEffect : IDeferredTileEffect
 {
     private EffectResolver effectResolver;
     private IReadOnlyList<EffectData> rareEvents;
@@ -14,14 +15,20 @@ public sealed class RareTileEffect : ITileEffect
 
     public void Resolve(BoardTile tile)
     {
+        Resolve(tile, null);
+    }
+
+    public void Resolve(BoardTile tile, Action onResolved)
+    {
         var effect = GetRandomEffect();
         if (effect == null)
         {
             Debug.LogWarning("Rare event tile has no events to resolve.");
+            onResolved?.Invoke();
             return;
         }
 
-        effectResolver.TryApply(effect, "Rare event tile");
+        effectResolver.TryApply(effect, "Rare event tile", onResolved);
     }
 
     private EffectData GetRandomEffect()
@@ -29,6 +36,6 @@ public sealed class RareTileEffect : ITileEffect
         if (effectResolver == null || rareEvents == null || rareEvents.Count == 0)
             return null;
 
-        return rareEvents[Random.Range(0, rareEvents.Count)];
+        return rareEvents[UnityEngine.Random.Range(0, rareEvents.Count)];
     }
 }

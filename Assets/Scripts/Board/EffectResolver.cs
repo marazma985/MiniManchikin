@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public sealed class EffectResolver
     private PlayerStats playerStats;
     private PlayerInventory playerInventory;
     private CardSystem cardSystem;
+    private SingleRewardSystem singleRewardSystem;
     private IReadOnlyList<CardData> possibleCommonCards;
     private IReadOnlyList<CardData> possibleRareCards;
     private IReadOnlyList<ItemData> possibleRareItems;
@@ -14,6 +16,7 @@ public sealed class EffectResolver
         PlayerStats newPlayerStats,
         PlayerInventory newPlayerInventory,
         CardSystem newCardSystem,
+        SingleRewardSystem newSingleRewardSystem,
         IReadOnlyList<CardData> newPossibleCommonCards,
         IReadOnlyList<CardData> newPossibleRareCards,
         IReadOnlyList<ItemData> newPossibleRareItems)
@@ -21,6 +24,7 @@ public sealed class EffectResolver
         playerStats = newPlayerStats;
         playerInventory = newPlayerInventory;
         cardSystem = newCardSystem;
+        singleRewardSystem = newSingleRewardSystem;
         possibleCommonCards = newPossibleCommonCards;
         possibleRareCards = newPossibleRareCards;
         possibleRareItems = newPossibleRareItems;
@@ -28,28 +32,42 @@ public sealed class EffectResolver
 
     public bool TryApply(EffectData effect, string sourceName)
     {
+        return TryApply(effect, sourceName, null);
+    }
+
+    public bool TryApply(EffectData effect, string sourceName, Action onResolved)
+    {
         if (effect == null)
         {
             Debug.LogWarning($"{sourceName} has a missing effect.");
+            onResolved?.Invoke();
             return false;
         }
 
+        bool result;
         switch (effect.EffectType)
         {
             case EffectType.HpRestore:
-                return ApplyHpRestore(effect, sourceName);
+                result = ApplyHpRestore(effect, sourceName);
+                break;
             case EffectType.Level:
-                return ApplyLevel(effect.Value, sourceName);
+                result = ApplyLevel(effect.Value, sourceName);
+                break;
             case EffectType.GiveCard:
-                return ApplyGiveCard(effect, sourceName);
+                return ApplyGiveCard(effect, sourceName, onResolved);
             case EffectType.RemoveCard:
-                return ApplyRemoveCard(effect, sourceName);
+                result = ApplyRemoveCard(effect, sourceName);
+                break;
             case EffectType.GiveItem:
-                return ApplyGiveItem(effect, sourceName);
+                return ApplyGiveItem(effect, sourceName, onResolved);
             default:
                 Debug.LogWarning($"{sourceName} has unsupported effect type '{effect.EffectType}'.");
-                return false;
+                result = false;
+                break;
         }
+
+        onResolved?.Invoke();
+        return result;
     }
 
     private bool ApplyHpRestore(EffectData effect, string sourceName)
@@ -120,55 +138,61 @@ public sealed class EffectResolver
         return true;
     }
 
-    private bool ApplyGiveCard(EffectData effect, string sourceName)
+    private bool ApplyGiveCard(EffectData effect, string sourceName, Action onResolved)
     {
-        if (cardSystem == null)
-        {
-            Debug.LogWarning($"{sourceName} requires CardSystem to give a card.");
-            return false;
-        }
-
         var rarity = effect.RarityFilter;
         var card = GetRandomCard(rarity);
         if (card == null)
         {
             Debug.LogWarning($"{sourceName} cannot give a {rarity} card because the card pool is empty.");
+            onResolved?.Invoke();
             return false;
         }
 
-        if (!cardSystem.AddCard(card))
+        if (singleRewardSystem == null)
         {
-            Debug.LogWarning($"{sourceName} could not give card '{card.CardName}'.");
+            Debug.LogWarning($"{sourceName} cannot show card reward '{card.CardName}' because SingleRewardSystem is not assigned.");
+            onResolved?.Invoke();
             return false;
         }
 
-        Debug.Log($"{sourceName} gave {rarity} card: {card.CardName}.");
+        if (!singleRewardSystem.ShowReward(RewardData.FromCard(card), onResolved))
+        {
+            Debug.LogWarning($"{sourceName} could not show card reward '{card.CardName}'.");
+            onResolved?.Invoke();
+            return false;
+        }
+
+        Debug.Log($"{sourceName} offered {rarity} card reward: {card.CardName}.");
         return true;
     }
 
-    private bool ApplyGiveItem(EffectData effect, string sourceName)
+    private bool ApplyGiveItem(EffectData effect, string sourceName, Action onResolved)
     {
-        if (playerInventory == null)
-        {
-            Debug.LogWarning($"{sourceName} requires PlayerInventory to give an item.");
-            return false;
-        }
-
         var rarity = effect.RarityFilter;
         var item = GetRandomItem(rarity);
         if (item == null)
         {
             Debug.LogWarning($"{sourceName} cannot give a {rarity} item because the item pool is empty.");
+            onResolved?.Invoke();
             return false;
         }
 
-        if (!playerInventory.TryEquip(item))
+        if (singleRewardSystem == null)
         {
-            Debug.LogWarning($"{sourceName} could not give item '{item.ItemName}'.");
+            Debug.LogWarning($"{sourceName} cannot show item reward '{item.ItemName}' because SingleRewardSystem is not assigned.");
+            onResolved?.Invoke();
             return false;
         }
 
-        Debug.Log($"{sourceName} gave {rarity} item: {item.ItemName}.");
+        if (!singleRewardSystem.ShowReward(RewardData.FromItem(item), onResolved))
+        {
+            Debug.LogWarning($"{sourceName} could not show item reward '{item.ItemName}'.");
+            onResolved?.Invoke();
+            return false;
+        }
+
+        Debug.Log($"{sourceName} offered {rarity} item reward: {item.ItemName}.");
         return true;
     }
 
@@ -213,7 +237,7 @@ public sealed class EffectResolver
                 validCards.Add(card);
         }
 
-        return validCards.Count == 0 ? null : validCards[Random.Range(0, validCards.Count)];
+        return validCards.Count == 0 ? null : validCards[UnityEngine.Random.Range(0, validCards.Count)];
     }
 
     private ItemData GetRandomItem(Rarity rarity)
@@ -230,6 +254,6 @@ public sealed class EffectResolver
                 validItems.Add(item);
         }
 
-        return validItems.Count == 0 ? null : validItems[Random.Range(0, validItems.Count)];
+        return validItems.Count == 0 ? null : validItems[UnityEngine.Random.Range(0, validItems.Count)];
     }
 }

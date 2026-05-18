@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SingleRewardSystem))]
 public sealed class TileEffectSystem : MonoBehaviour
 {
     [SerializeField] private BattleSystem battleSystem;
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private PlayerInventory playerInventory;
     [SerializeField] private CardSystem cardSystem;
+    [SerializeField] private SingleRewardSystem singleRewardSystem;
     [SerializeField] private List<CardData> possibleCommonCards = new List<CardData>();
     [SerializeField] private List<CardData> possibleRareCards = new List<CardData>();
     [SerializeField] private List<ItemData> possibleRareItems = new List<ItemData>();
@@ -110,8 +112,10 @@ public sealed class TileEffectSystem : MonoBehaviour
 
     private void InitializeEffects()
     {
+        var resolvedSingleRewardSystem = ResolveSingleRewardSystem();
+
         effectsByTileType.Clear();
-        effectResolver.Configure(playerStats, playerInventory, cardSystem, possibleCommonCards, possibleRareCards, possibleRareItems);
+        effectResolver.Configure(playerStats, playerInventory, cardSystem, resolvedSingleRewardSystem, possibleCommonCards, possibleRareCards, possibleRareItems);
         eventTileEffect.Configure(effectResolver, buffEvents, debuffEvents);
         buffTileEffect.Configure(effectResolver, buffEvents);
         debuffTileEffect.Configure(effectResolver, debuffEvents);
@@ -124,6 +128,21 @@ public sealed class TileEffectSystem : MonoBehaviour
         RegisterEffect(TileType.Debuff, debuffTileEffect);
 
         _ = healTileEffect;
+    }
+
+    private SingleRewardSystem ResolveSingleRewardSystem()
+    {
+        if (singleRewardSystem != null)
+            return singleRewardSystem;
+
+        if (TryGetComponent(out SingleRewardSystem localSingleRewardSystem))
+        {
+            singleRewardSystem = localSingleRewardSystem;
+            return singleRewardSystem;
+        }
+
+        Debug.LogWarning("TileEffectSystem requires SingleRewardSystem for card and item tile rewards.");
+        return null;
     }
 
     private void EnsureDefaultEvents()
