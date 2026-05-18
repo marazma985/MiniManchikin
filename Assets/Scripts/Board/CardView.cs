@@ -11,11 +11,14 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     [SerializeField] private Button removeButton;
     [SerializeField] private CanvasGroup removeButtonCanvasGroup;
     [SerializeField, Min(0f)] private float removeButtonFadeDuration = 0.15f;
+    [SerializeField, Min(0f)] private float cardHoverFadeDuration = 0.12f;
 
     private CardData currentCard;
     private Coroutine removeButtonFade;
+    private Coroutine cardHoverFade;
     private bool isPointerOver;
     private bool isRemoveButtonVisible;
+    private bool isCardHighlighted;
     private bool removeButtonHoverConfigured;
     private RectTransform cardRectTransform;
     private RectTransform removeButtonRectTransform;
@@ -55,7 +58,8 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
             removeButton.onClick.RemoveListener(HandleRemoveClick);
 
         StopRemoveButtonFade();
-        ApplyMainButtonHover(false);
+        StopCardHoverFade();
+        SetCardHover(false, true);
     }
 
     public void SetCard(CardData card)
@@ -105,7 +109,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnPointerExit(PointerEventData eventData)
     {
         isPointerOver = false;
-        ApplyMainButtonHover(false);
+        SetCardHover(false, false);
         SetRemoveButtonVisible(false, false);
     }
 
@@ -116,7 +120,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
             buttonColors = button.colors;
             buttonTargetGraphic = button.targetGraphic;
             button.transition = Selectable.Transition.None;
-            ApplyMainButtonHover(false);
+            SetCardHover(false, true);
             buttonVisualConfigured = true;
         }
 
@@ -140,7 +144,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
         isPointerOver = pointerOverCard;
         SetRemoveButtonVisible(pointerOverCard, instant);
-        ApplyMainButtonHover(pointerOverCard && !pointerOverRemoveButton);
+        SetCardHover(pointerOverCard && !pointerOverRemoveButton, instant);
     }
 
     private bool IsScreenPointInsideCard(Vector2 screenPosition, Camera eventCamera)
@@ -208,12 +212,42 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         RefreshPointerState(pointerEventData != null ? pointerEventData.position : (Vector2)Input.mousePosition, GetEventCamera(), false);
     }
 
-    private void ApplyMainButtonHover(bool highlighted)
+    private void SetCardHover(bool highlighted, bool instant)
     {
         if (buttonTargetGraphic == null)
             return;
 
-        buttonTargetGraphic.color = highlighted ? buttonColors.highlightedColor : buttonColors.normalColor;
+        if (!instant && isCardHighlighted == highlighted)
+            return;
+
+        isCardHighlighted = highlighted;
+        var targetColor = highlighted ? buttonColors.highlightedColor : buttonColors.normalColor;
+
+        StopCardHoverFade();
+        if (instant || cardHoverFadeDuration <= 0f)
+        {
+            buttonTargetGraphic.color = targetColor;
+            return;
+        }
+
+        cardHoverFade = StartCoroutine(FadeCardHover(targetColor));
+    }
+
+    private IEnumerator FadeCardHover(Color targetColor)
+    {
+        var startColor = buttonTargetGraphic.color;
+        var elapsed = 0f;
+
+        while (elapsed < cardHoverFadeDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            var progress = Mathf.Clamp01(elapsed / cardHoverFadeDuration);
+            buttonTargetGraphic.color = Color.Lerp(startColor, targetColor, progress);
+            yield return null;
+        }
+
+        buttonTargetGraphic.color = targetColor;
+        cardHoverFade = null;
     }
 
     private void SetRemoveButtonVisible(bool visible, bool instant)
@@ -266,5 +300,14 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
         StopCoroutine(removeButtonFade);
         removeButtonFade = null;
+    }
+
+    private void StopCardHoverFade()
+    {
+        if (cardHoverFade == null)
+            return;
+
+        StopCoroutine(cardHoverFade);
+        cardHoverFade = null;
     }
 }
