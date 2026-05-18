@@ -50,6 +50,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
     {
         item = newItem;
         itemIcon = null;
+        isPointerOver = false;
         Refresh();
     }
 
@@ -57,6 +58,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
     {
         item = null;
         itemIcon = newItemIcon;
+        isPointerOver = false;
         Refresh();
     }
 
@@ -64,6 +66,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
     {
         item = null;
         itemIcon = null;
+        isPointerOver = false;
         Refresh();
     }
 

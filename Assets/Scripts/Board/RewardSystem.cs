@@ -198,8 +198,16 @@ public sealed class RewardSystem : MonoBehaviour
             return false;
         }
 
+        if (cardSystem.Hand.Count >= cardSystem.MaxCards)
+        {
+            rewardModalView?.ShowStatus("Card hand is full");
+            Debug.LogWarning($"Card reward '{reward.DisplayName}' was not claimed. Card hand is full.");
+            return false;
+        }
+
         if (!cardSystem.AddCard(reward.CardData))
         {
+            rewardModalView?.ShowStatus("Card hand is full");
             Debug.LogWarning($"Card reward '{reward.DisplayName}' was not claimed.");
             return false;
         }
@@ -216,8 +224,16 @@ public sealed class RewardSystem : MonoBehaviour
             return false;
         }
 
+        if (!playerInventory.HasFreeSlot())
+        {
+            rewardModalView?.ShowStatus("Equipment inventory is full");
+            Debug.LogWarning($"Item reward '{reward.DisplayName}' was not claimed. Equipment inventory is full.");
+            return false;
+        }
+
         if (!playerInventory.TryEquip(reward.ItemData))
         {
+            rewardModalView?.ShowStatus("Equipment inventory is full");
             Debug.LogWarning($"Item reward '{reward.DisplayName}' was not claimed.");
             return false;
         }

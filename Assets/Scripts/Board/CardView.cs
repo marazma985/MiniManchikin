@@ -46,6 +46,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void SetCard(CardData card)
     {
         currentCard = card;
+        isPointerOver = false;
         RefreshVisual();
     }
 
