@@ -11,6 +11,7 @@ public sealed class BattleSystem : MonoBehaviour
     [SerializeField] private PlayerInventory playerInventory;
     [SerializeField] private CardSystem cardSystem;
     [SerializeField] private RewardSystem rewardSystem;
+    [SerializeField] private EventNotificationSystem eventNotificationSystem;
     [SerializeField] private DiceSystem diceSystem;
     [SerializeField] private Sprite playerSprite;
     [SerializeField] private BattleModalView battleModalView;
@@ -187,7 +188,9 @@ public sealed class BattleSystem : MonoBehaviour
 
         if (currentBattleData.PlayerTotalPower > currentBattleData.EnemyTotalPower)
         {
+            var previousLevel = playerStats.Level;
             playerStats.SetLevel(playerStats.Level + 1);
+            NotifyEffect(EffectType.Level, playerStats.Level - previousLevel, EffectNotificationStatus.Success);
             Debug.Log($"Battle won: {currentBattleData.PlayerName} defeated {currentBattleData.EnemyName}. Level is now {playerStats.Level}.");
             if (rewardSystem != null && rewardSystem.ShowBattleRewards(HandleRewardAccepted))
             {
@@ -294,11 +297,15 @@ public sealed class BattleSystem : MonoBehaviour
         var damage = -value;
         if (playerInventory != null && playerInventory.TryBreakArmorForHpLoss())
         {
+            NotifyEffect(EffectType.HpRestore, value, EffectNotificationStatus.Blocked);
             Debug.Log($"{currentEnemy.EnemyName} HP loss penalty was prevented by armor.");
             return;
         }
 
+        var previousHp = playerStats.CurrentHp;
         playerStats.TakeDamage(damage);
+        var lostHp = previousHp - playerStats.CurrentHp;
+        NotifyEffect(EffectType.HpRestore, lostHp > 0 ? -lostHp : value, lostHp > 0 ? EffectNotificationStatus.Success : EffectNotificationStatus.NoEffect);
         Debug.Log($"{currentEnemy.EnemyName} penalty applied: lose {damage} HP.");
     }
 
@@ -311,7 +318,10 @@ public sealed class BattleSystem : MonoBehaviour
         }
 
         var levelLoss = -value;
+        var previousLevel = playerStats.Level;
         playerStats.SetLevel(playerStats.Level + value);
+        var levelChange = playerStats.Level - previousLevel;
+        NotifyEffect(EffectType.Level, levelChange != 0 ? levelChange : value, levelChange != 0 ? EffectNotificationStatus.Success : EffectNotificationStatus.NoEffect);
         Debug.Log($"{currentEnemy.EnemyName} penalty applied: lose {levelLoss} level.");
     }
 
@@ -332,9 +342,12 @@ public sealed class BattleSystem : MonoBehaviour
                 continue;
             }
 
+            NotifyEffect(EffectType.RemoveCard, removeCount, EffectNotificationStatus.Failed);
             Debug.LogWarning($"{currentEnemy.EnemyName} penalty could not remove a common card.");
             return;
         }
+
+        NotifyEffect(EffectType.RemoveCard, removeCount, EffectNotificationStatus.Success);
     }
 
     private EnemyModifier SelectRandomModifier(EnemyData enemy)
@@ -490,6 +503,12 @@ public sealed class BattleSystem : MonoBehaviour
         currentBattleData = CreateBattleData(currentEnemy);
         battleModalView.Show(currentBattleData);
         battleModalView.UpdateState(status, GetCurrentActionButtonText());
+    }
+
+    private void NotifyEffect(EffectType effectType, int value, EffectNotificationStatus status)
+    {
+        if (eventNotificationSystem != null)
+            eventNotificationSystem.ShowEffectNotification(effectType, value, status);
     }
 
     private string GetCurrentActionButtonText()

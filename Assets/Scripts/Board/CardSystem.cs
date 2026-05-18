@@ -10,6 +10,7 @@ public sealed class CardSystem : MonoBehaviour
     [SerializeField] private BattleSystem battleSystem;
     [SerializeField] private TurnSystem turnSystem;
     [SerializeField] private BoardManager boardManager;
+    [SerializeField] private EventNotificationSystem eventNotificationSystem;
     [SerializeField] private CardData testSmallHeal;
     [SerializeField] private CardData testExperiencePotion;
     [SerializeField] private CardData testTreasureMap;
@@ -235,17 +236,35 @@ public sealed class CardSystem : MonoBehaviour
         switch (effect.EffectType)
         {
             case EffectType.HpRestore:
+                var previousHp = playerStats.CurrentHp;
                 playerStats.Heal(effect.Value);
+                var restoredHp = playerStats.CurrentHp - previousHp;
+                NotifyEffect(effect, restoredHp > 0 ? EffectNotificationStatus.Success : EffectNotificationStatus.NoEffect, restoredHp > 0 ? restoredHp : effect.Value);
                 return true;
             case EffectType.Level:
+                var previousLevel = playerStats.Level;
                 playerStats.SetLevel(playerStats.Level + effect.Value);
+                var levelChange = playerStats.Level - previousLevel;
+                NotifyEffect(effect, levelChange != 0 ? EffectNotificationStatus.Success : EffectNotificationStatus.NoEffect, levelChange != 0 ? levelChange : effect.Value);
                 return true;
             case EffectType.Power:
-                return battleSystem.AddTemporaryCardPower(effect.Value);
+                if (!battleSystem.AddTemporaryCardPower(effect.Value))
+                    return false;
+
+                NotifyEffect(effect, EffectNotificationStatus.Success);
+                return true;
             case EffectType.EscapeBonus:
-                return battleSystem.AddTemporaryEscapeBonus(effect.Value);
+                if (!battleSystem.AddTemporaryEscapeBonus(effect.Value))
+                    return false;
+
+                NotifyEffect(effect, EffectNotificationStatus.Success);
+                return true;
             case EffectType.ChangePosition:
-                return ApplyChangePosition(effect);
+                if (!ApplyChangePosition(effect))
+                    return false;
+
+                NotifyEffect(effect, EffectNotificationStatus.Success);
+                return true;
             default:
                 return false;
         }
@@ -290,6 +309,18 @@ public sealed class CardSystem : MonoBehaviour
             return false;
 
         return turnSystem.TryMoveFixedSteps(steps);
+    }
+
+    private void NotifyEffect(EffectData effect, EffectNotificationStatus status)
+    {
+        if (eventNotificationSystem != null)
+            eventNotificationSystem.ShowEffectNotification(effect, status);
+    }
+
+    private void NotifyEffect(EffectData effect, EffectNotificationStatus status, int displayValue)
+    {
+        if (eventNotificationSystem != null)
+            eventNotificationSystem.ShowEffectNotification(effect, status, displayValue);
     }
 
     [ContextMenu("Test Add Small Heal")]

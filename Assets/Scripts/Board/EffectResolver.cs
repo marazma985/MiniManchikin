@@ -86,7 +86,7 @@ public sealed class EffectResolver
             var previousHp = playerStats.CurrentHp;
             playerStats.Heal(playerStats.MaxHp - previousHp);
             var restoredHp = playerStats.CurrentHp - previousHp;
-            NotifyEffect(restoredHp > 0 ? $"+{restoredHp} HP" : "Full heal", EffectType.HpRestore);
+            NotifyEffect(effect, restoredHp > 0 ? EffectNotificationStatus.Success : EffectNotificationStatus.NoEffect, restoredHp > 0 ? restoredHp : playerStats.MaxHp);
             Debug.Log($"{sourceName} fully healed the player.");
             return true;
         }
@@ -97,8 +97,7 @@ public sealed class EffectResolver
             var previousHp = playerStats.CurrentHp;
             playerStats.Heal(value);
             var restoredHp = playerStats.CurrentHp - previousHp;
-            if (restoredHp > 0)
-                NotifyEffect($"+{restoredHp} HP", EffectType.HpRestore);
+            NotifyEffect(effect, restoredHp > 0 ? EffectNotificationStatus.Success : EffectNotificationStatus.NoEffect, restoredHp > 0 ? restoredHp : value);
 
             Debug.Log($"{sourceName} restored {value} HP.");
             return true;
@@ -109,7 +108,7 @@ public sealed class EffectResolver
             var damage = -value;
             if (playerInventory != null && playerInventory.TryBreakArmorForHpLoss())
             {
-                NotifyEffect("Armor broke", EffectType.RemoveItem);
+                NotifyEffect(effect, EffectNotificationStatus.Blocked);
                 Debug.Log($"{sourceName} HP loss was prevented by armor.");
                 return true;
             }
@@ -117,8 +116,7 @@ public sealed class EffectResolver
             var previousHp = playerStats.CurrentHp;
             playerStats.TakeDamage(damage);
             var lostHp = previousHp - playerStats.CurrentHp;
-            if (lostHp > 0)
-                NotifyEffect($"-{lostHp} HP", EffectType.HpRestore);
+            NotifyEffect(effect, lostHp > 0 ? EffectNotificationStatus.Success : EffectNotificationStatus.NoEffect, lostHp > 0 ? -lostHp : value);
 
             Debug.Log($"{sourceName} dealt {damage} HP damage.");
             return true;
@@ -147,11 +145,12 @@ public sealed class EffectResolver
         var levelChange = playerStats.Level - previousLevel;
         if (levelChange == 0)
         {
+            NotifyEffect(EffectType.Level, value, EffectNotificationStatus.NoEffect);
             Debug.Log($"{sourceName} left level unchanged at {playerStats.Level}.");
             return true;
         }
 
-        NotifyEffect(levelChange > 0 ? $"+{levelChange} Level" : $"{levelChange} Level", EffectType.Level);
+        NotifyEffect(EffectType.Level, levelChange, EffectNotificationStatus.Success);
         Debug.Log(levelChange > 0 ? $"{sourceName} added {levelChange} level." : $"{sourceName} removed {-levelChange} level.");
         return true;
     }
@@ -163,6 +162,7 @@ public sealed class EffectResolver
         if (card == null)
         {
             Debug.LogWarning($"{sourceName} cannot give a {rarity} card because the card pool is empty.");
+            NotifyEffect(effect, EffectNotificationStatus.Failed);
             onResolved?.Invoke();
             return false;
         }
@@ -170,6 +170,7 @@ public sealed class EffectResolver
         if (singleRewardSystem == null)
         {
             Debug.LogWarning($"{sourceName} cannot show card reward '{card.CardName}' because SingleRewardSystem is not assigned.");
+            NotifyEffect(effect, EffectNotificationStatus.Failed);
             onResolved?.Invoke();
             return false;
         }
@@ -177,6 +178,7 @@ public sealed class EffectResolver
         if (!singleRewardSystem.ShowReward(RewardData.FromCard(card), onResolved, NotifyRewardClaimed))
         {
             Debug.LogWarning($"{sourceName} could not show card reward '{card.CardName}'.");
+            NotifyEffect(effect, EffectNotificationStatus.Failed);
             onResolved?.Invoke();
             return false;
         }
@@ -192,6 +194,7 @@ public sealed class EffectResolver
         if (item == null)
         {
             Debug.LogWarning($"{sourceName} cannot give a {rarity} item because the item pool is empty.");
+            NotifyEffect(effect, EffectNotificationStatus.Failed);
             onResolved?.Invoke();
             return false;
         }
@@ -199,6 +202,7 @@ public sealed class EffectResolver
         if (singleRewardSystem == null)
         {
             Debug.LogWarning($"{sourceName} cannot show item reward '{item.ItemName}' because SingleRewardSystem is not assigned.");
+            NotifyEffect(effect, EffectNotificationStatus.Failed);
             onResolved?.Invoke();
             return false;
         }
@@ -206,6 +210,7 @@ public sealed class EffectResolver
         if (!singleRewardSystem.ShowReward(RewardData.FromItem(item), onResolved, NotifyRewardClaimed))
         {
             Debug.LogWarning($"{sourceName} could not show item reward '{item.ItemName}'.");
+            NotifyEffect(effect, EffectNotificationStatus.Failed);
             onResolved?.Invoke();
             return false;
         }
@@ -231,6 +236,7 @@ public sealed class EffectResolver
             if (!cardSystem.RemoveRandomCard(rarity))
             {
                 Debug.LogWarning($"{sourceName} could not remove a random {rarity} card.");
+                NotifyEffect(effect, removedAny ? EffectNotificationStatus.Success : EffectNotificationStatus.Failed, removedAny ? i : removeCount);
                 return removedAny;
             }
 
@@ -238,7 +244,7 @@ public sealed class EffectResolver
         }
 
         Debug.Log($"{sourceName} removed {removeCount} random {rarity} card.");
-        NotifyEffect(removeCount == 1 ? "Card removed" : $"{removeCount} cards removed", EffectType.RemoveCard);
+        NotifyEffect(effect, EffectNotificationStatus.Success, removeCount);
         return true;
     }
 
@@ -250,18 +256,30 @@ public sealed class EffectResolver
         switch (reward.RewardType)
         {
             case RewardType.Card:
-                NotifyEffect("Card gained", EffectType.GiveCard);
+                NotifyEffect(EffectType.GiveCard, 1, EffectNotificationStatus.Success);
                 break;
             case RewardType.Item:
-                NotifyEffect("Item gained", EffectType.GiveItem);
+                NotifyEffect(EffectType.GiveItem, 1, EffectNotificationStatus.Success);
                 break;
         }
     }
 
-    private void NotifyEffect(string message, EffectType effectType)
+    private void NotifyEffect(EffectData effect, EffectNotificationStatus status)
     {
         if (eventNotificationSystem != null)
-            eventNotificationSystem.ShowNotification(message, effectType);
+            eventNotificationSystem.ShowEffectNotification(effect, status);
+    }
+
+    private void NotifyEffect(EffectData effect, EffectNotificationStatus status, int displayValue)
+    {
+        if (eventNotificationSystem != null)
+            eventNotificationSystem.ShowEffectNotification(effect, status, displayValue);
+    }
+
+    private void NotifyEffect(EffectType effectType, int value, EffectNotificationStatus status)
+    {
+        if (eventNotificationSystem != null)
+            eventNotificationSystem.ShowEffectNotification(effectType, value, status);
     }
 
     private CardData GetRandomCard(Rarity rarity)

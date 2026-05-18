@@ -9,6 +9,7 @@ public sealed class RewardSystem : MonoBehaviour
     [SerializeField] private CardSystem cardSystem;
     [SerializeField] private PlayerInventory playerInventory;
     [SerializeField] private RewardModalView rewardModalView;
+    [SerializeField] private EventNotificationSystem eventNotificationSystem;
     [SerializeField] private List<CardData> cardRewards = new List<CardData>();
     [SerializeField] private List<ItemData> itemRewards = new List<ItemData>();
 
@@ -194,6 +195,7 @@ public sealed class RewardSystem : MonoBehaviour
     {
         if (cardSystem == null || reward.CardData == null)
         {
+            NotifyEffect(EffectType.GiveCard, 1, EffectNotificationStatus.Failed);
             Debug.LogWarning("Cannot claim card reward. CardSystem or CardData is missing.");
             return false;
         }
@@ -201,6 +203,7 @@ public sealed class RewardSystem : MonoBehaviour
         if (cardSystem.Hand.Count >= cardSystem.MaxCards)
         {
             rewardModalView?.ShowStatus("Card hand is full");
+            NotifyEffect(EffectType.GiveCard, 1, EffectNotificationStatus.Failed);
             Debug.LogWarning($"Card reward '{reward.DisplayName}' was not claimed. Card hand is full.");
             return false;
         }
@@ -208,11 +211,13 @@ public sealed class RewardSystem : MonoBehaviour
         if (!cardSystem.AddCard(reward.CardData))
         {
             rewardModalView?.ShowStatus("Card hand is full");
+            NotifyEffect(EffectType.GiveCard, 1, EffectNotificationStatus.Failed);
             Debug.LogWarning($"Card reward '{reward.DisplayName}' was not claimed.");
             return false;
         }
 
         Debug.Log($"Card reward claimed: {reward.DisplayName}.");
+        NotifyEffect(EffectType.GiveCard, 1, EffectNotificationStatus.Success);
         return true;
     }
 
@@ -220,6 +225,7 @@ public sealed class RewardSystem : MonoBehaviour
     {
         if (playerInventory == null || reward.ItemData == null)
         {
+            NotifyEffect(EffectType.GiveItem, 1, EffectNotificationStatus.Failed);
             Debug.LogWarning("Cannot claim item reward. PlayerInventory or ItemData is missing.");
             return false;
         }
@@ -227,6 +233,7 @@ public sealed class RewardSystem : MonoBehaviour
         if (!playerInventory.HasFreeSlot())
         {
             rewardModalView?.ShowStatus("Equipment inventory is full");
+            NotifyEffect(EffectType.GiveItem, 1, EffectNotificationStatus.Failed);
             Debug.LogWarning($"Item reward '{reward.DisplayName}' was not claimed. Equipment inventory is full.");
             return false;
         }
@@ -234,12 +241,20 @@ public sealed class RewardSystem : MonoBehaviour
         if (!playerInventory.TryEquip(reward.ItemData))
         {
             rewardModalView?.ShowStatus("Equipment inventory is full");
+            NotifyEffect(EffectType.GiveItem, 1, EffectNotificationStatus.Failed);
             Debug.LogWarning($"Item reward '{reward.DisplayName}' was not claimed.");
             return false;
         }
 
         Debug.Log($"Item reward claimed: {reward.DisplayName}.");
+        NotifyEffect(EffectType.GiveItem, 1, EffectNotificationStatus.Success);
         return true;
+    }
+
+    private void NotifyEffect(EffectType effectType, int value, EffectNotificationStatus status)
+    {
+        if (eventNotificationSystem != null)
+            eventNotificationSystem.ShowEffectNotification(effectType, value, status);
     }
 
     private void OnValidate()
