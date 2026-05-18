@@ -10,8 +10,14 @@ public sealed class SingleRewardSystem : MonoBehaviour
 
     private RewardData currentReward;
     private Action rewardCompleted;
+    private Action<RewardData> rewardClaimed;
 
     public bool ShowReward(RewardData reward, Action onCompleted)
+    {
+        return ShowReward(reward, onCompleted, null);
+    }
+
+    public bool ShowReward(RewardData reward, Action onCompleted, Action<RewardData> onClaimed)
     {
         if (modalView == null)
         {
@@ -27,6 +33,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
 
         currentReward = reward;
         rewardCompleted = onCompleted;
+        rewardClaimed = onClaimed;
         modalView.Show(reward);
         RefreshAcceptState();
         return true;
@@ -94,6 +101,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
             return;
         }
 
+        rewardClaimed?.Invoke(currentReward);
         CompleteReward();
     }
 
@@ -186,6 +194,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
 
         var onCompleted = rewardCompleted;
         rewardCompleted = null;
+        rewardClaimed = null;
         onCompleted?.Invoke();
     }
 }

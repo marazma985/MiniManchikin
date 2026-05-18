@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SingleRewardSystem))]
+[RequireComponent(typeof(EventNotificationSystem))]
 public sealed class TileEffectSystem : MonoBehaviour
 {
     [SerializeField] private BattleSystem battleSystem;
@@ -10,6 +11,7 @@ public sealed class TileEffectSystem : MonoBehaviour
     [SerializeField] private PlayerInventory playerInventory;
     [SerializeField] private CardSystem cardSystem;
     [SerializeField] private SingleRewardSystem singleRewardSystem;
+    [SerializeField] private EventNotificationSystem eventNotificationSystem;
     [SerializeField] private List<CardData> possibleCommonCards = new List<CardData>();
     [SerializeField] private List<CardData> possibleRareCards = new List<CardData>();
     [SerializeField] private List<ItemData> possibleRareItems = new List<ItemData>();
@@ -113,9 +115,10 @@ public sealed class TileEffectSystem : MonoBehaviour
     private void InitializeEffects()
     {
         var resolvedSingleRewardSystem = ResolveSingleRewardSystem();
+        var resolvedEventNotificationSystem = ResolveEventNotificationSystem();
 
         effectsByTileType.Clear();
-        effectResolver.Configure(playerStats, playerInventory, cardSystem, resolvedSingleRewardSystem, possibleCommonCards, possibleRareCards, possibleRareItems);
+        effectResolver.Configure(playerStats, playerInventory, cardSystem, resolvedSingleRewardSystem, resolvedEventNotificationSystem, possibleCommonCards, possibleRareCards, possibleRareItems);
         eventTileEffect.Configure(effectResolver, buffEvents, debuffEvents);
         buffTileEffect.Configure(effectResolver, buffEvents);
         debuffTileEffect.Configure(effectResolver, debuffEvents);
@@ -142,6 +145,21 @@ public sealed class TileEffectSystem : MonoBehaviour
         }
 
         Debug.LogWarning("TileEffectSystem requires SingleRewardSystem for card and item tile rewards.");
+        return null;
+    }
+
+    private EventNotificationSystem ResolveEventNotificationSystem()
+    {
+        if (eventNotificationSystem != null)
+            return eventNotificationSystem;
+
+        if (TryGetComponent(out EventNotificationSystem localEventNotificationSystem))
+        {
+            eventNotificationSystem = localEventNotificationSystem;
+            return eventNotificationSystem;
+        }
+
+        Debug.LogWarning("TileEffectSystem requires EventNotificationSystem for tile event feedback.");
         return null;
     }
 
