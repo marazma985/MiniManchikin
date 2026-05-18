@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
 {
     [SerializeField] private Image cardImage;
     [SerializeField] private Button button;
@@ -15,6 +15,17 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private CardData currentCard;
     private Coroutine removeButtonFade;
     private bool isPointerOver;
+    private bool isRemoveButtonVisible;
+    private bool removeButtonHoverConfigured;
+    private RectTransform cardRectTransform;
+    private RectTransform removeButtonRectTransform;
+    private Canvas parentCanvas;
+    private Graphic buttonTargetGraphic;
+    private Graphic removeButtonTargetGraphic;
+    private ColorBlock buttonColors;
+    private Color removeButtonNormalColor;
+    private bool buttonVisualConfigured;
+    private bool removeButtonVisualConfigured;
 
     public event Action<CardData> Clicked;
     public event Action<CardData> RemoveClicked;
@@ -23,12 +34,15 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     private void OnEnable()
     {
+        ConfigureButtonVisuals();
+
         if (button != null)
             button.onClick.AddListener(HandleClick);
 
         if (removeButton != null)
             removeButton.onClick.AddListener(HandleRemoveClick);
 
+        EnsureRemoveButtonHoverEvents();
         RefreshVisual();
     }
 
@@ -41,13 +55,14 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
             removeButton.onClick.RemoveListener(HandleRemoveClick);
 
         StopRemoveButtonFade();
+        ApplyMainButtonHover(false);
     }
 
     public void SetCard(CardData card)
     {
         currentCard = card;
-        isPointerOver = false;
         RefreshVisual();
+        RefreshPointerState(Input.mousePosition, GetEventCamera(), true);
     }
 
     private void RefreshVisual()
@@ -79,14 +94,126 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        isPointerOver = true;
-        SetRemoveButtonVisible(currentCard != null, false);
+        RefreshPointerState(eventData.position, eventData.enterEventCamera, false);
+    }
+
+    public void OnPointerMove(PointerEventData eventData)
+    {
+        RefreshPointerState(eventData.position, eventData.enterEventCamera, false);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         isPointerOver = false;
+        ApplyMainButtonHover(false);
         SetRemoveButtonVisible(false, false);
+    }
+
+    private void ConfigureButtonVisuals()
+    {
+        if (button != null && !buttonVisualConfigured)
+        {
+            buttonColors = button.colors;
+            buttonTargetGraphic = button.targetGraphic;
+            button.transition = Selectable.Transition.None;
+            ApplyMainButtonHover(false);
+            buttonVisualConfigured = true;
+        }
+
+        if (removeButton != null && !removeButtonVisualConfigured)
+        {
+            removeButtonTargetGraphic = removeButton.targetGraphic;
+            removeButtonNormalColor = removeButtonTargetGraphic != null ? removeButtonTargetGraphic.color : removeButton.colors.normalColor;
+            removeButton.transition = Selectable.Transition.None;
+
+            if (removeButtonTargetGraphic != null)
+                removeButtonTargetGraphic.color = removeButtonNormalColor;
+
+            removeButtonVisualConfigured = true;
+        }
+    }
+
+    private void RefreshPointerState(Vector2 screenPosition, Camera eventCamera, bool instant)
+    {
+        var pointerOverCard = currentCard != null && IsScreenPointInsideCard(screenPosition, eventCamera);
+        var pointerOverRemoveButton = pointerOverCard && IsScreenPointInsideRemoveButton(screenPosition, eventCamera);
+
+        isPointerOver = pointerOverCard;
+        SetRemoveButtonVisible(pointerOverCard, instant);
+        ApplyMainButtonHover(pointerOverCard && !pointerOverRemoveButton);
+    }
+
+    private bool IsScreenPointInsideCard(Vector2 screenPosition, Camera eventCamera)
+    {
+        if (cardRectTransform == null)
+            cardRectTransform = transform as RectTransform;
+
+        return cardRectTransform != null &&
+               RectTransformUtility.RectangleContainsScreenPoint(cardRectTransform, screenPosition, eventCamera);
+    }
+
+    private bool IsScreenPointInsideRemoveButton(Vector2 screenPosition, Camera eventCamera)
+    {
+        if (removeButton == null || !removeButton.gameObject.activeInHierarchy)
+            return false;
+
+        if (removeButtonRectTransform == null)
+            removeButtonRectTransform = removeButton.transform as RectTransform;
+
+        return removeButtonRectTransform != null &&
+               RectTransformUtility.RectangleContainsScreenPoint(removeButtonRectTransform, screenPosition, eventCamera);
+    }
+
+    private Camera GetEventCamera()
+    {
+        if (parentCanvas == null)
+            parentCanvas = GetComponentInParent<Canvas>();
+
+        if (parentCanvas == null || parentCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            return null;
+
+        return parentCanvas.worldCamera;
+    }
+
+    private void EnsureRemoveButtonHoverEvents()
+    {
+        if (removeButton == null || removeButtonHoverConfigured)
+            return;
+
+        var trigger = removeButton.GetComponent<EventTrigger>();
+        if (trigger == null)
+            trigger = removeButton.gameObject.AddComponent<EventTrigger>();
+
+        AddEventTrigger(trigger, EventTriggerType.PointerEnter, HandleRemovePointerEnter);
+        AddEventTrigger(trigger, EventTriggerType.PointerExit, HandleRemovePointerExit);
+        removeButtonHoverConfigured = true;
+    }
+
+    private static void AddEventTrigger(EventTrigger trigger, EventTriggerType eventType, Action<BaseEventData> callback)
+    {
+        var entry = new EventTrigger.Entry { eventID = eventType };
+        entry.callback.AddListener(eventData => callback?.Invoke(eventData));
+        trigger.triggers.Add(entry);
+    }
+
+    private void HandleRemovePointerEnter(BaseEventData eventData)
+    {
+        var pointerEventData = eventData as PointerEventData;
+        RefreshPointerState(pointerEventData != null ? pointerEventData.position : (Vector2)Input.mousePosition, GetEventCamera(), false);
+    }
+
+    private void HandleRemovePointerExit(BaseEventData eventData)
+    {
+        var pointerEventData = eventData as PointerEventData;
+        RefreshPointerState(pointerEventData != null ? pointerEventData.position : (Vector2)Input.mousePosition, GetEventCamera(), false);
+    }
+
+    private void ApplyMainButtonHover(bool highlighted)
+    {
+        if (buttonTargetGraphic == null)
+            return;
+
+        buttonTargetGraphic.color = highlighted ? buttonColors.highlightedColor : buttonColors.normalColor;
     }
 
     private void SetRemoveButtonVisible(bool visible, bool instant)
@@ -94,6 +221,14 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         if (removeButtonCanvasGroup == null)
             return;
 
+        if (!instant && isRemoveButtonVisible == visible)
+        {
+            removeButtonCanvasGroup.interactable = visible;
+            removeButtonCanvasGroup.blocksRaycasts = visible;
+            return;
+        }
+
+        isRemoveButtonVisible = visible;
         StopRemoveButtonFade();
         removeButtonCanvasGroup.interactable = visible;
         removeButtonCanvasGroup.blocksRaycasts = visible;
