@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 05a12977516a08148959f38c98ebea0b
+guid: cadc183a069bfc54f84a8cde77ab96cd
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6343121912727562903
-    second: "ChatGPT Image 20 \u043C\u0430\u044F 2026 \u0433., 20_14_14_0"
+      213: 2549297865486547182
+    second: TileRandomEvent_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "ChatGPT Image 20 \u043C\u0430\u044F 2026 \u0433., 20_14_14_0"
+      name: TileRandomEvent_0
       rect:
         serializedVersion: 2
-        x: 84
-        y: 160
-        width: 1363
-        height: 721
+        x: 72
+        y: 134
+        width: 1136
+        height: 596
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 96590e84a34b8f7a0800000000000000
-      internalID: -6343121912727562903
+      spriteID: ee8bcf2e6ece06320800000000000000
+      internalID: 2549297865486547182
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "ChatGPT Image 20 \u043C\u0430\u044F 2026 \u0433., 20_14_14_0": -6343121912727562903
+      TileRandomEvent_0: 2549297865486547182
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
