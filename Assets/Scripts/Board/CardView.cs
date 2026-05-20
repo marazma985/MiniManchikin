@@ -7,11 +7,13 @@ using UnityEngine.UI;
 public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
 {
     [SerializeField] private Image cardImage;
+    [SerializeField] private Image hoverOverlayImage;
     [SerializeField] private Button button;
     [SerializeField] private Button removeButton;
     [SerializeField] private CanvasGroup removeButtonCanvasGroup;
     [SerializeField, Min(0f)] private float removeButtonFadeDuration = 0.15f;
     [SerializeField, Min(0f)] private float cardHoverFadeDuration = 0.12f;
+    [SerializeField, Range(0f, 1f)] private float cardHoverOverlayAlpha = 0.18f;
 
     private CardData currentCard;
     private Coroutine removeButtonFade;
@@ -23,9 +25,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private RectTransform cardRectTransform;
     private RectTransform removeButtonRectTransform;
     private Canvas parentCanvas;
-    private Graphic buttonTargetGraphic;
     private Graphic removeButtonTargetGraphic;
-    private ColorBlock buttonColors;
     private Color removeButtonNormalColor;
     private bool buttonVisualConfigured;
     private bool removeButtonVisualConfigured;
@@ -82,6 +82,11 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         var sprite = currentCard != null ? currentCard.CardSprite : null;
         cardImage.sprite = sprite;
         cardImage.enabled = sprite != null;
+
+        RefreshHoverOverlaySprite(sprite);
+
+        if (currentCard == null)
+            SetCardHover(false, true);
     }
 
     private void HandleClick()
@@ -117,8 +122,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         if (button != null && !buttonVisualConfigured)
         {
-            buttonColors = button.colors;
-            buttonTargetGraphic = button.targetGraphic;
+            EnsureHoverOverlay();
             button.transition = Selectable.Transition.None;
             SetCardHover(false, true);
             buttonVisualConfigured = true;
@@ -214,40 +218,89 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     private void SetCardHover(bool highlighted, bool instant)
     {
-        if (buttonTargetGraphic == null)
+        if (hoverOverlayImage == null)
             return;
 
         if (!instant && isCardHighlighted == highlighted)
             return;
 
         isCardHighlighted = highlighted;
-        var targetColor = highlighted ? buttonColors.highlightedColor : buttonColors.normalColor;
+        var targetAlpha = highlighted ? cardHoverOverlayAlpha : 0f;
 
         StopCardHoverFade();
         if (instant || cardHoverFadeDuration <= 0f)
         {
-            buttonTargetGraphic.color = targetColor;
+            SetHoverOverlayAlpha(targetAlpha);
             return;
         }
 
-        cardHoverFade = StartCoroutine(FadeCardHover(targetColor));
+        cardHoverFade = StartCoroutine(FadeCardHover(targetAlpha));
     }
 
-    private IEnumerator FadeCardHover(Color targetColor)
+    private IEnumerator FadeCardHover(float targetAlpha)
     {
-        var startColor = buttonTargetGraphic.color;
+        var startAlpha = hoverOverlayImage.color.a;
         var elapsed = 0f;
 
         while (elapsed < cardHoverFadeDuration)
         {
             elapsed += Time.unscaledDeltaTime;
             var progress = Mathf.Clamp01(elapsed / cardHoverFadeDuration);
-            buttonTargetGraphic.color = Color.Lerp(startColor, targetColor, progress);
+            SetHoverOverlayAlpha(Mathf.Lerp(startAlpha, targetAlpha, progress));
             yield return null;
         }
 
-        buttonTargetGraphic.color = targetColor;
+        SetHoverOverlayAlpha(targetAlpha);
         cardHoverFade = null;
+    }
+
+    private void EnsureHoverOverlay()
+    {
+        if (hoverOverlayImage != null)
+        {
+            hoverOverlayImage.raycastTarget = false;
+            SetHoverOverlayAlpha(0f);
+            return;
+        }
+
+        if (cardImage == null)
+            return;
+
+        var overlayObject = new GameObject("Hover Light Overlay", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        overlayObject.transform.SetParent(transform, false);
+        overlayObject.transform.SetAsFirstSibling();
+
+        if (overlayObject.transform is RectTransform rectTransform)
+        {
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.offsetMin = Vector2.zero;
+            rectTransform.offsetMax = Vector2.zero;
+        }
+
+        hoverOverlayImage = overlayObject.GetComponent<Image>();
+        hoverOverlayImage.raycastTarget = false;
+        RefreshHoverOverlaySprite(cardImage.sprite);
+        SetHoverOverlayAlpha(0f);
+    }
+
+    private void RefreshHoverOverlaySprite(Sprite sprite)
+    {
+        if (hoverOverlayImage == null)
+            return;
+
+        hoverOverlayImage.sprite = sprite;
+        hoverOverlayImage.type = cardImage != null ? cardImage.type : Image.Type.Simple;
+        hoverOverlayImage.preserveAspect = cardImage != null && cardImage.preserveAspect;
+        hoverOverlayImage.enabled = sprite != null;
+    }
+
+    private void SetHoverOverlayAlpha(float alpha)
+    {
+        if (hoverOverlayImage == null)
+            return;
+
+        hoverOverlayImage.color = new Color(1f, 1f, 1f, alpha);
     }
 
     private void SetRemoveButtonVisible(bool visible, bool instant)

@@ -1353,11 +1353,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardView
   cardImage: {fileID: 289513849}
+  hoverOverlayImage: {fileID: 0}
   button: {fileID: 289513848}
   removeButton: {fileID: 2141000003}
   removeButtonCanvasGroup: {fileID: 2141000009}
   removeButtonFadeDuration: 0.15
   cardHoverFadeDuration: 0.12
+  cardHoverOverlayAlpha: 0.18
 --- !u!114 &289513848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4776,7 +4778,7 @@ Transform:
   m_GameObject: {fileID: 1266047070}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.92, y: -0.24499989, z: -0.25}
+  m_LocalPosition: {x: 0.85, y: -0.3, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4798,7 +4800,7 @@ MonoBehaviour:
   boardManager: {fileID: 1294733952}
   movementSpeed: 4
   stopDuration: 0.08
-  tileLocalOffset: {x: 0.9050001, y: -0.245, z: -0.25}
+  tileLocalOffset: {x: 0.85, y: -0.3, z: -0.25}
   onMoveCompleted:
     m_PersistentCalls:
       m_Calls: []
@@ -4816,7 +4818,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   maxHp: 5
   currentHp: 5
-  level: 2
+  level: 1
 --- !u!114 &1266047074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5602,7 +5604,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.52, y: 0.52, z: 0.52}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1266047071}
@@ -5654,13 +5656,13 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 6a75c1a0c87d49f4ba9dc0bd814fd6f7, type: 3}
+  m_Sprite: {fileID: -3076968021092009553, guid: f985ae63a9f79a04291ee52cf260ce00, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 1
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -6553,11 +6555,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardView
   cardImage: {fileID: 1649539190}
+  hoverOverlayImage: {fileID: 0}
   button: {fileID: 1649539189}
   removeButton: {fileID: 2141000023}
   removeButtonCanvasGroup: {fileID: 2141000029}
   removeButtonFadeDuration: 0.15
   cardHoverFadeDuration: 0.12
+  cardHoverOverlayAlpha: 0.18
 --- !u!114 &1649539189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8049,11 +8053,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardView
   cardImage: {fileID: 2132902785}
+  hoverOverlayImage: {fileID: 0}
   button: {fileID: 2132902784}
   removeButton: {fileID: 2141000043}
   removeButtonCanvasGroup: {fileID: 2141000049}
   removeButtonFadeDuration: 0.15
   cardHoverFadeDuration: 0.12
+  cardHoverOverlayAlpha: 0.18
 --- !u!114 &2132902784
 MonoBehaviour:
   m_ObjectHideFlags: 0
