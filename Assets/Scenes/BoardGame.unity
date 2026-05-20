@@ -8196,6 +8196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2140000001}
   - component: {fileID: 2140000002}
+  - component: {fileID: 9100001001}
   - component: {fileID: 2140000003}
   - component: {fileID: 2140000004}
   m_Layer: 5
@@ -8246,6 +8247,24 @@ MonoBehaviour:
   statusCanvasGroup: {fileID: 2140000104}
   statusFadeDuration: 0.2
   statusVisibleDuration: 1.2
+--- !u!114 &9100001001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc515a0bd57d4cf2bec9ff99babab736, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::BattleBackgroundBlurView
+  sourceCamera: {fileID: 841404074}
+  blurMaterial: {fileID: 2100000, guid: b77662177470415e9a25e2169a38dc04, type: 2}
+  blurImage: {fileID: 0}
+  captureWidth: 640
+  captureHeight: 360
+  backdropColor: {r: 1, g: 1, b: 1, a: 0.86}
 --- !u!114 &2140000003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10820,6 +10839,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2143000001}
   - component: {fileID: 2143000002}
+  - component: {fileID: 9100001002}
   m_Layer: 5
   m_Name: Single Reward Modal
   m_TagString: Untagged
@@ -10865,6 +10885,24 @@ MonoBehaviour:
   statusText: {fileID: 2143000052}
   acceptButton: {fileID: 2143000063}
   closeButton: {fileID: 2143000083}
+--- !u!114 &9100001002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2143000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc515a0bd57d4cf2bec9ff99babab736, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::BattleBackgroundBlurView
+  sourceCamera: {fileID: 841404074}
+  blurMaterial: {fileID: 2100000, guid: b77662177470415e9a25e2169a38dc04, type: 2}
+  blurImage: {fileID: 0}
+  captureWidth: 640
+  captureHeight: 360
+  backdropColor: {r: 1, g: 1, b: 1, a: 0.86}
 --- !u!1 &2143000010
 GameObject:
   m_ObjectHideFlags: 0
