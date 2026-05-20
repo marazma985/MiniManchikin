@@ -10,6 +10,10 @@ public sealed class PlayerStats : MonoBehaviour
     public event Action<int, int> OnHpChanged;
     public event Action<int> OnLevelChanged;
 
+    private int lastNotifiedHp = -1;
+    private int lastNotifiedMaxHp = -1;
+    private int lastNotifiedLevel = -1;
+
     public int CurrentHp => currentHp;
     public int MaxHp => maxHp;
     public int Level => level;
@@ -37,7 +41,7 @@ public sealed class PlayerStats : MonoBehaviour
             return;
 
         level = newLevel;
-        OnLevelChanged?.Invoke(level);
+        NotifyLevelChanged();
     }
 
     [ContextMenu("Test Take 1 Damage")]
@@ -52,9 +56,22 @@ public sealed class PlayerStats : MonoBehaviour
         Heal(1);
     }
 
+    [ContextMenu("Test Set Level 10")]
+    private void TestSetLevelTen()
+    {
+        SetLevel(10);
+    }
+
+    [ContextMenu("Test Take Lethal Damage")]
+    private void TestTakeLethalDamage()
+    {
+        TakeDamage(maxHp);
+    }
+
     private void Awake()
     {
         currentHp = Mathf.Clamp(currentHp, 0, maxHp);
+        CacheNotifiedValues();
     }
 
     private void OnValidate()
@@ -62,6 +79,9 @@ public sealed class PlayerStats : MonoBehaviour
         maxHp = Mathf.Max(1, maxHp);
         currentHp = Mathf.Clamp(currentHp, 0, maxHp);
         level = Mathf.Max(1, level);
+
+        if (Application.isPlaying)
+            NotifyRuntimeInspectorChanges();
     }
 
     private void SetHp(int newHp)
@@ -71,6 +91,35 @@ public sealed class PlayerStats : MonoBehaviour
             return;
 
         currentHp = newHp;
+        NotifyHpChanged();
+    }
+
+    private void NotifyRuntimeInspectorChanges()
+    {
+        if (lastNotifiedHp != currentHp || lastNotifiedMaxHp != maxHp)
+            NotifyHpChanged();
+
+        if (lastNotifiedLevel != level)
+            NotifyLevelChanged();
+    }
+
+    private void NotifyHpChanged()
+    {
+        lastNotifiedHp = currentHp;
+        lastNotifiedMaxHp = maxHp;
         OnHpChanged?.Invoke(currentHp, maxHp);
+    }
+
+    private void NotifyLevelChanged()
+    {
+        lastNotifiedLevel = level;
+        OnLevelChanged?.Invoke(level);
+    }
+
+    private void CacheNotifiedValues()
+    {
+        lastNotifiedHp = currentHp;
+        lastNotifiedMaxHp = maxHp;
+        lastNotifiedLevel = level;
     }
 }

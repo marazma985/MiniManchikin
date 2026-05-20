@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyId: siren
   enemyName: Siren
-  enemySprite: {fileID: 0}
+  enemySprite: {fileID: 5190138498232969072, guid: 8a5d4b3c4b642874181a214866fb054c, type: 3}
   baseLevel: 9
   bonusPower: 0
   penaltyType: 0

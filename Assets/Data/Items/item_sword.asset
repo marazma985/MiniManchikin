@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: sword
   itemName: Sword
   description: Rare weapon. Adds +4 Power.
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: -8594660322307314958, guid: 3fb16885d586b314abfa92f23c6f4bc1, type: 3}
   rarity: 1
   itemType: 0
   effects:

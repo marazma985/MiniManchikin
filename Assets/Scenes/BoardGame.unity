@@ -4818,7 +4818,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   maxHp: 5
   currentHp: 5
-  level: 1
+  level: 9
 --- !u!114 &1266047074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4852,6 +4852,7 @@ GameObject:
   - component: {fileID: 1294733956}
   - component: {fileID: 1294733957}
   - component: {fileID: 1294733958}
+  - component: {fileID: 1294733959}
   m_Layer: 0
   m_Name: BoardRoot
   m_TagString: Untagged
@@ -5251,6 +5252,21 @@ MonoBehaviour:
     blockedMessageTemplate: 
     noEffectMessageTemplate: 
     failedMessageTemplate: Item not removed
+--- !u!114 &1294733959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294733950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4909bebf11fe4f4a9c556585547eac82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameResultSystem
+  playerStats: {fileID: 1266047073}
+  winningLevel: 10
+  resultSceneName: ResultGameScene
 --- !u!1 &1348819609
 GameObject:
   m_ObjectHideFlags: 0
@@ -6066,24 +6082,6 @@ MonoBehaviour:
   statusText: {fileID: 578511041}
   actionButtonText: {fileID: 29247174}
   resolveButton: {fileID: 2103861302}
---- !u!114 &1571262784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1571262779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc515a0bd57d4cf2bec9ff99babab736, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::BattleBackgroundBlurView
-  sourceCamera: {fileID: 841404074}
-  blurMaterial: {fileID: 2100000, guid: b77662177470415e9a25e2169a38dc04, type: 2}
-  blurImage: {fileID: 0}
-  captureWidth: 640
-  captureHeight: 360
-  backdropColor: {r: 1, g: 1, b: 1, a: 0.86}
 --- !u!114 &1571262782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6122,6 +6120,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1571262779}
   m_CullTransparentMesh: 1
+--- !u!114 &1571262784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571262779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc515a0bd57d4cf2bec9ff99babab736, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleBackgroundBlurView
+  sourceCamera: {fileID: 841404074}
+  blurMaterial: {fileID: 2100000, guid: b77662177470415e9a25e2169a38dc04, type: 2}
+  blurImage: {fileID: 0}
+  captureWidth: 640
+  captureHeight: 360
+  backdropColor: {r: 1, g: 1, b: 1, a: 0.86}
 --- !u!1 &1599650572
 GameObject:
   m_ObjectHideFlags: 0
@@ -8247,24 +8263,6 @@ MonoBehaviour:
   statusCanvasGroup: {fileID: 2140000104}
   statusFadeDuration: 0.2
   statusVisibleDuration: 1.2
---- !u!114 &9100001001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2140000000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc515a0bd57d4cf2bec9ff99babab736, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::BattleBackgroundBlurView
-  sourceCamera: {fileID: 841404074}
-  blurMaterial: {fileID: 2100000, guid: b77662177470415e9a25e2169a38dc04, type: 2}
-  blurImage: {fileID: 0}
-  captureWidth: 640
-  captureHeight: 360
-  backdropColor: {r: 1, g: 1, b: 1, a: 0.86}
 --- !u!114 &2140000003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10885,24 +10883,6 @@ MonoBehaviour:
   statusText: {fileID: 2143000052}
   acceptButton: {fileID: 2143000063}
   closeButton: {fileID: 2143000083}
---- !u!114 &9100001002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2143000000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc515a0bd57d4cf2bec9ff99babab736, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::BattleBackgroundBlurView
-  sourceCamera: {fileID: 841404074}
-  blurMaterial: {fileID: 2100000, guid: b77662177470415e9a25e2169a38dc04, type: 2}
-  blurImage: {fileID: 0}
-  captureWidth: 640
-  captureHeight: 360
-  backdropColor: {r: 1, g: 1, b: 1, a: 0.86}
 --- !u!1 &2143000010
 GameObject:
   m_ObjectHideFlags: 0
@@ -11996,6 +11976,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144000030}
   m_CullTransparentMesh: 1
+--- !u!114 &9100001001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc515a0bd57d4cf2bec9ff99babab736, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleBackgroundBlurView
+  sourceCamera: {fileID: 841404074}
+  blurMaterial: {fileID: 2100000, guid: b77662177470415e9a25e2169a38dc04, type: 2}
+  blurImage: {fileID: 0}
+  captureWidth: 640
+  captureHeight: 360
+  backdropColor: {r: 1, g: 1, b: 1, a: 0.86}
+--- !u!114 &9100001002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2143000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc515a0bd57d4cf2bec9ff99babab736, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleBackgroundBlurView
+  sourceCamera: {fileID: 841404074}
+  blurMaterial: {fileID: 2100000, guid: b77662177470415e9a25e2169a38dc04, type: 2}
+  blurImage: {fileID: 0}
+  captureWidth: 640
+  captureHeight: 360
+  backdropColor: {r: 1, g: 1, b: 1, a: 0.86}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

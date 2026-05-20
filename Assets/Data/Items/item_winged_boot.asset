@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: winged_boot
   itemName: Winged Boot
   description: Rare artifact. Adds +2 Escape Bonus.
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: 5538399835660280381, guid: 5fd7f3f4ac8061b4b9ce10f0711b9076, type: 3}
   rarity: 1
   itemType: 2
   effects:

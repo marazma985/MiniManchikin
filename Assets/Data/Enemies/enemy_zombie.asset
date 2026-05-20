@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyId: zombie
   enemyName: Zombie
-  enemySprite: {fileID: 0}
+  enemySprite: {fileID: 7000520131886586932, guid: 8a5d4b3c4b642874181a214866fb054c, type: 3}
   baseLevel: 3
   bonusPower: 0
   penaltyType: 0
