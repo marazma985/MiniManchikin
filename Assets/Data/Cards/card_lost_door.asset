@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 912663d47b466f940998044c2b48f775, type: 3}
+  m_Name: card_lost_door
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  cardId: lost_door
+  cardName: Lost Door
+  description: TODO: Instant escape is represented as EscapeBonus with isInstant, but CardSystem does not execute instant escape yet.
+  cardSprite: {fileID: 0}
+  rarity: 1
+  usageContext: 0
+  effects:
+  - effectType: 2
+    value: 0
+    contentId: todo_instant_escape_not_supported_yet
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 0
+    isInstant: 1
+    restoreToFull: 0

@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 912663d47b466f940998044c2b48f775, type: 3}
-  m_Name: SmallHeal
+  m_Name: card_speed_potion
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  cardId: small_heal
-  cardName: Small Heal
-  description: Restore a small amount of HP.
-  cardSprite: {fileID: 2058537165261051658, guid: 4025d352dba1dc740ae064de8de021cc, type: 3}
+  cardId: speed_potion
+  cardName: Speed Potion
+  description: Battle card. Adds +1 Escape Bonus.
+  cardSprite: {fileID: 0}
   rarity: 0
-  usageContext: 2
+  usageContext: 0
   effects:
-  - effectType: 1
+  - effectType: 2
     value: 1
     contentId: 
     rarityFilter: 0
@@ -27,3 +27,4 @@ MonoBehaviour:
     useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0
+    restoreToFull: 0

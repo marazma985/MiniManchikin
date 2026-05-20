@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c197f882112244b197b3ad59048f71e1, type: 3}
-  m_Name: Dagger
+  m_Name: item_dagger
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: dagger
   itemName: Dagger
-  description: Adds a small power bonus.
-  itemSprite: {fileID: -4011259557217355647, guid: f5b5fe6ccf0c29a4baff912d389a4adc, type: 3}
+  description: Common weapon. Adds +2 Power.
+  itemSprite: {fileID: 0}
   rarity: 0
   itemType: 0
   effects:
@@ -27,3 +27,4 @@ MonoBehaviour:
     useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0
+    restoreToFull: 0

@@ -10,20 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 912663d47b466f940998044c2b48f775, type: 3}
-  m_Name: MonsterContract
+  m_Name: card_hot_springs_retreat
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  cardId: monster_contract
-  cardName: Monster Contract
-  description: Move to the nearest Battle tile.
-  cardSprite: {fileID: -2570222332997100001, guid: a13c625dca66f3e4e80e64cd66a27410, type: 3}
-  rarity: 0
-  usageContext: 1
+  cardId: hot_springs_retreat
+  cardName: Hot Springs Retreat
+  description: TODO: Full heal is represented with restoreToFull, but CardSystem does not execute full-heal card effects yet.
+  cardSprite: {fileID: 0}
+  rarity: 1
+  usageContext: 2
   effects:
-  - effectType: 4
+  - effectType: 1
     value: 0
-    contentId: 
+    contentId: todo_full_heal_card_flow_not_supported_yet
     rarityFilter: 0
-    targetTileType: 2
-    useNearestMatchingTile: 1
+    targetTileType: 0
+    useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0
+    restoreToFull: 1

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 912663d47b466f940998044c2b48f775, type: 3}
-  m_Name: TreasureMap
+  m_Name: card_treasure_map
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   cardId: treasure_map
   cardName: Treasure Map
   description: Move to the nearest Buff tile.
-  cardSprite: {fileID: -818144557915594591, guid: efb910dd6ebd7224f8c97106c0211327, type: 3}
+  cardSprite: {fileID: 0}
   rarity: 0
   usageContext: 1
   effects:
@@ -27,3 +27,4 @@ MonoBehaviour:
     useNearestMatchingTile: 1
     useRandomTarget: 0
     isInstant: 0
+    restoreToFull: 0

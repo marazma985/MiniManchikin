@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c197f882112244b197b3ad59048f71e1, type: 3}
-  m_Name: Helmet
+  m_Name: item_chestplate
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: helmet
-  itemName: Helmet
-  description: Armor test item. Runtime armor protection is not implemented yet.
-  itemSprite: {fileID: 4311318372839444377, guid: a6d382853df58e34e8aad899e3ddb3f5, type: 3}
+  itemId: chestplate
+  itemName: Chestplate
+  description: Common armor. Prevents HP damage once, then breaks.
+  itemSprite: {fileID: 0}
   rarity: 0
   itemType: 1
   effects: []

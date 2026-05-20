@@ -10,32 +10,34 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbdbc750bd4b4b2d968668d1615120fa, type: 3}
-  m_Name: Bat
+  m_Name: enemy_siren
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  enemyId: bat
-  enemyName: Bat
-  enemySprite: {fileID: 6675791632142210667, guid: 8a5d4b3c4b642874181a214866fb054c, type: 3}
-  baseLevel: 2
-  bonusPower: 1
-  penaltyType: 1
+  enemyId: siren
+  enemyName: Siren
+  enemySprite: {fileID: 0}
+  baseLevel: 9
+  bonusPower: 0
+  penaltyType: 0
   penaltyValue: 1
   modifiers:
-  - modifierName: Fast
+  - modifierName: Charming
     effects:
     - effectType: 0
-      value: 1
+      value: 2
       contentId: 
       rarityFilter: 0
       targetTileType: 0
       useNearestMatchingTile: 0
       useRandomTarget: 0
       isInstant: 0
+      restoreToFull: 0
   penaltyEffects:
-  - effectType: 6
-    value: 1
+  - effectType: 3
+    value: -1
     contentId: 
     rarityFilter: 0
     targetTileType: 0
     useNearestMatchingTile: 0
-    useRandomTarget: 1
+    useRandomTarget: 0
     isInstant: 0
+    restoreToFull: 0

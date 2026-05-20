@@ -9,21 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c197f882112244b197b3ad59048f71e1, type: 3}
-  m_Name: Necklace
-  m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: necklace
-  itemName: Necklace
-  description: Adds a small power bonus.
-  itemSprite: {fileID: 6948620173069357187, guid: 3a0b5b9694c2c97499c8f2faac0917de, type: 3}
+  m_Script: {fileID: 11500000, guid: 912663d47b466f940998044c2b48f775, type: 3}
+  m_Name: card_strength_potion
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  cardId: strength_potion
+  cardName: Strength Potion
+  description: Battle card. Adds +3 Power.
+  cardSprite: {fileID: 0}
   rarity: 0
-  itemType: 2
+  usageContext: 0
   effects:
   - effectType: 0
-    value: 1
+    value: 3
     contentId: 
     rarityFilter: 0
     targetTileType: 0
     useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0
+    restoreToFull: 0

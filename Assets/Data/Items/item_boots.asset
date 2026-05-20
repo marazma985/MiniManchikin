@@ -10,20 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c197f882112244b197b3ad59048f71e1, type: 3}
-  m_Name: WingedBoot
+  m_Name: item_boots
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: winged_boot
-  itemName: Winged Boot
-  description: Adds an escape bonus.
-  itemSprite: {fileID: -8940632971705989291, guid: 1371ac67d0ef5184bbc1ee0aad7aade8, type: 3}
-  rarity: 1
-  itemType: 2
-  effects:
-  - effectType: 2
-    value: 2
-    contentId: 
-    rarityFilter: 0
-    targetTileType: 0
-    useNearestMatchingTile: 0
-    useRandomTarget: 0
-    isInstant: 0
+  itemId: boots
+  itemName: Boots
+  description: Common armor. Prevents HP damage once, then breaks.
+  itemSprite: {fileID: 0}
+  rarity: 0
+  itemType: 1
+  effects: []

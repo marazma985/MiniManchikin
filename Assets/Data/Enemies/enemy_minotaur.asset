@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbdbc750bd4b4b2d968668d1615120fa, type: 3}
+  m_Name: enemy_minotaur
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  enemyId: minotaur
+  enemyName: Minotaur
+  enemySprite: {fileID: 0}
+  baseLevel: 14
+  bonusPower: 0
+  penaltyType: 0
+  penaltyValue: 1
+  modifiers:
+  - modifierName: Fast
+    effects:
+    - effectType: 0
+      value: 1
+      contentId: 
+      rarityFilter: 0
+      targetTileType: 0
+      useNearestMatchingTile: 0
+      useRandomTarget: 0
+      isInstant: 0
+      restoreToFull: 0
+  penaltyEffects:
+  - effectType: 1
+    value: -2
+    contentId: 
+    rarityFilter: 0
+    targetTileType: 0
+    useNearestMatchingTile: 0
+    useRandomTarget: 0
+    isInstant: 0
+    restoreToFull: 0
