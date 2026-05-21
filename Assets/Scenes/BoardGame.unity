@@ -906,7 +906,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &213637945
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1424,7 +1424,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 289a76fb2aefe8040a88f5e3b7cf4b1e, type: 3}
+  m_Sprite: {fileID: 2684005426739812973, guid: 0b7c981160d2e294d817a4a789e1f253, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4822,7 +4822,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   maxHp: 5
   currentHp: 5
-  level: 9
+  level: 1
 --- !u!114 &1266047074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5766,6 +5766,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DiceRollButtonController
   button: {fileID: 1476678495}
+  buttonImage: {fileID: 1476678496}
+  normalSprite: {fileID: -6407542566949921670, guid: 4944958b5c0412c4da01e85448558f22, type: 3}
+  highlightedSprite: {fileID: 2839554743733184432, guid: 4944958b5c0412c4da01e85448558f22, type: 3}
+  pressedSprite: {fileID: -2821840451606992798, guid: 4944958b5c0412c4da01e85448558f22, type: 3}
+  disabledSprite: {fileID: -492803118743908232, guid: 4944958b5c0412c4da01e85448558f22, type: 3}
+  spriteFadeDuration: 0.2
   turnSystem: {fileID: 1294733953}
   battleSystem: {fileID: 1294733955}
 --- !u!114 &1476678495
@@ -5787,7 +5793,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 0.58, b: 0.08, a: 1}
     m_HighlightedColor: {r: 1, g: 0.68, b: 0.18, a: 1}
@@ -5825,16 +5831,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.58, b: 0.08, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -6407542566949921670, guid: 4944958b5c0412c4da01e85448558f22, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -5907,7 +5913,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8d9855e6770d8f542b12416363b1956b, type: 3}
+  m_Sprite: {fileID: -5693749229786187761, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -6005,9 +6011,9 @@ MonoBehaviour:
   testTreasureMap: {fileID: 11400000, guid: ffd5f84fcf7e4e4dad8d0313eccc5c00, type: 2}
   testMonsterContract: {fileID: 11400000, guid: c68fb2e255ca466da51bdd8e1df7651f, type: 2}
   hand:
-  - {fileID: 11400000, guid: 383d2ea9378aad04e8d3b1db979bedb0, type: 2}
   - {fileID: 11400000, guid: e17850df428640a8b7ce143de4944925, type: 2}
-  - {fileID: 11400000, guid: ffd5f84fcf7e4e4dad8d0313eccc5c00, type: 2}
+  - {fileID: 11400000, guid: eedd5d3b66e8c6b4e9525f0100b0c7d9, type: 2}
+  - {fileID: 11400000, guid: 97be8742271c4f84a1abe2451a3a7d71, type: 2}
 --- !u!4 &1564144278
 Transform:
   m_ObjectHideFlags: 0
@@ -6690,7 +6696,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: dead300b2f2f7d749b3bad036f542ab9, type: 3}
+  m_Sprite: {fileID: 7029966499312148973, guid: 0b7c981160d2e294d817a4a789e1f253, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -8190,7 +8196,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e181b6f62f4bd124b964dac1060b961b, type: 3}
+  m_Sprite: {fileID: 3275915938350323413, guid: 0b7c981160d2e294d817a4a789e1f253, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

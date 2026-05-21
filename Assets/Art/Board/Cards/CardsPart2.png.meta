@@ -1,19 +1,22 @@
 fileFormatVersion: 2
-guid: 4944958b5c0412c4da01e85448558f22
+guid: 9bce38005b053864896b45eef09706b7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6407542566949921670
-    second: RollDiseList_0
+      213: -5408063732451399968
+    second: CardsPart2_0
   - first:
-      213: 2839554743733184432
-    second: RollDiseList_1
+      213: -7584992706043491492
+    second: CardsPart2_1
   - first:
-      213: -2821840451606992798
-    second: RollDiseList_2
+      213: -5234875708147891085
+    second: CardsPart2_2
   - first:
-      213: -492803118743908232
-    second: RollDiseList_3
+      213: 2902219642426063322
+    second: CardsPart2_3
+  - first:
+      213: -3458528478058749761
+    second: CardsPart2_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,13 +112,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: RollDiseList_0
+      name: CardsPart2_1
       rect:
         serializedVersion: 2
-        x: 37
-        y: 570
-        width: 715
-        height: 240
+        x: 55
+        y: 51
+        width: 424
+        height: 631
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +127,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a7c51c5ebf5d317a0800000000000000
-      internalID: -6407542566949921670
+      spriteID: c5b49542251bcb690800000000000000
+      internalID: -7584992706043491492
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: RollDiseList_1
+      name: CardsPart2_2
       rect:
         serializedVersion: 2
-        x: 790
-        y: 571
-        width: 715
-        height: 240
+        x: 512
+        y: 51
+        width: 423
+        height: 630
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -146,20 +149,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0b7ed7caeff186720800000000000000
-      internalID: 2839554743733184432
+      spriteID: 374068c674cf957b0800000000000000
+      internalID: -5234875708147891085
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: RollDiseList_2
+      name: CardsPart2_3
       rect:
         serializedVersion: 2
-        x: 36
-        y: 233
-        width: 715
-        height: 240
+        x: 967
+        y: 51
+        width: 424
+        height: 630
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -168,30 +171,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 268232d5f0fc6d8d0800000000000000
-      internalID: -2821840451606992798
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: RollDiseList_3
-      rect:
-        serializedVersion: 2
-        x: 795
-        y: 233
-        width: 715
-        height: 240
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 870901bac263929f0800000000000000
-      internalID: -492803118743908232
+      spriteID: ad977fe5361c64820800000000000000
+      internalID: 2902219642426063322
       vertices: []
       indices: 
       edges: []
@@ -200,7 +181,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 87422813039a61b49b36c6c65f90d1ab
+    spriteID: add58379fa49ec3459c2abf3afcba9fc
     internalID: 0
     vertices: []
     indices: 
@@ -210,10 +191,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      RollDiseList_0: -6407542566949921670
-      RollDiseList_1: 2839554743733184432
-      RollDiseList_2: -2821840451606992798
-      RollDiseList_3: -492803118743908232
+      CardsPart2_0: -5408063732451399968
+      CardsPart2_1: -7584992706043491492
+      CardsPart2_2: -5234875708147891085
+      CardsPart2_3: 2902219642426063322
+      CardsPart2_4: -3458528478058749761
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
