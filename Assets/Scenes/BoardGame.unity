@@ -3104,7 +3104,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f1877080ed02e6748b9ab886f1c4ecbf, type: 3}
+  m_Sprite: {fileID: -7738290845906750307, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4223,13 +4223,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotView
   backgroundImage: {fileID: 1097353837}
+  emptyBackgroundSprite: {fileID: 7777112813350631067, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
+  occupiedBackgroundSprite: {fileID: 9132503938268069455, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
   iconImage: {fileID: 787255042}
   removeButton: {fileID: 2141000063}
   removeButtonCanvasGroup: {fileID: 2141000069}
   removeButtonFadeDuration: 0.15
   item: {fileID: 0}
   itemIcon: {fileID: 0}
-  emptyColor: {r: 0.22, g: 0.2, b: 0.35, a: 0.9}
+  emptyColor: {r: 1, g: 1, b: 1, a: 1}
   occupiedColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1097353837
 MonoBehaviour:
@@ -4244,14 +4246,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.22, g: 0.2, b: 0.35, a: 0.9}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3f2c6e95b5b6ec3459ed8c0b8ee3ebfe, type: 3}
+  m_Sprite: {fileID: 7777112813350631067, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4508,7 +4510,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f1877080ed02e6748b9ab886f1c4ecbf, type: 3}
+  m_Sprite: {fileID: -7738290845906750307, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4630,13 +4632,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotView
   backgroundImage: {fileID: 1225239075}
+  emptyBackgroundSprite: {fileID: 7777112813350631067, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
+  occupiedBackgroundSprite: {fileID: 9132503938268069455, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
   iconImage: {fileID: 887498456}
   removeButton: {fileID: 2141000083}
   removeButtonCanvasGroup: {fileID: 2141000089}
   removeButtonFadeDuration: 0.15
   item: {fileID: 0}
   itemIcon: {fileID: 0}
-  emptyColor: {r: 0.22, g: 0.2, b: 0.35, a: 0.9}
+  emptyColor: {r: 1, g: 1, b: 1, a: 1}
   occupiedColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1225239075
 MonoBehaviour:
@@ -4651,14 +4655,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.22, g: 0.2, b: 0.35, a: 0.9}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3f2c6e95b5b6ec3459ed8c0b8ee3ebfe, type: 3}
+  m_Sprite: {fileID: 7777112813350631067, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4744,8 +4748,8 @@ MonoBehaviour:
   - {fileID: 2059533720}
   - {fileID: 815783948}
   - {fileID: 1144849417}
-  fullHeartSprite: {fileID: 21300000, guid: f1877080ed02e6748b9ab886f1c4ecbf, type: 3}
-  emptyHeartSprite: {fileID: 21300000, guid: 890d4885808278a449f07fafaae4af37, type: 3}
+  fullHeartSprite: {fileID: -7738290845906750307, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
+  emptyHeartSprite: {fileID: 2868839821787737709, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
   inventorySlots:
   - {fileID: 1097353836}
   - {fileID: 1225239074}
@@ -5600,7 +5604,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f1877080ed02e6748b9ab886f1c4ecbf, type: 3}
+  m_Sprite: {fileID: -7738290845906750307, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -7318,13 +7322,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotView
   backgroundImage: {fileID: 1907612431}
+  emptyBackgroundSprite: {fileID: 7777112813350631067, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
+  occupiedBackgroundSprite: {fileID: 9132503938268069455, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
   iconImage: {fileID: 772354226}
   removeButton: {fileID: 2141000103}
   removeButtonCanvasGroup: {fileID: 2141000109}
   removeButtonFadeDuration: 0.15
   item: {fileID: 0}
   itemIcon: {fileID: 0}
-  emptyColor: {r: 0.22, g: 0.2, b: 0.35, a: 0.9}
+  emptyColor: {r: 1, g: 1, b: 1, a: 1}
   occupiedColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1907612431
 MonoBehaviour:
@@ -7339,14 +7345,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.22, g: 0.2, b: 0.35, a: 0.9}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3f2c6e95b5b6ec3459ed8c0b8ee3ebfe, type: 3}
+  m_Sprite: {fileID: 7777112813350631067, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7616,7 +7622,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f1877080ed02e6748b9ab886f1c4ecbf, type: 3}
+  m_Sprite: {fileID: -7738290845906750307, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -7691,7 +7697,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f1877080ed02e6748b9ab886f1c4ecbf, type: 3}
+  m_Sprite: {fileID: -7738290845906750307, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

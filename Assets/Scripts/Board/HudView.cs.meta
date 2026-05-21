@@ -1,2 +1,16 @@
 fileFormatVersion: 2
 guid: 0a9eeaa479739764fa5b64744aca2cb0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - playerStats: {instanceID: 0}
+  - playerInventory: {instanceID: 0}
+  - levelText: {instanceID: 0}
+  - fullHeartSprite: {fileID: -7738290845906750307, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
+  - emptyHeartSprite: {fileID: 2868839821787737709, guid: 94cc7a0114fa5494ea5a39b71940805b, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

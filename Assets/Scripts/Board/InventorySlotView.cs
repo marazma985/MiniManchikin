@@ -7,13 +7,15 @@ using UnityEngine.UI;
 public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private Image backgroundImage;
+    [SerializeField] private Sprite emptyBackgroundSprite;
+    [SerializeField] private Sprite occupiedBackgroundSprite;
     [SerializeField] private Image iconImage;
     [SerializeField] private Button removeButton;
     [SerializeField] private CanvasGroup removeButtonCanvasGroup;
     [SerializeField, Min(0f)] private float removeButtonFadeDuration = 0.15f;
     [SerializeField] private ItemData item;
     [SerializeField] private Sprite itemIcon;
-    [SerializeField] private Color emptyColor = new Color(0.22f, 0.2f, 0.35f, 0.9f);
+    [SerializeField] private Color emptyColor = Color.white;
     [SerializeField] private Color occupiedColor = Color.white;
 
     private Coroutine removeButtonFade;
@@ -73,7 +75,13 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
     public void Refresh()
     {
         if (backgroundImage != null)
+        {
+            var backgroundSprite = IsOccupied ? occupiedBackgroundSprite : emptyBackgroundSprite;
+            if (backgroundSprite != null)
+                backgroundImage.sprite = backgroundSprite;
+
             backgroundImage.color = IsOccupied ? occupiedColor : emptyColor;
+        }
 
         if (removeButton != null)
             removeButton.gameObject.SetActive(item != null);
