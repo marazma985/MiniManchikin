@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: golden_apple
   cardName: Golden Apple
   description: Restore 2 HP.
-  cardSprite: {fileID: 7421515708091542020, guid: 3573927e3eff11d42a8788b29f9314cc, type: 3}
+  cardSprite: {fileID: -7584992706043491492, guid: 9bce38005b053864896b45eef09706b7, type: 3}
   rarity: 0
   usageContext: 2
   effects:

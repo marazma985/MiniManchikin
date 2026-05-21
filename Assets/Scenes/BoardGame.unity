@@ -1337,8 +1337,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 7}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 180, y: 0}
-  m_SizeDelta: {x: 180, y: 230}
+  m_AnchoredPosition: {x: 170, y: 0}
+  m_SizeDelta: {x: 180, y: 260}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &289513847
 MonoBehaviour:
@@ -2128,8 +2128,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 289513846}
-  - {fileID: 1649539187}
   - {fileID: 2132902782}
+  - {fileID: 1649539187}
   m_Father: {fileID: 1808088374}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -5750,8 +5750,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -56, y: 48}
-  m_SizeDelta: {x: 320, y: 92}
+  m_AnchoredPosition: {x: -30, y: 30}
+  m_SizeDelta: {x: 450, y: 130}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1476678494
 MonoBehaviour:
@@ -6011,9 +6011,9 @@ MonoBehaviour:
   testTreasureMap: {fileID: 11400000, guid: ffd5f84fcf7e4e4dad8d0313eccc5c00, type: 2}
   testMonsterContract: {fileID: 11400000, guid: c68fb2e255ca466da51bdd8e1df7651f, type: 2}
   hand:
-  - {fileID: 11400000, guid: e17850df428640a8b7ce143de4944925, type: 2}
-  - {fileID: 11400000, guid: eedd5d3b66e8c6b4e9525f0100b0c7d9, type: 2}
-  - {fileID: 11400000, guid: 97be8742271c4f84a1abe2451a3a7d71, type: 2}
+  - {fileID: 11400000, guid: effe9367ff144e0bbb60234e1fb3bb5c, type: 2}
+  - {fileID: 11400000, guid: ffd5f84fcf7e4e4dad8d0313eccc5c00, type: 2}
+  - {fileID: 11400000, guid: c68fb2e255ca466da51bdd8e1df7651f, type: 2}
 --- !u!4 &1564144278
 Transform:
   m_ObjectHideFlags: 0
@@ -6610,7 +6610,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 325, y: 10}
-  m_SizeDelta: {x: 180, y: 230}
+  m_SizeDelta: {x: 180, y: 260}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1649539188
 MonoBehaviour:
@@ -8109,8 +8109,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -7}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 470, y: 0}
-  m_SizeDelta: {x: 180, y: 230}
+  m_AnchoredPosition: {x: 480, y: 0}
+  m_SizeDelta: {x: 180, y: 260}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2132902783
 MonoBehaviour:
