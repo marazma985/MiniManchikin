@@ -17,6 +17,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
 
     private Image transitionImage;
     private Coroutine spriteFade;
+    private Coroutine releaseVisualRefresh;
     private bool isPointerOver;
     private bool isPointerPressed;
     private bool isSelected;
@@ -68,6 +69,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
             battleSystem.BattleStateChanged -= RefreshButtonState;
 
         StopSpriteFade();
+        StopReleaseVisualRefresh();
         HideTransitionImage();
         SetButtonAlpha(1f);
     }
@@ -179,6 +181,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         if (button == null || !button.interactable)
             return;
 
+        StopReleaseVisualRefresh();
         isPointerPressed = true;
         RefreshVisualState(false);
     }
@@ -186,7 +189,8 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
     public void OnPointerUp(PointerEventData eventData)
     {
         isPointerPressed = false;
-        RefreshVisualState(false);
+        StopReleaseVisualRefresh();
+        releaseVisualRefresh = StartCoroutine(RefreshReleasedVisualNextFrame());
     }
 
     public void OnSelect(BaseEventData eventData)
@@ -342,5 +346,22 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
 
         StopCoroutine(spriteFade);
         spriteFade = null;
+    }
+
+    private IEnumerator RefreshReleasedVisualNextFrame()
+    {
+        yield return null;
+
+        releaseVisualRefresh = null;
+        RefreshVisualState(false);
+    }
+
+    private void StopReleaseVisualRefresh()
+    {
+        if (releaseVisualRefresh == null)
+            return;
+
+        StopCoroutine(releaseVisualRefresh);
+        releaseVisualRefresh = null;
     }
 }
