@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyId: minotaur
   enemyName: Minotaur
-  enemySprite: {fileID: -3582897471256576171, guid: 8a5d4b3c4b642874181a214866fb054c, type: 3}
+  enemySprite: {fileID: 4919110843166129083, guid: ad1bf1965d722ac4ba90cf5c0497c960, type: 3}
   baseLevel: 14
   bonusPower: 0
   penaltyType: 0

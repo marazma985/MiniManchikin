@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyId: bat
   enemyName: Bat
-  enemySprite: {fileID: 490028542588366839, guid: 8a5d4b3c4b642874181a214866fb054c, type: 3}
+  enemySprite: {fileID: -1857206267333980651, guid: ad1bf1965d722ac4ba90cf5c0497c960, type: 3}
   baseLevel: 2
   bonusPower: 0
   penaltyType: 0
