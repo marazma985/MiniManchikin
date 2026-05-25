@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
@@ -23,6 +24,8 @@ public sealed class BattleModalView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI actionButtonText;
     [SerializeField] private Button resolveButton;
 
+    private Coroutine clearStatusRoutine;
+
     public event Action ResolveRequested;
 
     public void Show(BattleModalData data)
@@ -39,19 +42,50 @@ public sealed class BattleModalView : MonoBehaviour
         SetImage(enemyPortraitImage, data.EnemySprite);
         RenderPowerEntries(data.EnemyPowerEntries, enemyPowerListRoot, enemyPowerEntryRowPrefab, enemyPowerText, TextAnchor.UpperRight);
         SetText(enemyTotalText, $"Итого: {data.EnemyTotalPower}");
-        UpdateState("Бой начался", "Решить бой");
 
         gameObject.SetActive(true);
     }
 
     public void UpdateState(string status, string buttonText)
     {
-        SetText(statusText, status);
+        ShowPersistentStatus(status);
+        SetActionButtonText(buttonText);
+    }
+
+    public void SetActionButtonText(string buttonText)
+    {
         SetText(actionButtonText, buttonText);
+    }
+
+    public void ShowTemporaryStatus(string message, float duration)
+    {
+        StopClearStatusRoutine();
+        SetText(statusText, message);
+
+        if (duration <= 0f)
+        {
+            ClearStatus();
+            return;
+        }
+
+        clearStatusRoutine = StartCoroutine(ClearStatusAfter(duration));
+    }
+
+    public void ShowPersistentStatus(string message)
+    {
+        StopClearStatusRoutine();
+        SetText(statusText, message);
+    }
+
+    public void ClearStatus()
+    {
+        StopClearStatusRoutine();
+        SetText(statusText, string.Empty);
     }
 
     public void Hide()
     {
+        ClearStatus();
         gameObject.SetActive(false);
     }
 
@@ -63,6 +97,8 @@ public sealed class BattleModalView : MonoBehaviour
 
     private void OnDisable()
     {
+        StopClearStatusRoutine();
+
         if (resolveButton != null)
             resolveButton.onClick.RemoveListener(HandleResolveClicked);
     }
@@ -70,6 +106,22 @@ public sealed class BattleModalView : MonoBehaviour
     private void HandleResolveClicked()
     {
         ResolveRequested?.Invoke();
+    }
+
+    private IEnumerator ClearStatusAfter(float duration)
+    {
+        yield return new WaitForSecondsRealtime(duration);
+        clearStatusRoutine = null;
+        SetText(statusText, string.Empty);
+    }
+
+    private void StopClearStatusRoutine()
+    {
+        if (clearStatusRoutine == null)
+            return;
+
+        StopCoroutine(clearStatusRoutine);
+        clearStatusRoutine = null;
     }
 
     private static void SetText(TextMeshProUGUI text, string value)

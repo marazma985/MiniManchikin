@@ -6,6 +6,7 @@ public sealed class BattleSystem : MonoBehaviour
 {
     private const string PlayerName = "\u041a\u0430\u0440\u0430\u043c\u0435\u043b\u044c\u043a\u0430";
     private const int EscapeSuccessRoll = 5;
+    private const float TemporaryBattleStatusDuration = 2.5f;
 
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private PlayerInventory playerInventory;
@@ -96,7 +97,8 @@ public sealed class BattleSystem : MonoBehaviour
         currentBattleData = CreateBattleData(enemy);
         phase = BattlePhase.WaitingForResolve;
         battleModalView.Show(currentBattleData);
-        battleModalView.UpdateState(CanUseBattleDice ? "Кубик боя доступен" : "Кубик боя недоступен", "Решить бой");
+        battleModalView.ClearStatus();
+        RefreshActionButton();
         BattleStateChanged?.Invoke();
     }
 
@@ -118,7 +120,8 @@ public sealed class BattleSystem : MonoBehaviour
         battleDiceUsed = true;
         currentBattleData = CreateBattleData(currentEnemy);
         battleModalView.Show(currentBattleData);
-        battleModalView.UpdateState($"Кубик боя: +{currentBattleDiceBonus}", "Решить бой");
+        RefreshActionButton();
+        battleModalView.ShowTemporaryStatus($"Сила кубика: +{currentBattleDiceBonus}", TemporaryBattleStatusDuration);
         Debug.Log($"Battle dice used: +{currentBattleDiceBonus}. Player total is now {currentBattleData.PlayerTotalPower}.");
         BattleStateChanged?.Invoke();
         return true;
@@ -187,32 +190,9 @@ public sealed class BattleSystem : MonoBehaviour
             return;
 
         if (currentBattleData.PlayerTotalPower > currentBattleData.EnemyTotalPower)
-        {
-            var previousLevel = playerStats.Level;
-            playerStats.SetLevel(playerStats.Level + 1);
-            NotifyEffect(EffectType.Level, playerStats.Level - previousLevel, EffectNotificationStatus.Success);
-            Debug.Log($"Battle won: {currentBattleData.PlayerName} defeated {currentBattleData.EnemyName}. Level is now {playerStats.Level}.");
-            if (rewardSystem != null && rewardSystem.ShowBattleRewards(HandleRewardAccepted))
-            {
-                battleModalView.UpdateState("Победа! Выберите награду", "Выбрать награду");
-                battleModalView.Hide();
-                phase = BattlePhase.WaitingForReward;
-            }
-            else
-            {
-                battleModalView.UpdateState("Победа!", "Закрыть");
-                phase = BattlePhase.WaitingForClose;
-            }
-
-            BattleStateChanged?.Invoke();
-        }
+            ResolveVictory();
         else
-        {
-            Debug.Log($"Battle lost: {currentBattleData.PlayerName} failed against {currentBattleData.EnemyName}.");
-            battleModalView.UpdateState("Поражение. Попытка побега", "Бросить на побег");
-            phase = BattlePhase.WaitingForEscapeRoll;
-            BattleStateChanged?.Invoke();
-        }
+            RollEscape();
     }
 
     private void OnEnable()
@@ -235,17 +215,36 @@ public sealed class BattleSystem : MonoBehaviour
         if (finalEscapeValue >= EscapeSuccessRoll)
         {
             Debug.Log($"Escape successful. Base roll: {escapeRoll}, escape bonus: {escapeBonus}, final escape value: {finalEscapeValue}.");
-            battleModalView.UpdateState("Побег удался", "Закрыть");
+            battleModalView.ShowPersistentStatus("Побег удался");
         }
         else
         {
             Debug.Log($"Escape failed. Base roll: {escapeRoll}, escape bonus: {escapeBonus}, final escape value: {finalEscapeValue}.");
             ApplyPenalty();
-            battleModalView.UpdateState("Побег не удался. Штраф применён", "Закрыть");
+            battleModalView.ShowPersistentStatus("Побег не удался, штраф применён");
         }
 
         phase = BattlePhase.WaitingForClose;
+        RefreshActionButton();
         BattleStateChanged?.Invoke();
+    }
+
+    private void ResolveVictory()
+    {
+        var previousLevel = playerStats.Level;
+        playerStats.SetLevel(playerStats.Level + 1);
+        NotifyEffect(EffectType.Level, playerStats.Level - previousLevel, EffectNotificationStatus.Success);
+        Debug.Log($"Battle won: {currentBattleData.PlayerName} defeated {currentBattleData.EnemyName}. Level is now {playerStats.Level}.");
+
+        if (rewardSystem != null && rewardSystem.ShowBattleRewards(HandleRewardAccepted))
+        {
+            battleModalView.Hide();
+            phase = BattlePhase.WaitingForReward;
+            BattleStateChanged?.Invoke();
+            return;
+        }
+
+        CompleteBattle();
     }
 
     private void ApplyPenalty()
@@ -502,7 +501,10 @@ public sealed class BattleSystem : MonoBehaviour
 
         currentBattleData = CreateBattleData(currentEnemy);
         battleModalView.Show(currentBattleData);
-        battleModalView.UpdateState(status, GetCurrentActionButtonText());
+        RefreshActionButton();
+
+        if (!string.IsNullOrEmpty(status))
+            battleModalView.ShowTemporaryStatus(status, TemporaryBattleStatusDuration);
     }
 
     private void NotifyEffect(EffectType effectType, int value, EffectNotificationStatus status)
@@ -516,13 +518,23 @@ public sealed class BattleSystem : MonoBehaviour
         switch (phase)
         {
             case BattlePhase.WaitingForEscapeRoll:
-                return "Бросить на побег";
+                return "Пытаться сбежать";
             case BattlePhase.WaitingForReward:
-                return "Выбрать награду";
+                return string.Empty;
             case BattlePhase.WaitingForClose:
                 return "Закрыть";
+            case BattlePhase.WaitingForResolve:
+                return currentBattleData != null && currentBattleData.PlayerTotalPower > currentBattleData.EnemyTotalPower
+                    ? "Победа"
+                    : "Пытаться сбежать";
             default:
-                return "Решить бой";
+                return string.Empty;
         }
+    }
+
+    private void RefreshActionButton()
+    {
+        if (battleModalView != null)
+            battleModalView.SetActionButtonText(GetCurrentActionButtonText());
     }
 }
