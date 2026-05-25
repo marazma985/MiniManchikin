@@ -458,7 +458,7 @@ public sealed class BattleSystem : MonoBehaviour
         {
             var modifierName = string.IsNullOrEmpty(currentEnemyModifier.ModifierName)
                 ? "Модификатор"
-                : $"Модификатор: {currentEnemyModifier.ModifierName}";
+                : currentEnemyModifier.ModifierName;
             enemyEntries.Add(new BattlePowerEntry(modifierName, modifierPower));
         }
 

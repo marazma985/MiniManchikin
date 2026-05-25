@@ -14,12 +14,14 @@ public sealed class BattleModalView : MonoBehaviour
     [SerializeField] private Transform playerPowerListRoot;
     [SerializeField] private BattlePowerEntryRowView playerPowerEntryRowPrefab;
     [SerializeField] private TextMeshProUGUI playerTotalText;
+    [SerializeField] private BattlePowerTotalRowView playerTotalRow;
     [SerializeField] private TextMeshProUGUI enemyNameText;
     [SerializeField] private Image enemyPortraitImage;
     [SerializeField] private TextMeshProUGUI enemyPowerText;
     [SerializeField] private Transform enemyPowerListRoot;
     [SerializeField] private BattlePowerEntryRowView enemyPowerEntryRowPrefab;
     [SerializeField] private TextMeshProUGUI enemyTotalText;
+    [SerializeField] private BattlePowerTotalRowView enemyTotalRow;
     [SerializeField] private TextMeshProUGUI statusText;
     [SerializeField] private TextMeshProUGUI actionButtonText;
     [SerializeField] private Button resolveButton;
@@ -36,12 +38,12 @@ public sealed class BattleModalView : MonoBehaviour
         SetText(playerNameText, data.PlayerName);
         // Player portrait is a static scene UI image and should not be overwritten per battle.
         RenderPowerEntries(data.PlayerPowerEntries, playerPowerListRoot, playerPowerEntryRowPrefab, playerPowerText, TextAnchor.UpperLeft);
-        SetText(playerTotalText, $"Итого: {data.PlayerTotalPower}");
+        RenderTotal("Итого", data.PlayerTotalPower, playerTotalRow, playerTotalText);
 
         SetText(enemyNameText, data.EnemyName);
         SetImage(enemyPortraitImage, data.EnemySprite);
         RenderPowerEntries(data.EnemyPowerEntries, enemyPowerListRoot, enemyPowerEntryRowPrefab, enemyPowerText, TextAnchor.UpperRight);
-        SetText(enemyTotalText, $"Итого: {data.EnemyTotalPower}");
+        RenderTotal("Итого", data.EnemyTotalPower, enemyTotalRow, enemyTotalText);
 
         gameObject.SetActive(true);
     }
@@ -180,6 +182,28 @@ public sealed class BattleModalView : MonoBehaviour
             var row = Instantiate(rowPrefab, listRoot);
             row.gameObject.SetActive(true);
             row.Bind(entries[i]);
+        }
+    }
+
+    private static void RenderTotal(string label, int value, BattlePowerTotalRowView totalRow, TextMeshProUGUI fallbackText)
+    {
+        if (totalRow != null)
+        {
+            totalRow.Bind(label, value);
+
+            if (fallbackText != null)
+            {
+                fallbackText.text = string.Empty;
+                fallbackText.enabled = false;
+            }
+
+            return;
+        }
+
+        if (fallbackText != null)
+        {
+            fallbackText.enabled = true;
+            fallbackText.text = $"{label}: {value}";
         }
     }
 

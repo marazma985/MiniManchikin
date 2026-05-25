@@ -979,6 +979,7 @@ GameObject:
   - component: {fileID: 241221938}
   - component: {fileID: 241221940}
   - component: {fileID: 241221939}
+  - component: {fileID: 241221941}
   m_Layer: 5
   m_Name: Player Total
   m_TagString: Untagged
@@ -1012,7 +1013,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 241221937}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -1025,7 +1026,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0418\u0442\u043E\u0433\u043E: 1"
+  m_text: ""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1105,6 +1106,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 241221937}
   m_CullTransparentMesh: 1
+--- !u!114 &241221941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 241221937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea64ef0b2d24fb48a84b0f51f2fd3b1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::BattlePowerTotalRowView
+  dividerImage: {fileID: 0}
+  labelText: {fileID: 0}
+  valueText: {fileID: 0}
+  textColor: {r: 0.05, g: 0.35, b: 0.12, a: 1}
+  fontSize: 30
+  dividerHeight: 6
 --- !u!1 &286618696
 GameObject:
   m_ObjectHideFlags: 0
@@ -1648,6 +1667,7 @@ GameObject:
   - component: {fileID: 370091881}
   - component: {fileID: 370091883}
   - component: {fileID: 370091882}
+  - component: {fileID: 370091884}
   m_Layer: 5
   m_Name: Enemy Total
   m_TagString: Untagged
@@ -1681,7 +1701,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 370091880}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -1694,7 +1714,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0418\u0442\u043E\u0433\u043E: 10"
+  m_text: ""
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1774,6 +1794,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 370091880}
   m_CullTransparentMesh: 1
+--- !u!114 &370091884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 370091880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea64ef0b2d24fb48a84b0f51f2fd3b1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::BattlePowerTotalRowView
+  dividerImage: {fileID: 0}
+  labelText: {fileID: 0}
+  valueText: {fileID: 0}
+  textColor: {r: 0.65, g: 0.05, b: 0.05, a: 1}
+  fontSize: 30
+  dividerHeight: 6
 --- !u!1 &376136372
 GameObject:
   m_ObjectHideFlags: 0
@@ -6112,12 +6150,14 @@ MonoBehaviour:
   playerPowerListRoot: {fileID: 1078552330}
   playerPowerEntryRowPrefab: {fileID: 100004, guid: 8fd182492f4e4b85a0f0f3b42ce94b41, type: 3}
   playerTotalText: {fileID: 241221939}
+  playerTotalRow: {fileID: 241221941}
   enemyNameText: {fileID: 55390818}
   enemyPortraitImage: {fileID: 798112785}
   enemyPowerText: {fileID: 2098933810}
   enemyPowerListRoot: {fileID: 2098933809}
   enemyPowerEntryRowPrefab: {fileID: 100004, guid: abc5aa34bb20498fb4176d5f01bf090d, type: 3}
   enemyTotalText: {fileID: 370091882}
+  enemyTotalRow: {fileID: 370091884}
   statusText: {fileID: 578511041}
   actionButtonText: {fileID: 29247174}
   resolveButton: {fileID: 2103861302}
