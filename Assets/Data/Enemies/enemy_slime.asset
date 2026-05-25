@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: enemy_slime
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyId: slime
-  enemyName: Slime
+  enemyName: "\u0421\u043B\u0430\u0439\u043C"
   enemySprite: {fileID: 414875601970476392, guid: ad1bf1965d722ac4ba90cf5c0497c960, type: 3}
   baseLevel: 1
   bonusPower: 0
   penaltyType: 0
   penaltyValue: 1
   modifiers:
-  - modifierName: Large
+  - modifierName: "\u0411\u043E\u043B\u044C\u0448\u043E\u0439"
     effects:
     - effectType: 0
       value: 1

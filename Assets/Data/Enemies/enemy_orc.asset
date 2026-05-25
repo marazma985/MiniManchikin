@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: enemy_orc
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyId: orc
-  enemyName: Orc
+  enemyName: "\u041E\u0440\u043A"
   enemySprite: {fileID: 6959191703838080445, guid: ad1bf1965d722ac4ba90cf5c0497c960, type: 3}
   baseLevel: 5
   bonusPower: 0
   penaltyType: 0
   penaltyValue: 1
   modifiers:
-  - modifierName: Axe
+  - modifierName: "\u0422\u043E\u043F\u043E\u0440"
     effects:
     - effectType: 0
       value: 2
@@ -31,7 +31,7 @@ MonoBehaviour:
       useRandomTarget: 0
       isInstant: 0
       restoreToFull: 0
-  - modifierName: Rage
+  - modifierName: "\u042F\u0440\u043E\u0441\u0442\u044C"
     effects:
     - effectType: 0
       value: 2

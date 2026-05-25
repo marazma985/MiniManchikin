@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: enemy_cthulha
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyId: cthulha
-  enemyName: Cthulha
+  enemyName: "\u041A\u0442\u0443\u043B\u0445\u0430"
   enemySprite: {fileID: 1334942665405618754, guid: ad1bf1965d722ac4ba90cf5c0497c960, type: 3}
   baseLevel: 25
   bonusPower: 0

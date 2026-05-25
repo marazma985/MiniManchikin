@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: enemy_skeleton
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyId: skeleton
-  enemyName: Skeleton
+  enemyName: "\u0421\u043A\u0435\u043B\u0435\u0442 \u043C\u0435\u0447\u043D\u0438\u043A"
   enemySprite: {fileID: 6753562724950044794, guid: ad1bf1965d722ac4ba90cf5c0497c960, type: 3}
   baseLevel: 3
   bonusPower: 0
   penaltyType: 0
   penaltyValue: 1
   modifiers:
-  - modifierName: Helmet
+  - modifierName: "\u0428\u043B\u0435\u043C"
     effects:
     - effectType: 0
       value: 1
@@ -31,7 +31,7 @@ MonoBehaviour:
       useRandomTarget: 0
       isInstant: 0
       restoreToFull: 0
-  - modifierName: Sword
+  - modifierName: "\u041C\u0435\u0447"
     effects:
     - effectType: 0
       value: 2

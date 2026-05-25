@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: enemy_bat
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyId: bat
-  enemyName: Bat
+  enemyName: "\u041B\u0435\u0442\u0443\u0447\u0430\u044F \u043C\u044B\u0448\u044C"
   enemySprite: {fileID: -1857206267333980651, guid: ad1bf1965d722ac4ba90cf5c0497c960, type: 3}
   baseLevel: 2
   bonusPower: 0
   penaltyType: 0
   penaltyValue: 1
   modifiers:
-  - modifierName: Fast
+  - modifierName: "\u0420\u0435\u0437\u0432\u0430\u044F"
     effects:
     - effectType: 0
       value: 1

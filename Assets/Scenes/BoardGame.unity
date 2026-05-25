@@ -1003,8 +1003,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 64, y: 112}
-  m_SizeDelta: {x: 310, y: 56}
+  m_AnchoredPosition: {x: 65, y: 112}
+  m_SizeDelta: {x: 270, y: 56}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &241221939
 MonoBehaviour:
@@ -1026,7 +1026,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ""
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1116,12 +1116,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ea64ef0b2d24fb48a84b0f51f2fd3b1, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattlePowerTotalRowView
   dividerImage: {fileID: 0}
   labelText: {fileID: 0}
   valueText: {fileID: 0}
-  textColor: {r: 0.05, g: 0.35, b: 0.12, a: 1}
+  textColor: {r: 0.03137255, g: 0.5568628, b: 0.16078432, a: 1}
   fontSize: 30
   dividerHeight: 6
 --- !u!1 &286618696
@@ -1691,8 +1691,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 112}
-  m_SizeDelta: {x: 310, y: 56}
+  m_AnchoredPosition: {x: -50, y: 112}
+  m_SizeDelta: {x: 270, y: 56}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &370091882
 MonoBehaviour:
@@ -1714,7 +1714,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ""
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1804,12 +1804,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ea64ef0b2d24fb48a84b0f51f2fd3b1, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattlePowerTotalRowView
   dividerImage: {fileID: 0}
   labelText: {fileID: 0}
   valueText: {fileID: 0}
-  textColor: {r: 0.65, g: 0.05, b: 0.05, a: 1}
+  textColor: {r: 0.9607843, g: 0.007843138, b: 0.02745098, a: 0.96862745}
   fontSize: 30
   dividerHeight: 6
 --- !u!1 &376136372
@@ -2361,7 +2361,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041F\u043E\u0431\u0435\u0433 \u043D\u0435 \u0443\u0434\u0430\u043B\u0441\u044F. \u0428\u0442\u0440\u0430\u0444 \u043F\u0440\u0438\u043C\u0435\u043D\u0451\u043D"
+  m_text: "\u041F\u043E\u0431\u0435\u0433 \u043D\u0435 \u0443\u0434\u0430\u043B\u0441\u044F.
+    \u0428\u0442\u0440\u0430\u0444 \u043F\u0440\u0438\u043C\u0435\u043D\u0451\u043D"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4053,7 +4054,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.58}
   m_AnchorMax: {x: 0, y: 0.58}
-  m_AnchoredPosition: {x: 64, y: 8}
+  m_AnchoredPosition: {x: 60, y: 40}
   m_SizeDelta: {x: 310, y: 240}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1078552331
@@ -7825,7 +7826,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.58}
   m_AnchorMax: {x: 1, y: 0.58}
-  m_AnchoredPosition: {x: -48, y: 8}
+  m_AnchoredPosition: {x: -48, y: 40}
   m_SizeDelta: {x: 310, y: 240}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &2098933810
@@ -8748,7 +8749,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
@@ -9121,7 +9122,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
@@ -9494,7 +9495,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
@@ -9642,7 +9643,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -38, y: -38}
+  m_AnchoredPosition: {x: -45, y: -45}
   m_SizeDelta: {x: 64, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2140000083
@@ -9777,7 +9778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
