@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: card_golden_apple
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   cardId: golden_apple
-  cardName: Golden Apple
-  description: Restore 2 HP.
+  cardName: "\u0417\u043E\u043B\u043E\u0442\u043E\u0435 \u044F\u0431\u043B\u043E\u043A\u043E"
+  description: "\u041A\u0443\u0431\u0438\u0447\u0435\u0441\u043A\u043E\u0435, \u043D\u043E
+    \u043E\u0447\u0435\u043D\u044C \u0432\u043A\u0443\u0441\u043D\u043E\u0435, +2
+    \u043A \u0445\u0438\u0442\u043F\u043E\u0438\u043D\u0442\u0430\u043C."
   cardSprite: {fileID: -4295420182074819817, guid: 580b80fc8144b264d865967a4d622ea1, type: 3}
   rarity: 0
   usageContext: 2

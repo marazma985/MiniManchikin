@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: item_katana
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: katana
-  itemName: Katana
-  description: Rare weapon. Adds +5 Power.
+  itemName: "\u041A\u0430\u0442\u0430\u043D\u0430"
+  description: "\u041D\u0430\u0438\u0440\u0435\u0434\u0447\u0430\u0448\u0435\u0435
+    \u043E\u0440\u0443\u0434\u0438\u044F \u0441\u0430\u043C\u0443\u0440\u0430\u0435\u0432,
+    +5 \u043A \u0441\u0438\u043B\u0435 \u0432 \u0431\u043E\u044E."
   itemSprite: {fileID: -2064859774160998932, guid: 9cae02c960e52164f890440d22d1d5eb, type: 3}
   rarity: 1
   itemType: 0

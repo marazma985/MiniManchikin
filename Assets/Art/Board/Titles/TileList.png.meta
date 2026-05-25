@@ -1,22 +1,22 @@
 fileFormatVersion: 2
-guid: 8897a80d525279d4d8f28c2befa877b7
+guid: edf708ab6b8409a479db5e0a3606c62f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2611654739667160486
-    second: TileList2_0
+      213: 1735239039651989956
+    second: TileList_0
   - first:
-      213: -2120437292959271237
-    second: TileList2_1
+      213: -2622162786937376484
+    second: TileList_1
   - first:
-      213: 7549795006226855371
-    second: TileList2_2
+      213: -5120492817610540687
+    second: TileList_2
   - first:
-      213: 6142956647506381973
-    second: TileList2_3
+      213: -5987268444031069980
+    second: TileList_3
   - first:
-      213: 3337061382402360114
-    second: TileList2_4
+      213: 4124154873878035904
+    second: TileList_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -112,7 +112,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TileList2_0
+      name: TileList_0
       rect:
         serializedVersion: 2
         x: 34
@@ -127,14 +127,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a527c26f9d981cbd0800000000000000
-      internalID: -2611654739667160486
+      spriteID: 4c9c8de76bec41810800000000000000
+      internalID: 1735239039651989956
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TileList2_1
+      name: TileList_1
       rect:
         serializedVersion: 2
         x: 542
@@ -149,14 +149,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bb6fba04481b292e0800000000000000
-      internalID: -2120437292959271237
+      spriteID: c11795d86d43c9bd0800000000000000
+      internalID: -2622162786937376484
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TileList2_2
+      name: TileList_2
       rect:
         serializedVersion: 2
         x: 1045
@@ -171,14 +171,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bc57b21ce8246c860800000000000000
-      internalID: 7549795006226855371
+      spriteID: 179726379ea50f8b0800000000000000
+      internalID: -5120492817610540687
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TileList2_3
+      name: TileList_3
       rect:
         serializedVersion: 2
         x: 247
@@ -193,14 +193,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 59c0e3d268a204550800000000000000
-      internalID: 6142956647506381973
+      spriteID: 4e05f927213f8eca0800000000000000
+      internalID: -5987268444031069980
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TileList2_4
+      name: TileList_4
       rect:
         serializedVersion: 2
         x: 800
@@ -215,8 +215,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 23344c395af9f4e20800000000000000
-      internalID: 3337061382402360114
+      spriteID: 0cd3230d101fb3930800000000000000
+      internalID: 4124154873878035904
       vertices: []
       indices: 
       edges: []
@@ -235,11 +235,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      TileList2_0: -2611654739667160486
-      TileList2_1: -2120437292959271237
-      TileList2_2: 7549795006226855371
-      TileList2_3: 6142956647506381973
-      TileList2_4: 3337061382402360114
+      TileList_0: 1735239039651989956
+      TileList_1: -2622162786937376484
+      TileList_2: -5120492817610540687
+      TileList_3: -5987268444031069980
+      TileList_4: 4124154873878035904
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

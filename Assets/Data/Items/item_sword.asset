@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: item_sword
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: sword
-  itemName: Sword
-  description: Rare weapon. Adds +4 Power.
+  itemName: "\u041C\u0435\u0447 \u041B\u0430\u043D\u0441\u0435\u043B\u043E\u0442\u0430"
+  description: "\u041C\u0435\u0447 \u0442\u043E\u0433\u043E \u0441\u0430\u043C\u043E\u0433\u043E,
+    +4 \u043A \u0441\u0438\u043B\u0435 \u0432 \u0431\u043E\u044E."
   itemSprite: {fileID: -6099050445329199328, guid: 9cae02c960e52164f890440d22d1d5eb, type: 3}
   rarity: 1
   itemType: 0

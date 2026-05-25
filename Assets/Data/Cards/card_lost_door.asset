@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: card_lost_door
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   cardId: lost_door
-  cardName: Lost Door
-  description: 
+  cardName: "\u041F\u0440\u0438\u043E\u0442\u043A\u0440\u044B\u0442\u0430\u044F \u0434\u0432\u0435\u0440\u044C"
+  description: "\u0412\u0435\u0437\u0434\u0435 \u043C\u043E\u0436\u043D\u043E \u043D\u0430\u0439\u0442\u0438
+    \u043B\u043E\u0437\u0435\u0439\u043A\u0443, \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0430\u044F
+    \u0441\u043C\u044B\u0432\u043A\u0430."
   cardSprite: {fileID: -4099340948340065896, guid: 580b80fc8144b264d865967a4d622ea1, type: 3}
   rarity: 1
   usageContext: 0

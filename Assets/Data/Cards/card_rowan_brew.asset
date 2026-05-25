@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: card_rowan_brew
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   cardId: rowan_brew
-  cardName: Rowan Brew
-  description: Restore 1 HP.
+  cardName: "\u0417\u0435\u043B\u044C\u0435 \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u044F"
+  description: "\u041D\u0435\u043C\u043D\u043E\u0433\u043E \u043B\u0435\u0447\u0438\u0442,
+    \u0430 \u043C\u043E\u0436\u0435\u0442 \u0438 \u043F\u043B\u0430\u0446\u0435\u0431\u043E,
+    +1 \u043A \u0445\u0438\u0442\u043F\u043E\u0438\u043D\u0442\u0430\u043C."
   cardSprite: {fileID: -8357116900314449197, guid: 580b80fc8144b264d865967a4d622ea1, type: 3}
   rarity: 0
   usageContext: 2

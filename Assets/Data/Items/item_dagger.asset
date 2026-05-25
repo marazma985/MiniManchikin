@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: item_dagger
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: dagger
-  itemName: Dagger
-  description: Common weapon. Adds +2 Power.
+  itemName: "\u041A\u0438\u043D\u0436\u0430\u043B"
+  description: "\u041F\u0440\u043E\u0441\u0442\u043E\u0435 \u043D\u043E \u0434\u043E\u0431\u0440\u043E\u0442\u043D\u043E\u0435
+    \u043E\u0440\u0443\u0434\u0438\u0435, + 2 \u043A \u0441\u0438\u043B\u0435 \u0432
+    \u0431\u043E\u044E."
   itemSprite: {fileID: 4337684191699249041, guid: 9cae02c960e52164f890440d22d1d5eb, type: 3}
   rarity: 0
   itemType: 0

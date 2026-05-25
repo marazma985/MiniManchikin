@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: item_helmet
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: helmet
-  itemName: Helmet
-  description: Common armor. Prevents HP damage once, then breaks.
+  itemName: "\u0428\u043B\u0435\u043C \u043F\u0440\u0435\u0434\u0432\u043E\u0434\u0438\u0442\u0435\u043B\u044F"
+  description: "\u0417\u0430\u0449\u0438\u0449\u0430\u0435\u0442 \u043E\u0442 \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u044F
+    \u0443\u0440\u043E\u043D\u0430 \u0435\u0434\u0438\u043D\u043E\u0436\u0434\u044B."
   itemSprite: {fileID: 8033092973025764044, guid: 9cae02c960e52164f890440d22d1d5eb, type: 3}
   rarity: 0
   itemType: 1
