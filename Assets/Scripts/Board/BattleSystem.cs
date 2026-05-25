@@ -96,7 +96,7 @@ public sealed class BattleSystem : MonoBehaviour
         currentBattleData = CreateBattleData(enemy);
         phase = BattlePhase.WaitingForResolve;
         battleModalView.Show(currentBattleData);
-        battleModalView.UpdateState(CanUseBattleDice ? "Battle dice available" : "Battle dice unavailable", "Resolve Battle");
+        battleModalView.UpdateState(CanUseBattleDice ? "Кубик боя доступен" : "Кубик боя недоступен", "Решить бой");
         BattleStateChanged?.Invoke();
     }
 
@@ -118,7 +118,7 @@ public sealed class BattleSystem : MonoBehaviour
         battleDiceUsed = true;
         currentBattleData = CreateBattleData(currentEnemy);
         battleModalView.Show(currentBattleData);
-        battleModalView.UpdateState($"Battle dice used: +{currentBattleDiceBonus}", "Resolve Battle");
+        battleModalView.UpdateState($"Кубик боя: +{currentBattleDiceBonus}", "Решить бой");
         Debug.Log($"Battle dice used: +{currentBattleDiceBonus}. Player total is now {currentBattleData.PlayerTotalPower}.");
         BattleStateChanged?.Invoke();
         return true;
@@ -133,7 +133,7 @@ public sealed class BattleSystem : MonoBehaviour
         }
 
         temporaryCardPowerBonus += value;
-        RefreshBattleModal($"Card power bonus added: +{value}");
+        RefreshBattleModal($"Бонус силы от карты: +{value}");
         Debug.Log($"Temporary card power bonus added: +{value}. Total temporary card power: {temporaryCardPowerBonus}.");
         BattleStateChanged?.Invoke();
         return true;
@@ -148,7 +148,7 @@ public sealed class BattleSystem : MonoBehaviour
         }
 
         temporaryEscapeBonus += value;
-        RefreshBattleModal($"Card escape bonus added: +{value}");
+        RefreshBattleModal($"Бонус побега от карты: +{value}");
         Debug.Log($"Temporary escape bonus added: +{value}. Total temporary escape bonus: {temporaryEscapeBonus}.");
         BattleStateChanged?.Invoke();
         return true;
@@ -194,13 +194,13 @@ public sealed class BattleSystem : MonoBehaviour
             Debug.Log($"Battle won: {currentBattleData.PlayerName} defeated {currentBattleData.EnemyName}. Level is now {playerStats.Level}.");
             if (rewardSystem != null && rewardSystem.ShowBattleRewards(HandleRewardAccepted))
             {
-                battleModalView.UpdateState("Player won. Choose reward", "Choose Reward");
+                battleModalView.UpdateState("Победа! Выберите награду", "Выбрать награду");
                 battleModalView.Hide();
                 phase = BattlePhase.WaitingForReward;
             }
             else
             {
-                battleModalView.UpdateState("Player won", "Close");
+                battleModalView.UpdateState("Победа!", "Закрыть");
                 phase = BattlePhase.WaitingForClose;
             }
 
@@ -209,7 +209,7 @@ public sealed class BattleSystem : MonoBehaviour
         else
         {
             Debug.Log($"Battle lost: {currentBattleData.PlayerName} failed against {currentBattleData.EnemyName}.");
-            battleModalView.UpdateState("Player lost, trying to escape", "Roll Escape");
+            battleModalView.UpdateState("Поражение. Попытка побега", "Бросить на побег");
             phase = BattlePhase.WaitingForEscapeRoll;
             BattleStateChanged?.Invoke();
         }
@@ -235,13 +235,13 @@ public sealed class BattleSystem : MonoBehaviour
         if (finalEscapeValue >= EscapeSuccessRoll)
         {
             Debug.Log($"Escape successful. Base roll: {escapeRoll}, escape bonus: {escapeBonus}, final escape value: {finalEscapeValue}.");
-            battleModalView.UpdateState("Escape successful", "Close");
+            battleModalView.UpdateState("Побег удался", "Закрыть");
         }
         else
         {
             Debug.Log($"Escape failed. Base roll: {escapeRoll}, escape bonus: {escapeBonus}, final escape value: {finalEscapeValue}.");
             ApplyPenalty();
-            battleModalView.UpdateState("Escape failed. Penalty applied", "Close");
+            battleModalView.UpdateState("Побег не удался. Штраф применён", "Закрыть");
         }
 
         phase = BattlePhase.WaitingForClose;
@@ -437,29 +437,29 @@ public sealed class BattleSystem : MonoBehaviour
         var totalEquipmentBonus = equipmentBonus + GetEquipmentEffectBonus(EffectType.Power);
         var playerEntries = new List<BattlePowerEntry>
         {
-            new BattlePowerEntry("Level", playerStats.Level),
-            new BattlePowerEntry("Equipment bonus", totalEquipmentBonus)
+            new BattlePowerEntry("Уровень", playerStats.Level),
+            new BattlePowerEntry("Бонус экипировки", totalEquipmentBonus)
         };
 
         var totalDiceBonus = diceBonus + currentBattleDiceBonus;
         if (totalDiceBonus > 0)
-            playerEntries.Add(new BattlePowerEntry("Dice bonus", totalDiceBonus));
+            playerEntries.Add(new BattlePowerEntry("Бонус кубика", totalDiceBonus));
 
         var totalCardBonus = cardBonus + temporaryCardPowerBonus;
         if (totalCardBonus > 0)
-            playerEntries.Add(new BattlePowerEntry("Card bonuses", totalCardBonus));
+            playerEntries.Add(new BattlePowerEntry("Бонус карт", totalCardBonus));
 
         var enemyEntries = new List<BattlePowerEntry>
         {
-            new BattlePowerEntry("Base monster level", enemy.BaseLevel)
+            new BattlePowerEntry("Уровень монстра", enemy.BaseLevel)
         };
 
         var modifierPower = GetModifierPower(currentEnemyModifier);
         if (currentEnemyModifier != null)
         {
             var modifierName = string.IsNullOrEmpty(currentEnemyModifier.ModifierName)
-                ? "Modifier"
-                : $"Modifier: {currentEnemyModifier.ModifierName}";
+                ? "Модификатор"
+                : $"Модификатор: {currentEnemyModifier.ModifierName}";
             enemyEntries.Add(new BattlePowerEntry(modifierName, modifierPower));
         }
 
@@ -516,13 +516,13 @@ public sealed class BattleSystem : MonoBehaviour
         switch (phase)
         {
             case BattlePhase.WaitingForEscapeRoll:
-                return "Roll Escape";
+                return "Бросить на побег";
             case BattlePhase.WaitingForReward:
-                return "Choose Reward";
+                return "Выбрать награду";
             case BattlePhase.WaitingForClose:
-                return "Close";
+                return "Закрыть";
             default:
-                return "Resolve Battle";
+                return "Решить бой";
         }
     }
 }

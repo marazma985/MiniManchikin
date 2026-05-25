@@ -186,6 +186,7 @@ public sealed class RewardSystem : MonoBehaviour
             case RewardType.Item:
                 return TryClaimItemReward(reward);
             default:
+                rewardModalView?.ShowStatus("Неподдерживаемая награда");
                 Debug.LogWarning($"Unsupported reward type '{reward.RewardType}'.");
                 return false;
         }
@@ -195,6 +196,7 @@ public sealed class RewardSystem : MonoBehaviour
     {
         if (cardSystem == null || reward.CardData == null)
         {
+            rewardModalView?.ShowStatus("Система карт не назначена");
             NotifyEffect(EffectType.GiveCard, 1, EffectNotificationStatus.Failed);
             Debug.LogWarning("Cannot claim card reward. CardSystem or CardData is missing.");
             return false;
@@ -202,7 +204,7 @@ public sealed class RewardSystem : MonoBehaviour
 
         if (cardSystem.Hand.Count >= cardSystem.MaxCards)
         {
-            rewardModalView?.ShowStatus("Card hand is full");
+            rewardModalView?.ShowStatus("Рука карт заполнена");
             NotifyEffect(EffectType.GiveCard, 1, EffectNotificationStatus.Failed);
             Debug.LogWarning($"Card reward '{reward.DisplayName}' was not claimed. Card hand is full.");
             return false;
@@ -210,7 +212,7 @@ public sealed class RewardSystem : MonoBehaviour
 
         if (!cardSystem.AddCard(reward.CardData))
         {
-            rewardModalView?.ShowStatus("Card hand is full");
+            rewardModalView?.ShowStatus("Рука карт заполнена");
             NotifyEffect(EffectType.GiveCard, 1, EffectNotificationStatus.Failed);
             Debug.LogWarning($"Card reward '{reward.DisplayName}' was not claimed.");
             return false;
@@ -225,6 +227,7 @@ public sealed class RewardSystem : MonoBehaviour
     {
         if (playerInventory == null || reward.ItemData == null)
         {
+            rewardModalView?.ShowStatus("Инвентарь экипировки не назначен");
             NotifyEffect(EffectType.GiveItem, 1, EffectNotificationStatus.Failed);
             Debug.LogWarning("Cannot claim item reward. PlayerInventory or ItemData is missing.");
             return false;
@@ -232,7 +235,7 @@ public sealed class RewardSystem : MonoBehaviour
 
         if (!playerInventory.HasFreeSlot())
         {
-            rewardModalView?.ShowStatus("Equipment inventory is full");
+            rewardModalView?.ShowStatus("Инвентарь экипировки заполнен");
             NotifyEffect(EffectType.GiveItem, 1, EffectNotificationStatus.Failed);
             Debug.LogWarning($"Item reward '{reward.DisplayName}' was not claimed. Equipment inventory is full.");
             return false;
@@ -240,7 +243,7 @@ public sealed class RewardSystem : MonoBehaviour
 
         if (!playerInventory.TryEquip(reward.ItemData))
         {
-            rewardModalView?.ShowStatus("Equipment inventory is full");
+            rewardModalView?.ShowStatus("Инвентарь экипировки заполнен");
             NotifyEffect(EffectType.GiveItem, 1, EffectNotificationStatus.Failed);
             Debug.LogWarning($"Item reward '{reward.DisplayName}' was not claimed.");
             return false;

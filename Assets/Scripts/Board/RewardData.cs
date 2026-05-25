@@ -15,6 +15,21 @@ public sealed class RewardData
     public ItemData ItemData => itemData;
     public string DisplayName => displayName;
     public Sprite DisplaySprite => displaySprite;
+    public string DisplayDescription
+    {
+        get
+        {
+            switch (rewardType)
+            {
+                case RewardType.Card:
+                    return cardData != null ? cardData.Description : string.Empty;
+                case RewardType.Item:
+                    return itemData != null ? itemData.Description : string.Empty;
+                default:
+                    return string.Empty;
+            }
+        }
+    }
 
     private RewardData(RewardType rewardType, CardData cardData, ItemData itemData, string displayName, Sprite displaySprite)
     {

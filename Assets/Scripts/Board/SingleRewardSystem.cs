@@ -141,13 +141,13 @@ public sealed class SingleRewardSystem : MonoBehaviour
             case RewardType.Card:
                 if (cardSystem == null)
                 {
-                    status = "Card system is missing";
+                    status = "Система карт не назначена";
                     return false;
                 }
 
                 if (cardSystem.Hand.Count >= cardSystem.MaxCards)
                 {
-                    status = "Card hand is full";
+                    status = "Рука карт заполнена";
                     return false;
                 }
 
@@ -155,19 +155,19 @@ public sealed class SingleRewardSystem : MonoBehaviour
             case RewardType.Item:
                 if (playerInventory == null)
                 {
-                    status = "Equipment inventory is missing";
+                    status = "Инвентарь экипировки не назначен";
                     return false;
                 }
 
                 if (!playerInventory.HasFreeSlot())
                 {
-                    status = "Equipment inventory is full";
+                    status = "Инвентарь экипировки заполнен";
                     return false;
                 }
 
                 return true;
             default:
-                status = "Unsupported reward";
+                status = "Неподдерживаемая награда";
                 return false;
         }
     }

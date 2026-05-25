@@ -136,7 +136,7 @@ public sealed class CardSystem : MonoBehaviour
             return false;
 
         if (battleSystem != null && battleSystem.IsBattleActive)
-            battleSystem.RefreshCurrentBattleView($"Card applied: {card.CardName}");
+            battleSystem.RefreshCurrentBattleView($"Карта применена: {card.CardName}");
 
         return true;
     }

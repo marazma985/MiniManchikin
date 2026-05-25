@@ -6,6 +6,7 @@ public sealed class RewardView : MonoBehaviour
 {
     [SerializeField] private Image iconImage;
     [SerializeField] private Text nameText;
+    [SerializeField] private Text descriptionText;
     [SerializeField] private Button button;
 
     private RewardData currentReward;
@@ -36,6 +37,9 @@ public sealed class RewardView : MonoBehaviour
     {
         if (nameText != null)
             nameText.text = currentReward != null ? currentReward.DisplayName : string.Empty;
+
+        if (descriptionText != null)
+            descriptionText.text = currentReward != null ? currentReward.DisplayDescription : string.Empty;
 
         if (iconImage != null)
         {

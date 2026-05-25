@@ -33,13 +33,13 @@ public sealed class BattleModalView : MonoBehaviour
         SetText(playerNameText, data.PlayerName);
         // Player portrait is a static scene UI image and should not be overwritten per battle.
         RenderPowerEntries(data.PlayerPowerEntries, playerPowerListRoot, playerPowerEntryRowPrefab, playerPowerText, TextAnchor.UpperLeft);
-        SetText(playerTotalText, $"Total: {data.PlayerTotalPower}");
+        SetText(playerTotalText, $"Итого: {data.PlayerTotalPower}");
 
         SetText(enemyNameText, data.EnemyName);
         SetImage(enemyPortraitImage, data.EnemySprite);
         RenderPowerEntries(data.EnemyPowerEntries, enemyPowerListRoot, enemyPowerEntryRowPrefab, enemyPowerText, TextAnchor.UpperRight);
-        SetText(enemyTotalText, $"Total: {data.EnemyTotalPower}");
-        UpdateState("Battle started", "Resolve Battle");
+        SetText(enemyTotalText, $"Итого: {data.EnemyTotalPower}");
+        UpdateState("Бой начался", "Решить бой");
 
         gameObject.SetActive(true);
     }

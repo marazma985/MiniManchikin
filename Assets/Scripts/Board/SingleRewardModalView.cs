@@ -31,7 +31,7 @@ public sealed class SingleRewardModalView : MonoBehaviour
             nameText.text = reward != null ? reward.DisplayName : string.Empty;
 
         if (descriptionText != null)
-            descriptionText.text = GetDescription(reward);
+            descriptionText.text = reward != null ? reward.DisplayDescription : string.Empty;
 
         if (iconImage != null)
         {
@@ -66,22 +66,6 @@ public sealed class SingleRewardModalView : MonoBehaviour
 
         if (closeButton != null)
             closeButton.onClick.RemoveListener(HandleCloseClicked);
-    }
-
-    private static string GetDescription(RewardData reward)
-    {
-        if (reward == null)
-            return string.Empty;
-
-        switch (reward.RewardType)
-        {
-            case RewardType.Card:
-                return reward.CardData != null ? reward.CardData.Description : string.Empty;
-            case RewardType.Item:
-                return reward.ItemData != null ? reward.ItemData.Description : string.Empty;
-            default:
-                return string.Empty;
-        }
     }
 
     private void HandleAcceptClicked()
