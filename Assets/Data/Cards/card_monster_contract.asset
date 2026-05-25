@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: monster_contract
   cardName: Monster Contract
   description: Move to the nearest Battle tile.
-  cardSprite: {fileID: 2902219642426063322, guid: 9bce38005b053864896b45eef09706b7, type: 3}
+  cardSprite: {fileID: -4782941325692035639, guid: 580b80fc8144b264d865967a4d622ea1, type: 3}
   rarity: 0
   usageContext: 1
   effects:

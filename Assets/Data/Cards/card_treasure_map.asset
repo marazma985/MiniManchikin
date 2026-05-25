@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: treasure_map
   cardName: Treasure Map
   description: Move to the nearest Buff tile.
-  cardSprite: {fileID: -5234875708147891085, guid: 9bce38005b053864896b45eef09706b7, type: 3}
+  cardSprite: {fileID: -7849734055416814897, guid: 580b80fc8144b264d865967a4d622ea1, type: 3}
   rarity: 0
   usageContext: 1
   effects:

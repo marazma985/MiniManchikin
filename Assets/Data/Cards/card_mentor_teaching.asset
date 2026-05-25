@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: mentor_teaching
   cardName: Mentor Teaching
   description: Rare card. Gain 2 Levels.
-  cardSprite: {fileID: 8820237810666801820, guid: c4c3ce8f38c6da7439f43ab6691b7c90, type: 3}
+  cardSprite: {fileID: -2388053692007476838, guid: 580b80fc8144b264d865967a4d622ea1, type: 3}
   rarity: 1
   usageContext: 2
   effects:

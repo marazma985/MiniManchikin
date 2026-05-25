@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: strength_potion
   cardName: Strength Potion
   description: Battle card. Adds +3 Power.
-  cardSprite: {fileID: -3505281936698337249, guid: 09b82d982dc2d8c43b96df2ca8fcac09, type: 3}
+  cardSprite: {fileID: 5719021110029946092, guid: 580b80fc8144b264d865967a4d622ea1, type: 3}
   rarity: 0
   usageContext: 0
   effects:

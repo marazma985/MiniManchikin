@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: rowan_brew
   cardName: Rowan Brew
   description: Restore 1 HP.
-  cardSprite: {fileID: 2684005426739812973, guid: 0b7c981160d2e294d817a4a789e1f253, type: 3}
+  cardSprite: {fileID: -8357116900314449197, guid: 580b80fc8144b264d865967a4d622ea1, type: 3}
   rarity: 0
   usageContext: 2
   effects:

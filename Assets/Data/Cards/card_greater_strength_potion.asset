@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: greater_strength_potion
   cardName: Greater Strength Potion
   description: Rare battle card. Adds +5 Power.
-  cardSprite: {fileID: 3275915938350323413, guid: 0b7c981160d2e294d817a4a789e1f253, type: 3}
+  cardSprite: {fileID: -7233753241863384822, guid: 580b80fc8144b264d865967a4d622ea1, type: 3}
   rarity: 1
   usageContext: 0
   effects:

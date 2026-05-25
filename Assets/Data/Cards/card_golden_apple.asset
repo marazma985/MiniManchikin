@@ -15,7 +15,7 @@ MonoBehaviour:
   cardId: golden_apple
   cardName: Golden Apple
   description: Restore 2 HP.
-  cardSprite: {fileID: -7584992706043491492, guid: 9bce38005b053864896b45eef09706b7, type: 3}
+  cardSprite: {fileID: -4295420182074819817, guid: 580b80fc8144b264d865967a4d622ea1, type: 3}
   rarity: 0
   usageContext: 2
   effects:
