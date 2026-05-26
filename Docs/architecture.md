@@ -3,6 +3,9 @@
 Current project: Unity 6, 2D casual board game with turn-based board movement inspired by Munchkin.
 
 Main scene: `Assets/Scenes/BoardGame.unity`
+Additional runtime scenes:
+- `Assets/Scenes/MainMenu.unity`
+- `Assets/Scenes/ResultGameScene.unity`
 
 Vision documents:
 - `Docs/GDD.md` describes long-term game vision and planned mechanics.
@@ -19,6 +22,7 @@ Current `BoardGame.unity` root objects:
 - `Board UI Canvas`
 - `EventSystem`
 - `CardSystem`
+- `Board Back Button`
 
 Important children:
 - `BoardRoot/Board Background`
@@ -34,6 +38,8 @@ Important children:
 - `Board UI Canvas/CardHand`
 
 Dependencies are assigned through serialized Inspector references, with local component fallback only where the component is required on the same GameObject.
+
+`Board Back Button` is a world-space `SpriteRenderer` object, not a Canvas object. This keeps it under Canvas modals and allows modal background blur to include it.
 
 ## Content Foundation
 
@@ -144,6 +150,8 @@ Responsibilities:
 - exposes `TakeDamage`, `Heal`, and `SetLevel`;
 - exposes HP and level change events.
 
+`GameResultSystem` listens to player HP and level changes and can move the game to the result scene when an end condition is reached.
+
 ## Inventory And Items
 
 Files:
@@ -173,7 +181,7 @@ Implemented item gameplay:
 - `EscapeBonus` effects add to escape roll.
 - `ItemType.Armor` blocks one HP loss penalty, then breaks and is unequipped.
 
-No inventory window, item replacement flow, drag-and-drop, or save/load exists yet.
+No inventory window, item replacement flow, drag-and-drop, or game-state save/load exists yet.
 
 ## Card System
 
@@ -213,6 +221,8 @@ Files:
 - `Assets/Scripts/Board/BattleModalData.cs`
 - `Assets/Scripts/Board/BattleModalView.cs`
 - `Assets/Scripts/Board/BattlePowerEntry.cs`
+- `Assets/Scripts/Board/BattlePowerEntryRowView.cs`
+- `Assets/Scripts/Board/BattlePowerTotalRowView.cs`
 - `Assets/Scripts/Board/EnemyData.cs`
 - `Assets/Scripts/Board/EnemyModifier.cs`
 - `Assets/Scripts/Board/MonsterPenaltyType.cs`
@@ -226,6 +236,8 @@ Player battle power currently includes:
 - temporary card power bonus;
 - serialized card bonus field;
 - optional battle dice bonus.
+
+The battle modal renders player and enemy power as individual row prefabs. Player equipment bonus is not shown when its value is `0`. Totals are rendered as separate total-row views with a divider line and fallback to legacy total text when the row view is not assigned.
 
 Battle dice can be used when the enemy total exceeds or equals player total by `0..6` power.
 
@@ -254,6 +266,7 @@ Files:
 Battle victory rewards:
 - `RewardSystem` generates up to 3 random rewards from serialized card/item pools.
 - `RewardModalView` shows those rewards.
+- `RewardData.DisplayDescription` exposes card/item descriptions for reward UI.
 - Selecting a card calls `CardSystem.AddCard`.
 - Selecting an item calls `PlayerInventory.TryEquip`.
 - If hand/equipment is full, the modal remains open and displays a status message.
@@ -265,7 +278,7 @@ Single reward flow:
 - The modal updates when cards/equipment are manually removed.
 - Close declines the reward and completes the tile effect flow.
 
-No rarity weighting, duplicate protection, reward chains, or save/load exists yet.
+No rarity weighting, duplicate protection, reward chains, or game-state save/load exists yet.
 
 ## Event Notifications
 
@@ -287,6 +300,24 @@ Each notification setting has:
 
 Notifications support success, blocked, no-effect, and failed statuses. Existing animation behavior uses coroutines: short lifetime, fade, move up, then destroy.
 
+## Game Result Flow
+
+Files:
+- `Assets/Scripts/Board/GameResultSystem.cs`
+- `Assets/Scripts/Board/GameResultContext.cs`
+- `Assets/Scripts/Board/GameResultType.cs`
+- `Assets/Scripts/Board/ResultGameScreenController.cs`
+
+Scenes:
+- `Assets/Scenes/BoardGame.unity`
+- `Assets/Scenes/ResultGameScene.unity`
+
+Current behavior:
+- `GameResultSystem` triggers win when player level reaches `winningLevel`, currently `10`;
+- `GameResultSystem` triggers lose when player HP reaches `0`;
+- result state is passed through static `GameResultContext`;
+- `ResultGameScreenController` selects win/lose art and returns to `MainMenu`.
+
 ## HUD And UI Views
 
 Files:
@@ -295,38 +326,53 @@ Files:
 - `Assets/Scripts/Board/CardHandView.cs`
 - `Assets/Scripts/Board/CardView.cs`
 - `Assets/Scripts/Board/DiceRollButtonController.cs`
+- `Assets/Scripts/Board/BoardBackButtonController.cs`
+- `Assets/Scripts/Board/BattleBackgroundBlurView.cs`
 
 UI classes display data and forward user intent. They do not own gameplay rules.
 
 Implemented UI behavior:
-- roll button starts turn or battle dice when available;
+- roll button starts turn or battle dice when available and cross-fades state sprites;
+- board back button loads `MainMenu`, cross-fades state sprites, and blocks input while modals are active;
 - HUD displays level, HP hearts, and equipped item slots;
 - inventory slots show item sprites and have hover-fade remove buttons;
 - card views show card sprites, apply smooth hover highlight, and have hover-fade remove buttons;
 - card remove buttons call `CardSystem.RemoveCard`;
 - inventory remove buttons call `PlayerInventory.Unequip`.
+- battle/reward/single reward modals use Russian user-facing labels and status text.
+- modal roots use `BattleBackgroundBlurView` to capture and blur the camera background.
 
 ## Main Menu UI
 
 Scene: `Assets/Scenes/MainMenu.unity`
 
 Files:
+- `Assets/Scripts/UI/MainMenuSceneLoader.cs`
 - `Assets/Scripts/UI/MainMenuSpriteButton.cs`
 - `Assets/Scripts/UI/MainMenuButtonFeedback.cs`
 - `Assets/Scripts/UI/MainMenuCursor.cs`
 - `Assets/Scripts/UI/MainMenuCursorHoverTarget.cs`
 - `Assets/Scripts/UI/MainMenuSkinSlots.cs`
+- `Assets/Scripts/UI/MainMenuSettingsModalView.cs`
+- `Assets/Scripts/UI/GameSettingsService.cs`
+- `Assets/Resources/UI/GlobalCursor.prefab`
+- `Assets/Audio/MainAudioMixer.mixer`
 
 Current behavior:
 - sprite-based main menu visual layout;
 - Continue can be locked through `continueAvailable`;
 - buttons have hover feedback;
-- custom cursor changes state on hover/press.
+- custom cursor is provided globally from `Resources/UI/GlobalCursor` when a scene does not already contain one;
+- cursor changes state on hover and on any mouse press;
+- New Game loads `BoardGame`;
+- Settings opens a square modal with blurred background;
+- settings can save resolution, fullscreen state, and music volume through `PlayerPrefs`;
+- music volume is applied through exposed `MusicVolume` on `MainAudioMixer`.
 
 Current limitation:
-- menu button `onClick` handlers are empty;
-- no scene loading, settings, continue, save/load, or exit behavior is connected yet;
-- `MainMenuCursor` uses a static `Instance` bridge for main menu UI only.
+- Continue and Exit are still visual-only;
+- no game-state save/load exists yet;
+- `MainMenuCursor` uses a static `Instance` bridge for global cursor UI glue.
 
 ## Implemented vs Placeholder
 
@@ -342,6 +388,11 @@ Implemented:
 - single reward modal for tile reward events;
 - event notifications;
 - manual card/item removal from HUD.
+- Main Menu New Game scene loading;
+- Main Menu settings modal for resolution/fullscreen/music volume;
+- global custom cursor;
+- board back button to return to Main Menu.
+- win/lose result scene flow.
 
 MVP or placeholder:
 - reward generation is random and unweighted;
@@ -349,12 +400,11 @@ MVP or placeholder:
 - item inventory has no full inventory window;
 - old serialized enemy fields remain for compatibility;
 - legacy hardcoded card effect classes remain unused;
-- Main Menu is visual-only;
+- Continue and Exit menu buttons are visual-only;
 - visuals are still mixed placeholder/final-in-progress.
 
 Not implemented:
-- save/load;
-- settings menu;
+- game-state save/load;
 - inventory window;
 - item replacement flow;
 - rare reward chains;

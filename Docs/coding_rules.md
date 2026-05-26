@@ -14,7 +14,7 @@ These are current project rules for continuing development.
 - Keep `System`, `View`, `Manager`, and `Controller` roles separate.
 
 Known current exceptions:
-- `MainMenuCursor` uses a static `Instance` bridge for menu hover/press targets. Treat this as existing main-menu UI glue only; do not copy this pattern into gameplay systems.
+- `MainMenuCursor` uses a static `Instance` bridge for global cursor UI glue. Treat this as existing UI infrastructure only; do not copy this pattern into gameplay systems.
 - Some `Reset()` editor convenience methods may use scene search APIs. This should not become runtime dependency wiring.
 
 ## Unity Rules
@@ -62,12 +62,17 @@ Examples:
 - `InventorySlotView` reports remove clicks.
 - `RewardModalView` and `SingleRewardModalView` report user choices.
 - `EventNotificationView` displays one notification and animates itself.
+- `BoardBackButtonController` owns only the world-space back button view/input and delegates scene loading to `SceneManager`.
+- `MainMenuSettingsModalView` owns settings modal UI; `GameSettingsService` owns saved settings and applying them.
+- `GameResultSystem` owns win/lose condition checks; `ResultGameScreenController` owns only result-screen display and navigation.
 
 ## Current Naming Patterns
 
 - Board gameplay code lives in `Assets/Scripts/Board`.
 - Board UI view code currently also lives in `Assets/Scripts/Board`.
 - Main menu UI code lives in `Assets/Scripts/UI`.
+- Shared cursor prefab lives in `Assets/Resources/UI/GlobalCursor.prefab`.
+- Audio mixer assets live in `Assets/Audio`.
 - Data assets live under `Assets/Data`.
 - Board art lives under `Assets/Art/Board`.
 - Main menu art may live under main menu art folders; keep asset organization stable when editing existing scenes.
@@ -126,6 +131,9 @@ When changing battle:
 - keep enemy penalties based on `EnemyData.penaltyEffects`;
 - preserve item and card effect integration;
 - preserve battle reward callback flow so tile resolution completes correctly.
+- keep power rows display-only: `BattleSystem` builds `BattlePowerEntry` data and `BattleModalView` renders row prefabs;
+- keep zero-value equipment hidden from player power rows unless the design explicitly asks to show zeroes again;
+- keep the main battle action button text derived from the current win/escape state.
 
 ## Reward Guidelines
 
@@ -134,7 +142,25 @@ When changing rewards:
 - keep single reward flow in `SingleRewardSystem`;
 - do not duplicate reward claim rules in UI views;
 - failed claims due to full hand/equipment should keep the relevant modal open;
+- reward descriptions should come from `RewardData.DisplayDescription`;
 - single reward Accept state should update from `CardSystem.OnHandChanged` and `PlayerInventory.OnEquipmentChanged`.
+
+## Settings And Cursor Guidelines
+
+When changing settings or cursor behavior:
+- keep saved settings keys centralized in `GameSettingsService`;
+- apply music volume through `MainAudioMixer` exposed parameter `MusicVolume`;
+- keep the settings modal as UI only; do not let it own persistence rules;
+- keep global cursor creation through `MainMenuCursor` and `Resources/UI/GlobalCursor`;
+- click animation should stay global for mouse press, not only for clickable UI elements.
+
+## Result Flow Guidelines
+
+When changing win/lose flow:
+- keep result condition checks in `GameResultSystem`;
+- pass result state through `GameResultContext`;
+- keep result-screen art and main-menu navigation in `ResultGameScreenController`;
+- do not make battle, tile, reward, or UI views load the result scene directly.
 
 ## Notification Guidelines
 

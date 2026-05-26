@@ -40,6 +40,8 @@ Board currently has 10 tiles:
 
 `BoardRoot/Board Background` displays `Assets/Art/Board/BoardBackground.png` behind the board through a low `SpriteRenderer` sorting order.
 
+`Board Back Button` is a world-space button in the top-right camera area. It returns to `MainMenu`, is included in modal blur, and is blocked while battle/reward modals are active.
+
 ## Tile Types And Effects
 
 Current `TileType` values:
@@ -120,6 +122,10 @@ Current stat changes:
 
 Armor can block HP loss from debuff/enemy HP penalties once, then breaks.
 
+Game result checks:
+- reaching level `10` opens the win result scene;
+- reaching `0` HP opens the lose result scene.
+
 ## Cards
 
 Cards are data-driven through `CardData.effects`.
@@ -178,7 +184,7 @@ Not implemented:
 - inventory window;
 - item replacement flow;
 - item drag/drop;
-- save/load persistence.
+- game-state save/load persistence.
 
 ## Battle System
 
@@ -188,11 +194,12 @@ Current battle tile behavior:
 - landing on `Battle` starts `BattleSystem`;
 - a random `EnemyData` asset is selected;
 - 0 or 1 enemy modifier is selected randomly;
-- `BattleModalView` shows player and enemy names, portraits, power entries, totals, status, and action button;
-- resolving battle compares player total power and enemy total power;
+- `BattleModalView` shows player and enemy names, portraits, separate power rows, separate total rows, status, and action button;
+- the action button dynamically shows `Победа` when player power is higher, otherwise `Пытаться сбежать`;
+- clicking `Победа` immediately grants victory and opens reward choices;
+- clicking `Пытаться сбежать` rolls escape immediately;
 - win requires player total power to be greater than enemy total power;
 - win grants +1 level and opens battle reward choices;
-- loss asks for an escape roll;
 - escape succeeds when base roll + escape bonuses is at least `5`;
 - failed escape applies enemy `penaltyEffects`;
 - closing/finishing the flow completes tile resolution.
@@ -212,12 +219,19 @@ Current player battle power:
 
 The roll dice button is reused for battle dice when battle dice is available. Battle dice can be used when the enemy total exceeds or equals player total by `0..6`.
 
+Display details:
+- player equipment row is hidden when the total equipment bonus is `0`;
+- enemy modifier row uses the modifier name directly;
+- dice/card hints are temporary for 2.5 seconds;
+- escape result hints stay visible until the modal closes.
+
 ## Rewards
 
 After battle victory:
 - battle modal hides;
 - `RewardSystem` opens `Reward Modal`;
 - 3 random rewards are generated from serialized card/item reward pools;
+- each option displays icon, name, and description;
 - player chooses one reward or closes/skips the modal;
 - card reward uses `CardSystem.AddCard`;
 - item reward uses `PlayerInventory.TryEquip`;
@@ -226,6 +240,7 @@ After battle victory:
 Single reward flow:
 - `GiveCard` and `GiveItem` tile effects use `SingleRewardSystem`;
 - `Single Reward Modal` shows one reward;
+- reward description is shared through `RewardData.DisplayDescription`;
 - Accept is disabled when hand/equipment is full;
 - removing a card/item through HUD updates Accept state;
 - closing declines the reward and continues the tile flow.
@@ -247,10 +262,39 @@ Examples:
 
 Notifications are data-driven by `EffectType` settings on `EventNotificationSystem`. They support success, blocked, no-effect, and failed statuses.
 
+## Result Screen
+
+`GameResultSystem` watches `PlayerStats` during board gameplay. When the player reaches the win or lose condition, it stores the result in `GameResultContext` and loads `ResultGameScene`.
+
+Current result behavior:
+- win condition: player level reaches `10`;
+- lose condition: player HP reaches `0`;
+- result scene chooses win/lose art through `ResultGameScreenController`;
+- result scene can return to `MainMenu`.
+
+## Main Menu And Settings
+
+Current main menu behavior:
+- New Game loads `BoardGame`;
+- Settings opens a square modal over blurred background;
+- Settings can save window size, fullscreen mode, and music volume;
+- music volume is stored in `PlayerPrefs` and applied to `MainAudioMixer`;
+- Continue and Exit are still visual-only.
+
+Window size options are currently `1280x720`, `1600x900`, and `1920x1080`. Default music volume is `0.5`.
+
+## Cursor
+
+The custom cursor is loaded globally from `Assets/Resources/UI/GlobalCursor.prefab` when a scene does not already contain one.
+
+Current behavior:
+- cursor follows the mouse and hides the OS cursor while focused;
+- hover state is based on selectable UI under the pointer;
+- press state plays on any mouse press, including empty space.
+
 ## Not Implemented Yet
 
-- save/load;
-- settings UI;
+- game-state save/load;
 - inventory window;
 - reward weighting/rarity balancing;
 - item replacement flow;
@@ -258,4 +302,4 @@ Notifications are data-driven by `EffectType` settings on `EventNotificationSyst
 - card draw/discard piles;
 - final battle/event animations;
 - final balancing;
-- main menu button actions.
+- main menu Continue/Exit actions.

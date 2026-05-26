@@ -2,6 +2,10 @@
 
 Current board UI is in `Assets/Scenes/BoardGame.unity`.
 
+Other runtime UI scenes:
+- `Assets/Scenes/MainMenu.unity`
+- `Assets/Scenes/ResultGameScene.unity`
+
 Main Canvas:
 - `Board UI Canvas`
 
@@ -16,6 +20,9 @@ Canvas children:
 
 There is also an `EventSystem` in the scene.
 
+World-space UI-like objects:
+- `Board Back Button`
+
 ## Board Background
 
 World object:
@@ -26,6 +33,22 @@ Purpose:
 - uses `SpriteRenderer` with low sorting order.
 
 It is not a Canvas UI object.
+
+## Board Back Button
+
+Object:
+- `Board Back Button`
+
+Script:
+- `BoardBackButtonController`
+
+Responsibilities:
+- anchors itself to the top-right camera area;
+- returns to `MainMenu`;
+- cross-fades normal/hover/pressed sprites with the same "new underneath, old fades above" pattern as the roll dice button;
+- ignores hover/click while configured modal roots are active or the pointer is over UI.
+
+It is intentionally outside `Board UI Canvas`, so it is captured by modal blur and visually sits below modal panels.
 
 ## Roll Dice Button
 
@@ -41,7 +64,8 @@ Responsibilities:
 - disables/enables itself based on `TurnState`;
 - during active battle, requests `BattleSystem.RollBattleDice()`;
 - during active battle, is interactable only when battle dice can be used;
-- logs dice result through `TurnSystem.DiceRolled`.
+- logs dice result through `TurnSystem.DiceRolled`;
+- cross-fades between normal, hover, pressed, and disabled sprites over `0.2` seconds.
 
 The button does not directly call `DiceSystem.Roll()` or `PlayerMover.MoveSteps()`.
 
@@ -66,6 +90,12 @@ HUD depends on:
 - `InventorySlotView[]`.
 
 HUD only displays values and forwards remove clicks to `PlayerInventory.Unequip`.
+
+Current HUD sprites are assigned from `Assets/Art/Board/HUD/PlayerHudList.png`:
+- `PlayerHudList_1` full heart;
+- `PlayerHudList_2` empty heart;
+- `PlayerHudList_3` empty inventory slot;
+- `PlayerHudList_4` occupied inventory slot.
 
 ## Inventory Slots
 
@@ -154,26 +184,32 @@ Default scene state:
 Displays:
 - player name;
 - player portrait;
-- player power entries;
-- player total power;
+- player power rows;
+- player total row;
 - enemy name;
 - enemy portrait;
-- enemy power entries;
-- enemy total power;
+- enemy power rows;
+- enemy total row;
 - battle status;
 - action button label.
 
 Controls:
-- `Resolve Battle Button`
+- battle action button (scene object may still be named `Resolve Battle Button`)
 
 Current behavior:
 - `BattleSystem` shows the modal when a battle starts;
 - the modal forwards resolve/escape/close clicks through `ResolveRequested`;
-- button text changes between resolve, escape, reward-wait, and close states;
+- button text dynamically changes between `Победа`, `Пытаться сбежать`, and `Закрыть`;
+- victory immediately hides the battle modal and opens the reward modal;
+- power rows are instantiated from player/enemy row prefabs;
+- player equipment row is hidden when its value is `0`;
+- total rows use `BattlePowerTotalRowView` with label/value columns and a color divider;
+- temporary action hints clear after 2.5 seconds;
+- escape result hints remain until close;
 - after win, battle modal hides while reward modal is shown;
 - player portrait is not changed by `BattleModalView` when battle opens.
 
-No battle layout polish or animations are implemented.
+The modal uses Russian user-facing labels/status text.
 
 ## Reward Modal
 
@@ -195,11 +231,14 @@ Children include:
 Current behavior:
 - opens after battle victory;
 - displays up to 3 card/item rewards;
+- each option shows icon, name, and description from `RewardData.DisplayDescription`;
 - selecting a reward asks `RewardSystem` to claim it;
-- if card hand is full, shows `Card hand is full`;
-- if equipment inventory is full, shows `Equipment inventory is full`;
+- if card hand is full, shows Russian full-hand status;
+- if equipment inventory is full, shows Russian full-inventory status;
 - status text fades in and out;
 - close button skips the reward and completes battle flow.
+
+The modal uses Russian user-facing labels/status text.
 
 ## Single Reward Modal
 
@@ -213,7 +252,7 @@ Scripts:
 Displays:
 - reward icon;
 - reward name;
-- reward description;
+- reward description from `RewardData.DisplayDescription`;
 - status text;
 - Accept button;
 - close button.
@@ -224,6 +263,8 @@ Current behavior:
 - status text shows why Accept is unavailable;
 - after manual removal of card/item from HUD, Accept state refreshes;
 - close declines the reward and completes the tile flow.
+
+The modal uses Russian user-facing labels/status text.
 
 ## Event Notifications
 
@@ -244,14 +285,29 @@ Current behavior:
 - each notification waits briefly, moves upward, fades out, and destroys itself;
 - messages and icons are configured per `EffectType` on `EventNotificationSystem`.
 
+## Result Screen
+
+Scene:
+- `Assets/Scenes/ResultGameScene.unity`
+
+Script:
+- `ResultGameScreenController`
+
+Displays:
+- win or lose result image;
+- button to return to `MainMenu`.
+
+Current behavior:
+- reads result from `GameResultContext`;
+- defaults to lose art if no result context exists;
+- clears result context before returning to main menu.
+
 ## HUD Assets
 
 Current board HUD art includes:
-- `Assets/Art/Board/HUD/AvatarPlaceholder.png`
-- `Assets/Art/Board/HUD/HeartFull.png`
-- `Assets/Art/Board/HUD/HeartEmpty.png`
-- `Assets/Art/Board/HUD/InventorySlot.png`
-- `Assets/Art/Board/HUD/TestItemIcon.png`
+- `Assets/Art/Board/HUD/PlayerHudList.png`
+- `Assets/Art/Board/HUD/RollDiseList.png`
+- `Assets/Art/Board/ButtonBackList.png`
 
 Board art includes:
 - `Assets/Art/Board/BoardBackground.png`
@@ -259,6 +315,10 @@ Board art includes:
 - `Assets/Art/Board/PathSegmentPlaceholder.png`
 - `Assets/Art/Board/PlayerPlaceholder.png`
 - `Assets/Art/Board/PlayerPlaceholder2.asset`
+- `Assets/Art/ShareArt/ButtonsAndCell.png`
+- `Assets/Art/ShareArt/Modal.png`
+- `Assets/Art/ShareArt/ModalSquare.png`
+- `Assets/Art/ShareArt/Cursor.png`
 
 Some art remains placeholder/test content.
 
@@ -278,25 +338,33 @@ Main objects:
 - `New Game Button`
 - `Settings Button`
 - `Exit Button`
-- `Custom Cursor`
+- settings modal is generated/owned by `MainMenuSettingsModalView`
 
 Scripts:
+- `MainMenuSceneLoader`
 - `MainMenuSpriteButton`
 - `MainMenuButtonFeedback`
 - `MainMenuCursor`
 - `MainMenuCursorHoverTarget`
 - `MainMenuSkinSlots`
+- `MainMenuSettingsModalView`
+- `GameSettingsService`
 
 Current behavior:
 - sprite-based visual buttons;
 - Continue button can be locked through `continueAvailable`;
 - buttons have hover lift feedback;
-- custom cursor follows mouse and changes state on hover/press.
+- New Game loads `BoardGame`;
+- Settings opens a square modal using `Assets/Art/ShareArt/ModalSquare.png`;
+- settings modal blurs the menu background;
+- settings can save window size, fullscreen mode, and music volume;
+- music volume is applied through `Assets/Audio/MainAudioMixer.mixer`;
+- custom cursor is supplied globally from `Assets/Resources/UI/GlobalCursor.prefab`;
+- custom cursor follows mouse, changes state on hover, and plays press state for any mouse press.
 
 Current limitation:
-- button `onClick` calls are empty;
-- Continue/New Game/Settings/Exit do not perform actions yet;
-- no save/load or settings UI is connected.
+- Continue and Exit do not perform actions yet;
+- no game-state save/load is connected.
 
 ## Working UI Elements
 
@@ -311,15 +379,20 @@ Currently working:
 - card click routes through `CardSystem`;
 - card/item remove X buttons free slots;
 - battle modal opens from battle tiles;
+- battle modal displays separate power rows and total rows;
 - reward modal opens after battle win;
+- reward modal displays reward descriptions;
 - single reward modal opens from tile reward events;
 - event notifications display applied effects.
+- board back button returns to MainMenu.
+- main menu New Game and Settings buttons are connected.
+- result screen displays win/lose state and returns to MainMenu.
 
 Not implemented:
 - inventory window;
 - card animations;
 - drag-and-drop;
 - item/card tooltips;
-- settings UI for board scene;
-- main menu button actions;
-- save/load UI.
+- board-scene settings UI;
+- main menu Continue/Exit actions;
+- game-state save/load UI.
