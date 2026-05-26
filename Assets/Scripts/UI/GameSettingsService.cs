@@ -7,6 +7,7 @@ public sealed class GameSettingsService : MonoBehaviour
     public const string FullscreenKey = "Settings.Fullscreen";
     public const string MusicVolumeKey = "Settings.MusicVolume";
     public const string MusicVolumeMixerParameter = "MusicVolume";
+    private const float MaxMusicVolumeMultiplier = 0.5f;
 
     private static readonly Vector2Int[] WindowSizes =
     {
@@ -76,8 +77,13 @@ public sealed class GameSettingsService : MonoBehaviour
         if (mainAudioMixer == null)
             return;
 
-        var decibels = musicVolume <= 0.0001f ? -80f : Mathf.Log10(musicVolume) * 20f;
-        mainAudioMixer.SetFloat(MusicVolumeMixerParameter, decibels);
+        mainAudioMixer.SetFloat(MusicVolumeMixerParameter, GetMusicVolumeDecibels(musicVolume));
+    }
+
+    public static float GetMusicVolumeDecibels(float musicVolume)
+    {
+        var scaledVolume = Mathf.Clamp01(musicVolume) * MaxMusicVolumeMultiplier;
+        return scaledVolume <= 0.0001f ? -80f : Mathf.Log10(scaledVolume) * 20f;
     }
 
     private static Vector2Int GetWindowSize(int index)
