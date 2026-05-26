@@ -4,26 +4,26 @@ using UnityEngine.UI;
 public sealed class MainMenuSkinSlots : MonoBehaviour
 {
     [Header("Scene Art")]
-    public Image background;
-    public Image logo;
-    public Image leftCharacter;
-    public Image rightCharacter;
+    [SerializeField] private Image background;
+    [SerializeField] private Image logo;
+    [SerializeField] private Image leftCharacter;
+    [SerializeField] private Image rightCharacter;
 
     [Header("Buttons")]
-    public Image continueButton;
-    public Image newGameButton;
-    public Image settingsButton;
-    public Image exitButton;
+    [SerializeField] private Image continueButton;
+    [SerializeField] private Image newGameButton;
+    [SerializeField] private Image settingsButton;
+    [SerializeField] private Image exitButton;
 
     [Header("Sprites")]
-    public Sprite backgroundSprite;
-    public Sprite logoSprite;
-    public Sprite leftCharacterSprite;
-    public Sprite rightCharacterSprite;
-    public Sprite continueButtonSprite;
-    public Sprite newGameButtonSprite;
-    public Sprite settingsButtonSprite;
-    public Sprite exitButtonSprite;
+    [SerializeField] private Sprite backgroundSprite;
+    [SerializeField] private Sprite logoSprite;
+    [SerializeField] private Sprite leftCharacterSprite;
+    [SerializeField] private Sprite rightCharacterSprite;
+    [SerializeField] private Sprite continueButtonSprite;
+    [SerializeField] private Sprite newGameButtonSprite;
+    [SerializeField] private Sprite settingsButtonSprite;
+    [SerializeField] private Sprite exitButtonSprite;
 
     private void Awake()
     {

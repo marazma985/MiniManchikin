@@ -2,57 +2,109 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public sealed class RewardData
+public abstract class RewardData
 {
-    [SerializeField] private RewardType rewardType;
-    [SerializeField] private CardData cardData;
-    [SerializeField] private ItemData itemData;
-    [SerializeField] private string displayName;
-    [SerializeField] private Sprite displaySprite;
+    public abstract RewardType RewardType { get; }
+    public abstract string DisplayName { get; }
+    public abstract Sprite DisplaySprite { get; }
+    public abstract string DisplayDescription { get; }
+    public abstract EffectType ClaimEffectType { get; }
 
-    public RewardType RewardType => rewardType;
-    public CardData CardData => cardData;
-    public ItemData ItemData => itemData;
-    public string DisplayName => displayName;
-    public Sprite DisplaySprite => displaySprite;
-    public string DisplayDescription
-    {
-        get
-        {
-            switch (rewardType)
-            {
-                case RewardType.Card:
-                    return cardData != null ? cardData.Description : string.Empty;
-                case RewardType.Item:
-                    return itemData != null ? itemData.Description : string.Empty;
-                default:
-                    return string.Empty;
-            }
-        }
-    }
+    public virtual CardData CardData => null;
+    public virtual ItemData ItemData => null;
 
-    private RewardData(RewardType rewardType, CardData cardData, ItemData itemData, string displayName, Sprite displaySprite)
-    {
-        this.rewardType = rewardType;
-        this.cardData = cardData;
-        this.itemData = itemData;
-        this.displayName = displayName;
-        this.displaySprite = displaySprite;
-    }
+    public abstract bool CanClaim(CardSystem cardSystem, PlayerInventory playerInventory, out string status);
+    public abstract bool TryClaim(CardSystem cardSystem, PlayerInventory playerInventory);
 
     public static RewardData FromCard(CardData card)
     {
-        if (card == null)
-            return null;
-
-        return new RewardData(RewardType.Card, card, null, card.CardName, card.CardSprite);
+        return card != null ? new CardRewardData(card) : null;
     }
 
     public static RewardData FromItem(ItemData item)
     {
-        if (item == null)
-            return null;
+        return item != null ? new ItemRewardData(item) : null;
+    }
+}
 
-        return new RewardData(RewardType.Item, null, item, item.ItemName, item.ItemSprite);
+[Serializable]
+public sealed class CardRewardData : RewardData
+{
+    private readonly CardData cardData;
+
+    public CardRewardData(CardData cardData)
+    {
+        this.cardData = cardData;
+    }
+
+    public override RewardType RewardType => RewardType.Card;
+    public override CardData CardData => cardData;
+    public override string DisplayName => cardData != null ? cardData.CardName : string.Empty;
+    public override Sprite DisplaySprite => cardData != null ? cardData.CardSprite : null;
+    public override string DisplayDescription => cardData != null ? cardData.Description : string.Empty;
+    public override EffectType ClaimEffectType => EffectType.GiveCard;
+
+    public override bool CanClaim(CardSystem cardSystem, PlayerInventory playerInventory, out string status)
+    {
+        if (cardSystem == null || cardData == null)
+        {
+            status = "Система карт не назначена";
+            return false;
+        }
+
+        if (cardSystem.Hand.Count >= cardSystem.MaxCards)
+        {
+            status = "Рука карт заполнена";
+            return false;
+        }
+
+        status = string.Empty;
+        return true;
+    }
+
+    public override bool TryClaim(CardSystem cardSystem, PlayerInventory playerInventory)
+    {
+        return cardSystem != null && cardData != null && cardSystem.AddCard(cardData);
+    }
+}
+
+[Serializable]
+public sealed class ItemRewardData : RewardData
+{
+    private readonly ItemData itemData;
+
+    public ItemRewardData(ItemData itemData)
+    {
+        this.itemData = itemData;
+    }
+
+    public override RewardType RewardType => RewardType.Item;
+    public override ItemData ItemData => itemData;
+    public override string DisplayName => itemData != null ? itemData.ItemName : string.Empty;
+    public override Sprite DisplaySprite => itemData != null ? itemData.ItemSprite : null;
+    public override string DisplayDescription => itemData != null ? itemData.Description : string.Empty;
+    public override EffectType ClaimEffectType => EffectType.GiveItem;
+
+    public override bool CanClaim(CardSystem cardSystem, PlayerInventory playerInventory, out string status)
+    {
+        if (playerInventory == null || itemData == null)
+        {
+            status = "Инвентарь экипировки не назначен";
+            return false;
+        }
+
+        if (!playerInventory.HasFreeSlot())
+        {
+            status = "Инвентарь экипировки заполнен";
+            return false;
+        }
+
+        status = string.Empty;
+        return true;
+    }
+
+    public override bool TryClaim(CardSystem cardSystem, PlayerInventory playerInventory)
+    {
+        return playerInventory != null && itemData != null && playerInventory.TryEquip(itemData);
     }
 }

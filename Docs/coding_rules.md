@@ -141,6 +141,7 @@ When changing rewards:
 - keep battle reward choice flow in `RewardSystem`;
 - keep single reward flow in `SingleRewardSystem`;
 - do not duplicate reward claim rules in UI views;
+- keep reward-specific claim rules polymorphic in `RewardData` subclasses;
 - failed claims due to full hand/equipment should keep the relevant modal open;
 - reward descriptions should come from `RewardData.DisplayDescription`;
 - single reward Accept state should update from `CardSystem.OnHandChanged` and `PlayerInventory.OnEquipmentChanged`.

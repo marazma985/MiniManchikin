@@ -267,6 +267,7 @@ Battle victory rewards:
 - `RewardSystem` generates up to 3 random rewards from serialized card/item pools.
 - `RewardModalView` shows those rewards.
 - `RewardData.DisplayDescription` exposes card/item descriptions for reward UI.
+- `CardRewardData` and `ItemRewardData` own their own claim availability and claim behavior behind the `RewardData` abstraction.
 - Selecting a card calls `CardSystem.AddCard`.
 - Selecting an item calls `PlayerInventory.TryEquip`.
 - If hand/equipment is full, the modal remains open and displays a status message.

@@ -77,14 +77,12 @@ public sealed class RewardSystem : MonoBehaviour
 
     private RewardData CreateRandomCardReward()
     {
-        var card = GetRandomCardReward();
-        return RewardData.FromCard(card);
+        return RewardData.FromCard(GetRandomCardReward());
     }
 
     private RewardData CreateRandomItemReward()
     {
-        var item = GetRandomItemReward();
-        return RewardData.FromItem(item);
+        return RewardData.FromItem(GetRandomItemReward());
     }
 
     private CardData GetRandomCardReward()
@@ -179,78 +177,25 @@ public sealed class RewardSystem : MonoBehaviour
             return false;
         }
 
-        switch (reward.RewardType)
+        if (!reward.CanClaim(cardSystem, playerInventory, out var status))
         {
-            case RewardType.Card:
-                return TryClaimCardReward(reward);
-            case RewardType.Item:
-                return TryClaimItemReward(reward);
-            default:
-                rewardModalView?.ShowStatus("Неподдерживаемая награда");
-                Debug.LogWarning($"Unsupported reward type '{reward.RewardType}'.");
-                return false;
-        }
-    }
-
-    private bool TryClaimCardReward(RewardData reward)
-    {
-        if (cardSystem == null || reward.CardData == null)
-        {
-            rewardModalView?.ShowStatus("Система карт не назначена");
-            NotifyEffect(EffectType.GiveCard, 1, EffectNotificationStatus.Failed);
-            Debug.LogWarning("Cannot claim card reward. CardSystem or CardData is missing.");
+            rewardModalView?.ShowStatus(status);
+            NotifyEffect(reward.ClaimEffectType, 1, EffectNotificationStatus.Failed);
+            Debug.LogWarning($"Reward '{reward.DisplayName}' was not claimed: {status}");
             return false;
         }
 
-        if (cardSystem.Hand.Count >= cardSystem.MaxCards)
+        if (!reward.TryClaim(cardSystem, playerInventory))
         {
-            rewardModalView?.ShowStatus("Рука карт заполнена");
-            NotifyEffect(EffectType.GiveCard, 1, EffectNotificationStatus.Failed);
-            Debug.LogWarning($"Card reward '{reward.DisplayName}' was not claimed. Card hand is full.");
+            var failureStatus = string.IsNullOrEmpty(status) ? "Награда не получена" : status;
+            rewardModalView?.ShowStatus(failureStatus);
+            NotifyEffect(reward.ClaimEffectType, 1, EffectNotificationStatus.Failed);
+            Debug.LogWarning($"Reward '{reward.DisplayName}' was not claimed.");
             return false;
         }
 
-        if (!cardSystem.AddCard(reward.CardData))
-        {
-            rewardModalView?.ShowStatus("Рука карт заполнена");
-            NotifyEffect(EffectType.GiveCard, 1, EffectNotificationStatus.Failed);
-            Debug.LogWarning($"Card reward '{reward.DisplayName}' was not claimed.");
-            return false;
-        }
-
-        Debug.Log($"Card reward claimed: {reward.DisplayName}.");
-        NotifyEffect(EffectType.GiveCard, 1, EffectNotificationStatus.Success);
-        return true;
-    }
-
-    private bool TryClaimItemReward(RewardData reward)
-    {
-        if (playerInventory == null || reward.ItemData == null)
-        {
-            rewardModalView?.ShowStatus("Инвентарь экипировки не назначен");
-            NotifyEffect(EffectType.GiveItem, 1, EffectNotificationStatus.Failed);
-            Debug.LogWarning("Cannot claim item reward. PlayerInventory or ItemData is missing.");
-            return false;
-        }
-
-        if (!playerInventory.HasFreeSlot())
-        {
-            rewardModalView?.ShowStatus("Инвентарь экипировки заполнен");
-            NotifyEffect(EffectType.GiveItem, 1, EffectNotificationStatus.Failed);
-            Debug.LogWarning($"Item reward '{reward.DisplayName}' was not claimed. Equipment inventory is full.");
-            return false;
-        }
-
-        if (!playerInventory.TryEquip(reward.ItemData))
-        {
-            rewardModalView?.ShowStatus("Инвентарь экипировки заполнен");
-            NotifyEffect(EffectType.GiveItem, 1, EffectNotificationStatus.Failed);
-            Debug.LogWarning($"Item reward '{reward.DisplayName}' was not claimed.");
-            return false;
-        }
-
-        Debug.Log($"Item reward claimed: {reward.DisplayName}.");
-        NotifyEffect(EffectType.GiveItem, 1, EffectNotificationStatus.Success);
+        Debug.Log($"Reward claimed: {reward.DisplayName}.");
+        NotifyEffect(reward.ClaimEffectType, 1, EffectNotificationStatus.Success);
         return true;
     }
 

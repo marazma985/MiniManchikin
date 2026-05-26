@@ -253,15 +253,7 @@ public sealed class EffectResolver
         if (reward == null)
             return;
 
-        switch (reward.RewardType)
-        {
-            case RewardType.Card:
-                NotifyEffect(EffectType.GiveCard, 1, EffectNotificationStatus.Success);
-                break;
-            case RewardType.Item:
-                NotifyEffect(EffectType.GiveItem, 1, EffectNotificationStatus.Success);
-                break;
-        }
+        NotifyEffect(reward.ClaimEffectType, 1, EffectNotificationStatus.Success);
     }
 
     private void NotifyEffect(EffectData effect, EffectNotificationStatus status)

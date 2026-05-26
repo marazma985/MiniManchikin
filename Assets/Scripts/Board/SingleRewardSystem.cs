@@ -133,56 +133,12 @@ public sealed class SingleRewardSystem : MonoBehaviour
     private bool CanAcceptCurrentReward(out string status)
     {
         status = string.Empty;
-        if (currentReward == null)
-            return false;
-
-        switch (currentReward.RewardType)
-        {
-            case RewardType.Card:
-                if (cardSystem == null)
-                {
-                    status = "Система карт не назначена";
-                    return false;
-                }
-
-                if (cardSystem.Hand.Count >= cardSystem.MaxCards)
-                {
-                    status = "Рука карт заполнена";
-                    return false;
-                }
-
-                return true;
-            case RewardType.Item:
-                if (playerInventory == null)
-                {
-                    status = "Инвентарь экипировки не назначен";
-                    return false;
-                }
-
-                if (!playerInventory.HasFreeSlot())
-                {
-                    status = "Инвентарь экипировки заполнен";
-                    return false;
-                }
-
-                return true;
-            default:
-                status = "Неподдерживаемая награда";
-                return false;
-        }
+        return currentReward != null && currentReward.CanClaim(cardSystem, playerInventory, out status);
     }
 
     private bool TryClaimCurrentReward()
     {
-        switch (currentReward.RewardType)
-        {
-            case RewardType.Card:
-                return currentReward.CardData != null && cardSystem != null && cardSystem.AddCard(currentReward.CardData);
-            case RewardType.Item:
-                return currentReward.ItemData != null && playerInventory != null && playerInventory.TryEquip(currentReward.ItemData);
-            default:
-                return false;
-        }
+        return currentReward != null && currentReward.TryClaim(cardSystem, playerInventory);
     }
 
     private void CompleteReward()

@@ -465,17 +465,15 @@ public sealed class BattleSystem : MonoBehaviour
             enemyEntries.Add(new BattlePowerEntry(modifierName, modifierPower));
         }
 
-        return new BattleModalData
-        {
-            PlayerName = PlayerName,
-            PlayerSprite = playerSprite,
-            PlayerPowerEntries = playerEntries,
-            PlayerTotalPower = SumEntries(playerEntries),
-            EnemyName = enemy.EnemyName,
-            EnemySprite = enemy.EnemySprite,
-            EnemyPowerEntries = enemyEntries,
-            EnemyTotalPower = SumEntries(enemyEntries)
-        };
+        return new BattleModalData(
+            PlayerName,
+            playerSprite,
+            playerEntries,
+            SumEntries(playerEntries),
+            enemy.EnemyName,
+            enemy.EnemySprite,
+            enemyEntries,
+            SumEntries(enemyEntries));
     }
 
     private static int SumEntries(IReadOnlyList<BattlePowerEntry> entries)
