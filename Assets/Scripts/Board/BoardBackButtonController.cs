@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -11,12 +10,12 @@ public sealed class BoardBackButtonController : MonoBehaviour
     [SerializeField] private Sprite hoverSprite;
     [SerializeField] private Sprite pressedSprite;
     [SerializeField, Min(0f)] private float fadeDuration = 0.2f;
+    [SerializeField] private SmoothSpriteRendererTransition spriteTransition;
     [SerializeField] private string targetSceneName = "MainMenu";
     [SerializeField] private Camera anchorCamera;
     [SerializeField] private Vector2 worldMargin = new Vector2(0.35f, 0.35f);
     [SerializeField] private GameObject[] blockingModalRoots;
 
-    private Coroutine fadeCoroutine;
     private bool isPointerOver;
     private bool isPointerPressed;
 
@@ -35,7 +34,6 @@ public sealed class BoardBackButtonController : MonoBehaviour
             anchorCamera = Camera.main;
 
         ConfigureRenderers();
-        SetButtonSprite(normalSprite, true);
         AnchorToCamera();
     }
 
@@ -46,8 +44,9 @@ public sealed class BoardBackButtonController : MonoBehaviour
 
     private void OnDisable()
     {
-        StopFade();
-        HideTransitionRenderer();
+        if (spriteTransition != null)
+            spriteTransition.StopTransition();
+
         isPointerOver = false;
         isPointerPressed = false;
     }
@@ -98,16 +97,19 @@ public sealed class BoardBackButtonController : MonoBehaviour
         }
 
         if (transitionRenderer == null)
-            return;
-
-        transitionRenderer.sprite = null;
-        transitionRenderer.enabled = false;
-
-        if (mainRenderer != null)
         {
-            transitionRenderer.sortingLayerID = mainRenderer.sortingLayerID;
-            transitionRenderer.sortingOrder = mainRenderer.sortingOrder + 1;
+            var transitionTransform = transform.Find("Transition");
+            if (transitionTransform != null)
+                transitionRenderer = transitionTransform.GetComponent<SpriteRenderer>();
         }
+
+        if (spriteTransition == null)
+            spriteTransition = GetComponent<SmoothSpriteRendererTransition>();
+
+        if (spriteTransition == null)
+            spriteTransition = gameObject.AddComponent<SmoothSpriteRendererTransition>();
+
+        spriteTransition.Configure(mainRenderer, transitionRenderer, normalSprite, hoverSprite, pressedSprite, fadeDuration);
     }
 
     private void AnchorToCamera()
@@ -168,94 +170,10 @@ public sealed class BoardBackButtonController : MonoBehaviour
 
     private void RefreshVisualState(bool instant)
     {
-        SetButtonSprite(GetStateSprite(), instant);
-    }
+        if (spriteTransition == null)
+            ConfigureRenderers();
 
-    private Sprite GetStateSprite()
-    {
-        if (isPointerPressed && pressedSprite != null)
-            return pressedSprite;
-
-        if (isPointerOver && hoverSprite != null)
-            return hoverSprite;
-
-        return normalSprite;
-    }
-
-    private void SetButtonSprite(Sprite targetSprite, bool instant)
-    {
-        if (mainRenderer == null || targetSprite == null)
-            return;
-
-        if (mainRenderer.sprite == targetSprite)
-        {
-            if (instant)
-            {
-                StopFade();
-                SetMainAlpha(1f);
-                HideTransitionRenderer();
-            }
-
-            return;
-        }
-
-        var previousSprite = mainRenderer.sprite;
-        mainRenderer.sprite = targetSprite;
-        SetMainAlpha(1f);
-
-        if (instant || previousSprite == null || transitionRenderer == null || fadeDuration <= 0f)
-        {
-            StopFade();
-            HideTransitionRenderer();
-            return;
-        }
-
-        StopFade();
-        transitionRenderer.sprite = previousSprite;
-        transitionRenderer.color = Color.white;
-        transitionRenderer.enabled = true;
-        fadeCoroutine = StartCoroutine(FadePreviousSprite());
-    }
-
-    private IEnumerator FadePreviousSprite()
-    {
-        var elapsed = 0f;
-
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.unscaledDeltaTime;
-            var progress = Mathf.Clamp01(elapsed / fadeDuration);
-            transitionRenderer.color = new Color(1f, 1f, 1f, 1f - progress);
-            yield return null;
-        }
-
-        HideTransitionRenderer();
-        fadeCoroutine = null;
-    }
-
-    private void SetMainAlpha(float alpha)
-    {
-        if (mainRenderer == null)
-            return;
-
-        mainRenderer.color = new Color(1f, 1f, 1f, alpha);
-    }
-
-    private void HideTransitionRenderer()
-    {
-        if (transitionRenderer == null)
-            return;
-
-        transitionRenderer.sprite = null;
-        transitionRenderer.enabled = false;
-    }
-
-    private void StopFade()
-    {
-        if (fadeCoroutine == null)
-            return;
-
-        StopCoroutine(fadeCoroutine);
-        fadeCoroutine = null;
+        if (spriteTransition != null)
+            spriteTransition.SetInteractionState(isPointerOver, isPointerPressed, instant);
     }
 }

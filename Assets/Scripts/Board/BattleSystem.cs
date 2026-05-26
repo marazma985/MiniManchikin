@@ -17,13 +17,15 @@ public sealed class BattleSystem : MonoBehaviour
     [SerializeField] private Sprite playerSprite;
     [SerializeField] private BattleModalView battleModalView;
     [SerializeField] private List<EnemyData> enemies = new List<EnemyData>();
+    [SerializeField, Min(0)] private int enemyBalanceLowerOffset = 5;
+    [SerializeField, Min(0)] private int enemyBalanceUpperOffset = 5;
     [SerializeField, Min(0)] private int equipmentBonus;
     [SerializeField, Min(0)] private int cardBonus;
     [SerializeField, Min(0)] private int diceBonus;
 
     private BattleModalData currentBattleData;
     private EnemyData currentEnemy;
-    private EnemyModifier currentEnemyModifier;
+    private readonly List<EnemyModifier> currentEnemyModifiers = new List<EnemyModifier>();
     private Action battleCompleted;
     private BattlePhase phase;
     private int currentBattleDiceBonus;
@@ -89,7 +91,7 @@ public sealed class BattleSystem : MonoBehaviour
 
         battleCompleted = onBattleCompleted;
         currentEnemy = enemy;
-        currentEnemyModifier = SelectRandomModifier(enemy);
+        SelectRandomModifiers(enemy, currentEnemyModifiers);
         currentBattleDiceBonus = 0;
         temporaryCardPowerBonus = 0;
         temporaryEscapeBonus = 0;
@@ -98,8 +100,26 @@ public sealed class BattleSystem : MonoBehaviour
         phase = BattlePhase.WaitingForResolve;
         battleModalView.Show(currentBattleData);
         battleModalView.ClearStatus();
+        LogBattleOpened(enemy);
         RefreshActionButton();
         BattleStateChanged?.Invoke();
+    }
+
+    public void TestStartRandomBattle()
+    {
+        StartBattle();
+    }
+
+    public void CloseBattleWithoutConsequences()
+    {
+        if (!IsBattleActive)
+        {
+            Debug.Log("No active battle to close.");
+            return;
+        }
+
+        Debug.Log("Battle closed without rewards or penalties.");
+        CompleteBattle();
     }
 
     public bool RollBattleDice()
@@ -349,10 +369,12 @@ public sealed class BattleSystem : MonoBehaviour
         NotifyEffect(EffectType.RemoveCard, removeCount, EffectNotificationStatus.Success);
     }
 
-    private EnemyModifier SelectRandomModifier(EnemyData enemy)
+    private void SelectRandomModifiers(EnemyData enemy, List<EnemyModifier> selectedModifiers)
     {
+        selectedModifiers.Clear();
+
         if (enemy == null || enemy.Modifiers == null || enemy.Modifiers.Count == 0)
-            return null;
+            return;
 
         var validModifiers = new List<EnemyModifier>();
         for (var i = 0; i < enemy.Modifiers.Count; i++)
@@ -362,15 +384,18 @@ public sealed class BattleSystem : MonoBehaviour
         }
 
         if (validModifiers.Count == 0)
-            return null;
+            return;
 
-        var selectedIndex = UnityEngine.Random.Range(0, validModifiers.Count + 1);
-        if (selectedIndex == 0)
-            return null;
+        var outcomeCount = 1 << validModifiers.Count;
+        var selectedOutcome = UnityEngine.Random.Range(0, outcomeCount);
 
-        var modifier = validModifiers[selectedIndex - 1];
-        Debug.Log($"{enemy.EnemyName} modifier selected: {modifier.ModifierName}.");
-        return modifier;
+        for (var i = 0; i < validModifiers.Count; i++)
+        {
+            if ((selectedOutcome & (1 << i)) != 0)
+                selectedModifiers.Add(validModifiers[i]);
+        }
+
+        Debug.Log($"{enemy.EnemyName} modifier outcome {selectedOutcome + 1}/{outcomeCount}: {(selectedModifiers.Count > 0 ? FormatModifierNames(selectedModifiers) : "none")}.");
     }
 
     private static int GetModifierPower(EnemyModifier modifier)
@@ -394,7 +419,7 @@ public sealed class BattleSystem : MonoBehaviour
         battleModalView.Hide();
         currentBattleData = null;
         currentEnemy = null;
-        currentEnemyModifier = null;
+        currentEnemyModifiers.Clear();
         phase = BattlePhase.None;
         currentBattleDiceBonus = 0;
         temporaryCardPowerBonus = 0;
@@ -428,7 +453,32 @@ public sealed class BattleSystem : MonoBehaviour
         if (validEnemies.Count == 0)
             return null;
 
-        return validEnemies[UnityEngine.Random.Range(0, validEnemies.Count)];
+        var balancedEnemies = GetBalancedEnemies(validEnemies);
+        var enemyPool = balancedEnemies.Count > 0 ? balancedEnemies : validEnemies;
+        return enemyPool[UnityEngine.Random.Range(0, enemyPool.Count)];
+    }
+
+    private List<EnemyData> GetBalancedEnemies(IReadOnlyList<EnemyData> validEnemies)
+    {
+        var balancedEnemies = new List<EnemyData>();
+        var playerPower = GetPlayerBalancePower();
+        var minEnemyLevel = playerPower - enemyBalanceLowerOffset;
+        var maxEnemyLevel = playerPower + enemyBalanceUpperOffset;
+
+        for (var i = 0; i < validEnemies.Count; i++)
+        {
+            var enemy = validEnemies[i];
+            if (enemy.BaseLevel >= minEnemyLevel && enemy.BaseLevel <= maxEnemyLevel)
+                balancedEnemies.Add(enemy);
+        }
+
+        return balancedEnemies;
+    }
+
+    private int GetPlayerBalancePower()
+    {
+        var levelPower = playerStats != null ? playerStats.Level : 0;
+        return levelPower + equipmentBonus + GetEquipmentEffectBonus(EffectType.Power);
     }
 
     private BattleModalData CreateBattleData(EnemyData enemy)
@@ -456,13 +506,13 @@ public sealed class BattleSystem : MonoBehaviour
             new BattlePowerEntry("Уровень монстра", enemy.BaseLevel)
         };
 
-        var modifierPower = GetModifierPower(currentEnemyModifier);
-        if (currentEnemyModifier != null)
+        for (var i = 0; i < currentEnemyModifiers.Count; i++)
         {
-            var modifierName = string.IsNullOrEmpty(currentEnemyModifier.ModifierName)
+            var modifier = currentEnemyModifiers[i];
+            var modifierName = string.IsNullOrEmpty(modifier.ModifierName)
                 ? "Модификатор"
-                : currentEnemyModifier.ModifierName;
-            enemyEntries.Add(new BattlePowerEntry(modifierName, modifierPower));
+                : modifier.ModifierName;
+            enemyEntries.Add(new BattlePowerEntry(modifierName, GetModifierPower(modifier)));
         }
 
         return new BattleModalData(
@@ -483,6 +533,38 @@ public sealed class BattleSystem : MonoBehaviour
             total += entries[i].Value;
 
         return total;
+    }
+
+    private static string FormatModifierNames(IReadOnlyList<EnemyModifier> modifiers)
+    {
+        if (modifiers == null || modifiers.Count == 0)
+            return string.Empty;
+
+        var names = new List<string>();
+        for (var i = 0; i < modifiers.Count; i++)
+        {
+            var modifier = modifiers[i];
+            names.Add(modifier == null || string.IsNullOrEmpty(modifier.ModifierName)
+                ? "Modifier"
+                : modifier.ModifierName);
+        }
+
+        return string.Join(", ", names);
+    }
+
+    private void LogBattleOpened(EnemyData enemy)
+    {
+        if (enemy == null)
+            return;
+
+        var modifierText = currentEnemyModifiers.Count > 0
+            ? FormatModifierNames(currentEnemyModifiers)
+            : "none";
+        var possibleModifierText = enemy.Modifiers != null && enemy.Modifiers.Count > 0
+            ? FormatModifierNames(enemy.Modifiers)
+            : "none";
+
+        Debug.Log($"Battle opened. Enemy: {enemy.EnemyName}, base level: {enemy.BaseLevel}, possible modifiers: {possibleModifierText}, selected modifiers: {modifierText}.");
     }
 
     private int GetPowerDifference()

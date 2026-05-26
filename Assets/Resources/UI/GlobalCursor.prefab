@@ -27,7 +27,7 @@ RectTransform:
   m_GameObject: {fileID: 2422463056920599099}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 338459909634728974}
@@ -121,7 +121,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 110, y: 132}
+  m_SizeDelta: {x: 100, y: 120}
   m_Pivot: {x: 0.34, y: 0.84}
 --- !u!222 &2240976171995120485
 CanvasRenderer:
@@ -179,5 +179,5 @@ MonoBehaviour:
   hoverSprite: {fileID: -4750761433519615375, guid: 3202062a4e7b84347acd505e0d1de810, type: 3}
   pressedSprite: {fileID: 2926769648525297287, guid: 3202062a4e7b84347acd505e0d1de810, type: 3}
   normalSprite: {fileID: -3647630677443473183, guid: 3202062a4e7b84347acd505e0d1de810, type: 3}
-  cursorSize: {x: 110, y: 132}
+  cursorSize: {x: 100, y: 120}
   hotspotPivot: {x: 0.34, y: 0.84}

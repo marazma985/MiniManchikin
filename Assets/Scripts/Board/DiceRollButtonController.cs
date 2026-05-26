@@ -12,11 +12,10 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
     [SerializeField] private Sprite pressedSprite;
     [SerializeField] private Sprite disabledSprite;
     [SerializeField, Min(0f)] private float spriteFadeDuration = 0.2f;
+    [SerializeField] private SmoothSpriteButton spriteTransition;
     [SerializeField] private TurnSystem turnSystem;
     [SerializeField] private BattleSystem battleSystem;
 
-    private Image transitionImage;
-    private Coroutine spriteFade;
     private Coroutine releaseVisualRefresh;
     private bool isPointerOver;
     private bool isPointerPressed;
@@ -68,10 +67,9 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         if (battleSystem != null)
             battleSystem.BattleStateChanged -= RefreshButtonState;
 
-        StopSpriteFade();
         StopReleaseVisualRefresh();
-        HideTransitionImage();
-        SetButtonAlpha(1f);
+        if (spriteTransition != null)
+            spriteTransition.StopTransition();
     }
 
     private void OnValidate()
@@ -81,6 +79,9 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
 
         if (buttonImage == null)
             buttonImage = GetComponent<Image>();
+
+        if (spriteTransition == null)
+            spriteTransition = GetComponent<SmoothSpriteButton>();
     }
 
     private void LateUpdate()
@@ -213,139 +214,27 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         if (button == null)
             return;
 
-        button.transition = Selectable.Transition.None;
-        wasInteractable = button.interactable;
+        if (spriteTransition == null)
+            spriteTransition = GetComponent<SmoothSpriteButton>();
 
-        if (buttonImage != null)
-            buttonImage.color = Color.white;
+        if (spriteTransition == null)
+            spriteTransition = gameObject.AddComponent<SmoothSpriteButton>();
+
+        spriteTransition.Configure(button, buttonImage, normalSprite, highlightedSprite, pressedSprite, disabledSprite, spriteFadeDuration);
+        wasInteractable = button.interactable;
     }
 
     private void RefreshVisualState(bool instant)
     {
-        if (button == null || buttonImage == null)
+        if (button == null)
             return;
+
+        if (spriteTransition == null)
+            ConfigureButtonVisuals();
 
         wasInteractable = button.interactable;
-        SetButtonSprite(GetStateSprite(), instant);
-    }
-
-    private Sprite GetStateSprite()
-    {
-        if (button == null || !button.interactable)
-            return disabledSprite != null ? disabledSprite : normalSprite;
-
-        if (isPointerPressed && pressedSprite != null)
-            return pressedSprite;
-
-        if ((isPointerOver || isSelected) && highlightedSprite != null)
-            return highlightedSprite;
-
-        return normalSprite;
-    }
-
-    private void SetButtonSprite(Sprite targetSprite, bool instant)
-    {
-        if (targetSprite == null)
-            return;
-
-        if (buttonImage.sprite == targetSprite)
-        {
-            if (instant)
-            {
-                StopSpriteFade();
-                SetButtonAlpha(1f);
-            }
-
-            return;
-        }
-
-        var previousSprite = buttonImage.sprite;
-        buttonImage.sprite = targetSprite;
-        SetButtonAlpha(1f);
-
-        if (instant || previousSprite == null || spriteFadeDuration <= 0f)
-        {
-            StopSpriteFade();
-            HideTransitionImage();
-            return;
-        }
-
-        EnsureTransitionImage();
-        if (transitionImage == null)
-            return;
-
-        StopSpriteFade();
-        transitionImage.sprite = previousSprite;
-        transitionImage.color = Color.white;
-        transitionImage.enabled = true;
-        spriteFade = StartCoroutine(FadePreviousSprite());
-    }
-
-    private void EnsureTransitionImage()
-    {
-        if (transitionImage != null || buttonImage == null)
-            return;
-
-        var transitionObject = new GameObject("Roll Dice Sprite Transition", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-        var transitionTransform = transitionObject.GetComponent<RectTransform>();
-        transitionTransform.SetParent(buttonImage.rectTransform, false);
-        transitionTransform.anchorMin = Vector2.zero;
-        transitionTransform.anchorMax = Vector2.one;
-        transitionTransform.pivot = buttonImage.rectTransform.pivot;
-        transitionTransform.anchoredPosition = Vector2.zero;
-        transitionTransform.sizeDelta = Vector2.zero;
-        transitionTransform.localScale = Vector3.one;
-        transitionTransform.localRotation = Quaternion.identity;
-        transitionTransform.SetAsLastSibling();
-
-        transitionImage = transitionObject.GetComponent<Image>();
-        transitionImage.raycastTarget = false;
-        transitionImage.type = buttonImage.type;
-        transitionImage.preserveAspect = buttonImage.preserveAspect;
-        transitionImage.pixelsPerUnitMultiplier = buttonImage.pixelsPerUnitMultiplier;
-        transitionImage.enabled = false;
-    }
-
-    private IEnumerator FadePreviousSprite()
-    {
-        var elapsed = 0f;
-
-        while (elapsed < spriteFadeDuration)
-        {
-            elapsed += Time.unscaledDeltaTime;
-            var progress = Mathf.Clamp01(elapsed / spriteFadeDuration);
-            transitionImage.color = new Color(1f, 1f, 1f, 1f - progress);
-            yield return null;
-        }
-
-        HideTransitionImage();
-        spriteFade = null;
-    }
-
-    private void SetButtonAlpha(float alpha)
-    {
-        if (buttonImage == null)
-            return;
-
-        buttonImage.color = new Color(1f, 1f, 1f, alpha);
-    }
-
-    private void HideTransitionImage()
-    {
-        if (transitionImage == null)
-            return;
-
-        transitionImage.sprite = null;
-        transitionImage.enabled = false;
-    }
-
-    private void StopSpriteFade()
-    {
-        if (spriteFade == null)
-            return;
-
-        StopCoroutine(spriteFade);
-        spriteFade = null;
+        if (spriteTransition != null)
+            spriteTransition.SetInteractionState(isPointerOver, isPointerPressed, isSelected, instant);
     }
 
     private IEnumerator RefreshReleasedVisualNextFrame()

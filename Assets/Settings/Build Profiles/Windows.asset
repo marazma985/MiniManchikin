@@ -21,14 +21,14 @@ MonoBehaviour:
   m_OverrideGlobalSceneList: 1
   m_Scenes:
   - m_enabled: 1
+    m_path: Assets/Scenes/MainMenu.unity
+    m_guid: ce030113d8920ff4486a6f8ffd1971c8
+  - m_enabled: 1
     m_path: Assets/Scenes/BoardGame.unity
     m_guid: d3514449da7b2e747aeb300b5a79eb26
   - m_enabled: 1
     m_path: Assets/Scenes/ResultGameScene.unity
     m_guid: 3b0449d58e9b40708a0be17d679bcf88
-  - m_enabled: 1
-    m_path: Assets/Scenes/MainMenu.unity
-    m_guid: ce030113d8920ff4486a6f8ffd1971c8
   m_HasScriptingDefines: 0
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:

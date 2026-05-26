@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21d3bce8c6574dc2bb6c2bcb7c2d61f4, type: 3}
+  m_Name: CloseButtonSprites
+  m_EditorClassIdentifier: 
+  normalSprite: {fileID: 7932931936594614109, guid: b258a682099724b4cb7bee98a0202d8a, type: 3}
+  highlightedSprite: {fileID: 8810549222960992717, guid: afde8ee774439d14084f423d442254c0, type: 3}
+  pressedSprite: {fileID: 0}
+  fadeDuration: 0.12
