@@ -440,6 +440,9 @@ public sealed class BattleSystem : MonoBehaviour
             new BattlePowerEntry("Бонус экипировки", totalEquipmentBonus)
         };
 
+        if (totalEquipmentBonus == 0)
+            playerEntries.RemoveAt(playerEntries.Count - 1);
+
         var totalDiceBonus = diceBonus + currentBattleDiceBonus;
         if (totalDiceBonus > 0)
             playerEntries.Add(new BattlePowerEntry("Бонус кубика", totalDiceBonus));
