@@ -17,7 +17,6 @@ public sealed class MainMenuCursorHoverTarget : MonoBehaviour, IPointerEnterHand
         hovering = false;
         if (MainMenuCursor.Instance != null)
         {
-            MainMenuCursor.Instance.SetPressed(false);
             MainMenuCursor.Instance.SetHover(false);
         }
     }

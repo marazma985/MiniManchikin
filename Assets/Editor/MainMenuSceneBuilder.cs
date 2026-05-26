@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,7 +13,9 @@ public static class MainMenuSceneBuilder
     private const string ScenePath = "Assets/Scenes/MainMenu.unity";
     private const string BackgroundPath = "Assets/Art/MainMenuArt/background.png";
     private const string ButtonsPath = "Assets/Art/MainMenuArt/buttons.png";
-    private const string CursorPath = "Assets/Art/ShareArt/Cursor.png";
+    private const string ModalSquarePath = "Assets/Art/ShareArt/ModalSquare.png";
+    private const string BlurMaterialPath = "Assets/Materials/UIBackgroundBlur.mat";
+    private const string MainAudioMixerPath = "Assets/Audio/MainAudioMixer.mixer";
     private static readonly Vector2 ReferenceResolution = new Vector2(1672f, 941f);
 
     [MenuItem("Tools/Board Mili/Create Main Menu Scene")]
@@ -25,10 +28,9 @@ public static class MainMenuSceneBuilder
         var newGame = LoadSprite(ButtonsPath, "buttons_3", "button_3");
         var settings = LoadSprite(ButtonsPath, "buttons_11", "button_11");
         var exit = LoadSprite(ButtonsPath, "buttons_15", "button_15");
-        var cursorHover = LoadSprite(CursorPath, "Cursor_0", "Coursor_0");
-        var cursorPressed = LoadSprite(CursorPath, "Cursor_1", "Coursor_1");
-        var cursorNormal = LoadSprite(CursorPath, "Cursor_2", "Coursor_2");
-
+        var modalSquare = LoadSprite(ModalSquarePath, "ModalSquare_0", "ModalSquare");
+        var blurMaterial = AssetDatabase.LoadAssetAtPath<Material>(BlurMaterialPath);
+        var mainAudioMixer = AssetDatabase.LoadAssetAtPath<AudioMixer>(MainAudioMixerPath);
         var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         scene.name = "MainMenu";
 
@@ -51,9 +53,9 @@ public static class MainMenuSceneBuilder
 
         CreateMenuButton(buttonsRoot, "Continue Button", MainMenuSpriteButton.VisualKind.Continue, new Vector2(0f, 165f), continueAvailable, continueLocked, newGame, settings, exit, false);
         CreateMenuButton(buttonsRoot, "New Game Button", MainMenuSpriteButton.VisualKind.NewGame, new Vector2(0f, 55f), continueAvailable, continueLocked, newGame, settings, exit, true);
-        CreateMenuButton(buttonsRoot, "Settings Button", MainMenuSpriteButton.VisualKind.Settings, new Vector2(0f, -55f), continueAvailable, continueLocked, newGame, settings, exit, true);
+        var settingsButton = CreateMenuButton(buttonsRoot, "Settings Button", MainMenuSpriteButton.VisualKind.Settings, new Vector2(0f, -55f), continueAvailable, continueLocked, newGame, settings, exit, true);
         CreateMenuButton(buttonsRoot, "Exit Button", MainMenuSpriteButton.VisualKind.Exit, new Vector2(0f, -165f), continueAvailable, continueLocked, newGame, settings, exit, true);
-        CreateCursor(root, canvas, cursorHover, cursorPressed, cursorNormal);
+        CreateSettingsSystem(canvas, camera, settingsButton, modalSquare, blurMaterial, mainAudioMixer);
 
         EditorSceneManager.SaveScene(scene, ScenePath);
         AssetDatabase.SaveAssets();
@@ -94,7 +96,7 @@ public static class MainMenuSceneBuilder
         return canvas;
     }
 
-    private static void CreateMenuButton(RectTransform parent, string name, MainMenuSpriteButton.VisualKind kind, Vector2 anchoredPosition, Sprite continueAvailable, Sprite continueLocked, Sprite newGame, Sprite settings, Sprite exit, bool interactable)
+    private static Button CreateMenuButton(RectTransform parent, string name, MainMenuSpriteButton.VisualKind kind, Vector2 anchoredPosition, Sprite continueAvailable, Sprite continueLocked, Sprite newGame, Sprite settings, Sprite exit, bool interactable)
     {
         var image = CreateImage(name, parent, null, true);
         SetCentered(image.rectTransform, anchoredPosition, SpriteSize(kind == MainMenuSpriteButton.VisualKind.Continue ? continueLocked : SpriteFor(kind, newGame, settings, exit), 1f));
@@ -128,27 +130,25 @@ public static class MainMenuSceneBuilder
         skin.ApplyVisual();
 
         image.gameObject.AddComponent<MainMenuCursorHoverTarget>();
+        return button;
     }
 
-    private static void CreateCursor(RectTransform root, Canvas canvas, Sprite hover, Sprite pressed, Sprite normal)
+    private static void CreateSettingsSystem(Canvas canvas, Camera camera, Button settingsButton, Sprite modalSquare, Material blurMaterial, AudioMixer mainAudioMixer)
     {
-        var cursorImage = CreateImage("Custom Cursor", root, normal, true);
-        cursorImage.raycastTarget = false;
-                SetCentered(cursorImage.rectTransform, Vector2.zero, new Vector2(80f, 100f));
-        cursorImage.rectTransform.pivot = new Vector2(0.34f, 0.84f);
-        cursorImage.transform.SetAsLastSibling();
+        var settingsService = canvas.gameObject.AddComponent<GameSettingsService>();
+        var settingsServiceSerialized = new SerializedObject(settingsService);
+        settingsServiceSerialized.FindProperty("mainAudioMixer").objectReferenceValue = mainAudioMixer;
+        settingsServiceSerialized.ApplyModifiedPropertiesWithoutUndo();
 
-        var cursor = cursorImage.gameObject.AddComponent<MainMenuCursor>();
-        var serialized = new SerializedObject(cursor);
-        serialized.FindProperty("canvas").objectReferenceValue = canvas;
-        serialized.FindProperty("cursorTransform").objectReferenceValue = cursorImage.rectTransform;
-        serialized.FindProperty("cursorImage").objectReferenceValue = cursorImage;
-        serialized.FindProperty("hoverSprite").objectReferenceValue = hover;
-        serialized.FindProperty("pressedSprite").objectReferenceValue = pressed;
-        serialized.FindProperty("normalSprite").objectReferenceValue = normal;
-                serialized.FindProperty("cursorSize").vector2Value = new Vector2(80f, 100f);
-        serialized.FindProperty("hotspotPivot").vector2Value = new Vector2(0.34f, 0.84f);
-        serialized.ApplyModifiedPropertiesWithoutUndo();
+        var modalView = canvas.gameObject.AddComponent<MainMenuSettingsModalView>();
+        var modalSerialized = new SerializedObject(modalView);
+        modalSerialized.FindProperty("canvas").objectReferenceValue = canvas;
+        modalSerialized.FindProperty("sourceCamera").objectReferenceValue = camera;
+        modalSerialized.FindProperty("modalSprite").objectReferenceValue = modalSquare;
+        modalSerialized.FindProperty("blurMaterial").objectReferenceValue = blurMaterial;
+        modalSerialized.FindProperty("settingsService").objectReferenceValue = settingsService;
+        modalSerialized.FindProperty("openButton").objectReferenceValue = settingsButton;
+        modalSerialized.ApplyModifiedPropertiesWithoutUndo();
     }
 
     private static Sprite SpriteFor(MainMenuSpriteButton.VisualKind kind, Sprite newGame, Sprite settings, Sprite exit)

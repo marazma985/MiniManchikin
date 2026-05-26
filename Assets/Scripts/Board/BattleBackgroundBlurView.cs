@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,15 +12,28 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
     [SerializeField] private Color backdropColor = new Color(1f, 1f, 1f, 0.86f);
 
     private RenderTexture blurTexture;
+    private Coroutine captureRoutine;
+
+    public void Configure(Camera newSourceCamera, Material newBlurMaterial)
+    {
+        sourceCamera = newSourceCamera;
+        blurMaterial = newBlurMaterial;
+    }
 
     private void OnEnable()
     {
         EnsureBlurImage();
-        CaptureBackground();
+        captureRoutine = StartCoroutine(CaptureBackgroundAtEndOfFrame());
     }
 
     private void OnDisable()
     {
+        if (captureRoutine != null)
+        {
+            StopCoroutine(captureRoutine);
+            captureRoutine = null;
+        }
+
         ReleaseBlurTexture();
     }
 
@@ -52,7 +66,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         }
 
         blurImage.material = blurMaterial;
-        blurImage.color = backdropColor;
+        blurImage.color = blurImage.texture != null ? backdropColor : Color.clear;
         blurImage.gameObject.SetActive(true);
         blurImage.transform.SetAsFirstSibling();
     }
@@ -77,7 +91,17 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         RenderTexture.active = previousActiveTexture;
 
         if (blurImage != null)
+        {
             blurImage.texture = blurTexture;
+            blurImage.color = backdropColor;
+        }
+    }
+
+    private IEnumerator CaptureBackgroundAtEndOfFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        CaptureBackground();
+        captureRoutine = null;
     }
 
     private void EnsureRenderTexture()

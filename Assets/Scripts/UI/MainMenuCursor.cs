@@ -127,7 +127,7 @@ public sealed class MainMenuCursor : MonoBehaviour
         if (hoveringSelectable != hoveringButton)
             SetHover(hoveringSelectable);
 
-        if (Input.GetMouseButtonDown(0) && hoveringSelectable)
+        if (Input.GetMouseButtonDown(0))
             SetPressed(true);
         else if (Input.GetMouseButtonUp(0))
             SetPressed(false);
