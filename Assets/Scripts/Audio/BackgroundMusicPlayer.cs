@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -12,6 +13,9 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
 
     private AudioSource audioSource;
     private int currentClipIndex;
+    private int lastPlayedClipIndex = -1;
+    private readonly List<int> shuffledClipOrder = new List<int>();
+    private int shuffledOrderPosition;
 
     public static BackgroundMusicPlayer Instance { get; private set; }
 
@@ -55,7 +59,7 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         if (audioSource == null)
             ConfigureAudioSource();
 
-        currentClipIndex = Mathf.Clamp(currentClipIndex, 0, musicClips.Length - 1);
+        currentClipIndex = shufflePlaylist ? GetNextShuffledClipIndex() : Mathf.Clamp(currentClipIndex, 0, musicClips.Length - 1);
         PlayClip(currentClipIndex);
     }
 
@@ -84,6 +88,7 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         audioSource.clip = clip;
         audioSource.loop = musicClips.Length <= 1;
         audioSource.Play();
+        lastPlayedClipIndex = currentClipIndex;
     }
 
     private int GetNextClipIndex()
@@ -94,11 +99,45 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         if (!shufflePlaylist)
             return (currentClipIndex + 1) % musicClips.Length;
 
-        var nextIndex = Random.Range(0, musicClips.Length);
-        if (nextIndex == currentClipIndex)
-            nextIndex = (nextIndex + 1) % musicClips.Length;
+        return GetNextShuffledClipIndex();
+    }
 
-        return nextIndex;
+    private int GetNextShuffledClipIndex()
+    {
+        if (musicClips == null || musicClips.Length == 0)
+            return 0;
+
+        if (musicClips.Length == 1)
+            return 0;
+
+        if (shuffledClipOrder.Count != musicClips.Length || shuffledOrderPosition >= shuffledClipOrder.Count)
+            RebuildShuffledOrder();
+
+        return shuffledClipOrder[shuffledOrderPosition++];
+    }
+
+    private void RebuildShuffledOrder()
+    {
+        shuffledClipOrder.Clear();
+        for (var i = 0; i < musicClips.Length; i++)
+            shuffledClipOrder.Add(i);
+
+        for (var i = shuffledClipOrder.Count - 1; i > 0; i--)
+        {
+            var swapIndex = Random.Range(0, i + 1);
+            var current = shuffledClipOrder[i];
+            shuffledClipOrder[i] = shuffledClipOrder[swapIndex];
+            shuffledClipOrder[swapIndex] = current;
+        }
+
+        if (shuffledClipOrder.Count > 1 && shuffledClipOrder[0] == lastPlayedClipIndex)
+        {
+            var first = shuffledClipOrder[0];
+            shuffledClipOrder[0] = shuffledClipOrder[1];
+            shuffledClipOrder[1] = first;
+        }
+
+        shuffledOrderPosition = 0;
     }
 
     private void ApplySavedMixerVolume()

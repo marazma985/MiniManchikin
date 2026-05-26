@@ -66,4 +66,4 @@ MonoBehaviour:
   outputMixerGroup: {fileID: 24300004, guid: f2ee706e72ed00241a86822408181727, type: 2}
   playOnAwake: 1
   loopPlaylist: 1
-  shufflePlaylist: 0
+  shufflePlaylist: 1
