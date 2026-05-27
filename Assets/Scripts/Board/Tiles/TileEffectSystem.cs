@@ -123,7 +123,7 @@ public sealed class TileEffectSystem : MonoBehaviour
         InitializeEffects();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Пересобирает обработчики клеток после правок в инспекторе
     /// </summary>
     private void OnValidate()
     {

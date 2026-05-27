@@ -41,7 +41,7 @@ public sealed class PlayerStats : MonoBehaviour
         SetHp(currentHp + amount);
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Выставляет уровень игрока и сообщает HUD об изменении
     /// </summary>
     public void SetLevel(int newLevel)
     {
@@ -53,7 +53,7 @@ public sealed class PlayerStats : MonoBehaviour
         NotifyLevelChanged();
     }
     /// <summary>
-    /// Возвращает данные из сохранения или ранее запомненного состояния
+    /// Восстанавливает здоровье и уровень игрока из сохранения
     /// </summary>
     public void RestoreState(int restoredHp, int restoredLevel)
     {
@@ -71,7 +71,7 @@ public sealed class PlayerStats : MonoBehaviour
         CacheNotifiedValues();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Ограничивает здоровье и уровень допустимыми значениями в инспекторе
     /// </summary>
     private void OnValidate()
     {
@@ -83,7 +83,7 @@ public sealed class PlayerStats : MonoBehaviour
             NotifyRuntimeInspectorChanges();
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Выставляет здоровье игрока в пределах от нуля до максимума
     /// </summary>
     private void SetHp(int newHp)
     {
@@ -123,7 +123,7 @@ public sealed class PlayerStats : MonoBehaviour
         OnLevelChanged?.Invoke(level);
     }
     /// <summary>
-    /// Запоминает текущее значение для дальнейшего сравнения
+    /// Запоминает здоровье и уровень, о которых уже сообщили HUD
     /// </summary>
     private void CacheNotifiedValues()
     {

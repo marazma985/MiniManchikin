@@ -25,7 +25,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         blurMaterial = newBlurMaterial;
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Показывает слой размытого фона при открытии окна боя
     /// </summary>
     private void OnEnable()
     {
@@ -33,7 +33,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         captureRoutine = StartCoroutine(CaptureBackgroundAtEndOfFrame());
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Очищает временную текстуру размытого фона после закрытия окна боя
     /// </summary>
     private void OnDisable()
     {
@@ -46,7 +46,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         ReleaseBlurTexture();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Обновляет настройки размытого фона после изменений в инспекторе
     /// </summary>
     private void OnValidate()
     {

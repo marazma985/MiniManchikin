@@ -97,7 +97,7 @@ public sealed class RewardSystem : MonoBehaviour
         }
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает систему наград на окно выбора награды
     /// </summary>
     private void OnEnable()
     {
@@ -108,7 +108,7 @@ public sealed class RewardSystem : MonoBehaviour
         }
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает систему наград от окна выбора награды
     /// </summary>
     private void OnDisable()
     {
@@ -216,7 +216,7 @@ public sealed class RewardSystem : MonoBehaviour
         return false;
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Пытается выдать награду, которую выбрал игрок
     /// </summary>
     private void HandleRewardSelected(RewardData reward)
     {
@@ -226,7 +226,7 @@ public sealed class RewardSystem : MonoBehaviour
         CompleteRewardFlow();
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Закрывает окно награды, если игрок уже может продолжить игру
     /// </summary>
     private void HandleCloseRequested()
     {
@@ -289,7 +289,7 @@ public sealed class RewardSystem : MonoBehaviour
             eventNotificationSystem.ShowEffectNotification(effectType, value, status);
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Ограничивает количество вариантов награды допустимым значением
     /// </summary>
     private void OnValidate()
     {

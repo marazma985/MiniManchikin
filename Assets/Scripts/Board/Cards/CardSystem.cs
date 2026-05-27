@@ -21,7 +21,7 @@ public sealed class CardSystem : MonoBehaviour
     public IReadOnlyList<CardData> Hand => hand;
     public int MaxCards => MaxHandSize;
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Заменяет руку игрока списком карт из сохранения
     /// </summary>
     public void SetHand(List<CardData> cards)
     {
@@ -112,7 +112,7 @@ public sealed class CardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Ограничивает размер руки и убирает невозможные значения в инспекторе
     /// </summary>
     private void OnValidate()
     {

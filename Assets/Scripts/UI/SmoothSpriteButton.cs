@@ -23,7 +23,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
     private bool isSelected;
     private bool wasInteractable;
     /// <summary>
-    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
+    /// Автоматически находит Button и Image для плавной UI-кнопки
     /// </summary>
     private void Reset()
     {
@@ -31,7 +31,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         targetImage = GetComponent<Image>();
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Включает обработку наведения, выбора и нажатия UI-кнопки
     /// </summary>
     private void OnEnable()
     {
@@ -40,7 +40,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         RefreshVisualState(true);
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Сбрасывает плавный переход и состояние UI-кнопки
     /// </summary>
     private void OnDisable()
     {
@@ -50,7 +50,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         isSelected = false;
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Обновляет плавную UI-кнопку в инспекторе после смены спрайтов
     /// </summary>
     private void OnValidate()
     {
@@ -83,7 +83,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         RefreshVisualState(true);
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Передает кнопке состояние наведения, нажатия и выбора
     /// </summary>
     public void SetInteractionState(bool pointerOver, bool pointerPressed, bool selected, bool instant)
     {
@@ -93,7 +93,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         RefreshVisualState(instant);
     }
     /// <summary>
-    /// Останавливает текущий процесс или анимацию
+    /// Останавливает плавную смену спрайта UI-кнопки
     /// </summary>
     public void StopTransition()
     {
@@ -226,7 +226,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         return highlightedSprite != null ? highlightedSprite : normalSprite;
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Меняет спрайт UI-кнопки сразу или с плавным переходом
     /// </summary>
     private void SetButtonSprite(Sprite targetSprite, bool instant)
     {

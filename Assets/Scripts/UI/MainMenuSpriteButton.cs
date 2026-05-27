@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public sealed class MainMenuSpriteButton : MonoBehaviour
 {
     /// <summary>
-    /// Набор вариантов, из которых игра выбирает нужное состояние для VisualKind
+    /// Визуальное состояние кнопки главного меню
     /// </summary>
     public enum VisualKind
     {
@@ -49,7 +49,7 @@ public sealed class MainMenuSpriteButton : MonoBehaviour
         }
     }
     /// <summary>
-    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
+    /// Автоматически находит SpriteRenderer кнопки главного меню
     /// </summary>
     private void Reset()
     {
@@ -64,7 +64,7 @@ public sealed class MainMenuSpriteButton : MonoBehaviour
         ApplyVisual();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Обновляет спрайт кнопки главного меню в инспекторе
     /// </summary>
     private void OnValidate()
     {

@@ -22,14 +22,14 @@ public sealed class MainMenuButtonFeedback : MonoBehaviour, IPointerEnterHandler
         Initialize();
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Запоминает стартовый масштаб кнопки для эффекта нажатия
     /// </summary>
     private void OnEnable()
     {
         Initialize();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Обновляет стартовый масштаб кнопки главного меню в инспекторе
     /// </summary>
     private void OnValidate()
     {

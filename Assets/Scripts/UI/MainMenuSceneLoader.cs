@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public sealed class MainMenuSceneLoader : MonoBehaviour
 {
     /// <summary>
-    /// Набор вариантов, из которых игра выбирает нужное состояние для LaunchMode
+/// Режим запуска игровой сцены: новая партия или продолжение сохранения
     /// </summary>
     private enum LaunchMode
     {
@@ -22,7 +22,7 @@ public sealed class MainMenuSceneLoader : MonoBehaviour
     [SerializeField] private MainMenuSpriteButton spriteButton;
 
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает кнопку меню на запуск новой игры или продолжение
     /// </summary>
     private void OnEnable()
     {
@@ -32,7 +32,7 @@ public sealed class MainMenuSceneLoader : MonoBehaviour
             button.onClick.AddListener(LoadScene);
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает кнопку меню от запуска игры
     /// </summary>
     private void OnDisable()
     {
@@ -40,7 +40,7 @@ public sealed class MainMenuSceneLoader : MonoBehaviour
             button.onClick.RemoveListener(LoadScene);
     }
     /// <summary>
-    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
+    /// Автоматически находит Button для пункта главного меню
     /// </summary>
     private void Reset()
     {
@@ -48,7 +48,7 @@ public sealed class MainMenuSceneLoader : MonoBehaviour
         spriteButton = GetComponent<MainMenuSpriteButton>();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Находит кнопку главного меню в инспекторе, если ссылка еще не задана
     /// </summary>
     private void OnValidate()
     {

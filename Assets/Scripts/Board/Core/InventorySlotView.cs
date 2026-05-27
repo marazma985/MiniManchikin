@@ -30,7 +30,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
     public ItemData Item => item;
     public Sprite ItemIcon => item != null ? item.ItemSprite : itemIcon;
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает крестик ячейки предмета на нажатие и обновляет вид
     /// </summary>
     private void OnEnable()
     {
@@ -40,7 +40,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         Refresh();
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает крестик ячейки предмета и останавливает его анимацию
     /// </summary>
     private void OnDisable()
     {
@@ -50,14 +50,14 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         StopRemoveButtonFade();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Обновляет ячейку экипировки прямо в инспекторе после смены настроек
     /// </summary>
     private void OnValidate()
     {
         Refresh();
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подставляет предмет в ячейку экипировки
     /// </summary>
     public void SetItem(ItemData newItem)
     {
@@ -67,7 +67,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         Refresh();
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подставляет отдельную иконку в ячейку без привязки к предмету
     /// </summary>
     public void SetItemIcon(Sprite newItemIcon)
     {
@@ -113,7 +113,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         iconImage.color = Color.white;
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сообщает HUD, что игрок нажал крестик снятия предмета
     /// </summary>
     private void HandleRemoveClicked()
     {
@@ -137,7 +137,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         SetRemoveButtonVisible(false, false);
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Показывает или скрывает крестик снятия предмета
     /// </summary>
     private void SetRemoveButtonVisible(bool visible, bool instant)
     {
@@ -176,7 +176,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         removeButtonFade = null;
     }
     /// <summary>
-    /// Останавливает текущий процесс или анимацию
+    /// Останавливает плавное появление или скрытие крестика предмета
     /// </summary>
     private void StopRemoveButtonFade()
     {

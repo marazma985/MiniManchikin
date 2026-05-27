@@ -14,7 +14,7 @@ public sealed class ResultGameScreenController : MonoBehaviour
     [SerializeField] private string mainMenuSceneName = "MainMenu";
 
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Показывает текст победы или поражения на финальной сцене
     /// </summary>
     private void OnEnable()
     {
@@ -24,7 +24,7 @@ public sealed class ResultGameScreenController : MonoBehaviour
             mainMenuButton.onClick.AddListener(LoadMainMenu);
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает кнопку финальной сцены от возврата в меню
     /// </summary>
     private void OnDisable()
     {

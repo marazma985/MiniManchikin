@@ -430,7 +430,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         }
     }
     /// <summary>
-    /// Набор вариантов, из которых игра выбирает нужное состояние для ApngDisposeOp
+    /// Правило APNG о том, что делать с кадром после его показа
     /// </summary>
     private enum ApngDisposeOp
     {
@@ -439,7 +439,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         Previous = 2
     }
     /// <summary>
-    /// Набор вариантов, из которых игра выбирает нужное состояние для ApngBlendOp
+    /// Правило APNG о том, как новый кадр накладывается на предыдущий
     /// </summary>
     private enum ApngBlendOp
     {

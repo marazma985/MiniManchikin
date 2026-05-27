@@ -17,7 +17,7 @@ public sealed class HudView : MonoBehaviour
     [SerializeField] private InventorySlotView[] inventorySlots;
 
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает HUD на изменения игрока и сразу обновляет панели
     /// </summary>
     private void OnEnable()
     {
@@ -26,7 +26,7 @@ public sealed class HudView : MonoBehaviour
         RefreshAll();
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает HUD от событий игрока и ячеек экипировки
     /// </summary>
     private void OnDisable()
     {
@@ -34,7 +34,7 @@ public sealed class HudView : MonoBehaviour
         UnsubscribeSlots();
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подключает HUD к здоровью и уровню указанного игрока
     /// </summary>
     public void SetPlayerStats(PlayerStats newPlayerStats)
     {
@@ -47,7 +47,7 @@ public sealed class HudView : MonoBehaviour
         RefreshAll();
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подключает HUD к экипировке указанного игрока
     /// </summary>
     public void SetPlayerInventory(PlayerInventory newPlayerInventory)
     {
@@ -77,7 +77,7 @@ public sealed class HudView : MonoBehaviour
         RefreshSlots();
     }
     /// <summary>
-    /// Подписывается на события другой системы
+    /// Подписывает HUD на изменения здоровья, уровня, экипировки и слотов
     /// </summary>
     private void Subscribe()
     {
@@ -85,7 +85,7 @@ public sealed class HudView : MonoBehaviour
         SubscribeInventory();
     }
     /// <summary>
-    /// Подписывается на события другой системы
+    /// Подписывает HUD на изменение здоровья и уровня игрока
     /// </summary>
     private void SubscribeStats()
     {
@@ -96,7 +96,7 @@ public sealed class HudView : MonoBehaviour
         playerStats.OnLevelChanged += UpdateLevel;
     }
     /// <summary>
-    /// Отписывается от событий другой системы
+    /// Отписывает HUD от всех игровых событий
     /// </summary>
     private void Unsubscribe()
     {
@@ -104,7 +104,7 @@ public sealed class HudView : MonoBehaviour
         UnsubscribeInventory();
     }
     /// <summary>
-    /// Отписывается от событий другой системы
+    /// Отписывает HUD от изменения здоровья и уровня игрока
     /// </summary>
     private void UnsubscribeStats()
     {
@@ -115,7 +115,7 @@ public sealed class HudView : MonoBehaviour
         playerStats.OnLevelChanged -= UpdateLevel;
     }
     /// <summary>
-    /// Подписывается на события другой системы
+    /// Подписывает HUD на изменение экипировки игрока
     /// </summary>
     private void SubscribeInventory()
     {
@@ -125,7 +125,7 @@ public sealed class HudView : MonoBehaviour
         playerInventory.OnEquipmentChanged += UpdateEquipmentSlots;
     }
     /// <summary>
-    /// Отписывается от событий другой системы
+    /// Отписывает HUD от изменения экипировки игрока
     /// </summary>
     private void UnsubscribeInventory()
     {
@@ -191,7 +191,7 @@ public sealed class HudView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Подписывается на события другой системы
+    /// Подписывает ячейки HUD на нажатие крестика снятия предмета
     /// </summary>
     private void SubscribeSlots()
     {
@@ -205,7 +205,7 @@ public sealed class HudView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Отписывается от событий другой системы
+    /// Отписывает ячейки HUD от нажатия крестика снятия предмета
     /// </summary>
     private void UnsubscribeSlots()
     {
@@ -219,7 +219,7 @@ public sealed class HudView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Снимает предмет, крестик которого нажал игрок в HUD
     /// </summary>
     private void HandleInventorySlotRemoveClicked(ItemData item)
     {

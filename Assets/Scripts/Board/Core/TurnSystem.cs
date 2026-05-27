@@ -57,7 +57,7 @@ public sealed class TurnSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подключает систему хода к кубику, фишке, полю и эффектам клеток
     /// </summary>
     public void SetSystems(DiceSystem newDiceSystem, PlayerMover newPlayerMover, BoardManager newBoardManager, TileEffectSystem newTileEffectSystem)
     {
@@ -211,7 +211,7 @@ public sealed class TurnSystem : MonoBehaviour
         SetState(TurnState.WaitingForRoll);
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Запоминает незавершенный ход, чтобы его можно было восстановить из сохранения
     /// </summary>
     private void SetPendingMove(int steps, bool showsDice)
     {
@@ -231,7 +231,7 @@ public sealed class TurnSystem : MonoBehaviour
         pendingBoardMoveStartTileIndex = 0;
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Меняет текущее состояние хода и сообщает об этом кнопке кубика
     /// </summary>
     private void SetState(TurnState newState)
     {
@@ -242,7 +242,7 @@ public sealed class TurnSystem : MonoBehaviour
         StateChanged?.Invoke(state);
     }
     /// <summary>
-    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
+    /// Автоматически находит системы хода на сцене при добавлении компонента
     /// </summary>
     private void Reset()
     {
@@ -252,7 +252,7 @@ public sealed class TurnSystem : MonoBehaviour
         tileEffectSystem = FindAnyObjectByType<TileEffectSystem>();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Ограничивает настройки движения допустимыми значениями в инспекторе
     /// </summary>
     private void OnValidate()
     {

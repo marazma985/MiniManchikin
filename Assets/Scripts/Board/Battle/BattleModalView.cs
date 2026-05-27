@@ -62,7 +62,7 @@ public sealed class BattleModalView : MonoBehaviour
         SetActionButtonText(buttonText);
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Меняет текст главной кнопки в окне боя
     /// </summary>
     public void SetActionButtonText(string buttonText)
     {
@@ -109,7 +109,7 @@ public sealed class BattleModalView : MonoBehaviour
         gameObject.SetActive(false);
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает главную кнопку окна боя на нажатие
     /// </summary>
     private void OnEnable()
     {
@@ -117,7 +117,7 @@ public sealed class BattleModalView : MonoBehaviour
             resolveButton.onClick.AddListener(HandleResolveClicked);
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает кнопку боя и очищает временную подсказку
     /// </summary>
     private void OnDisable()
     {
@@ -127,7 +127,7 @@ public sealed class BattleModalView : MonoBehaviour
             resolveButton.onClick.RemoveListener(HandleResolveClicked);
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сообщает системе боя, что игрок нажал главную кнопку окна боя
     /// </summary>
     private void HandleResolveClicked()
     {
@@ -143,7 +143,7 @@ public sealed class BattleModalView : MonoBehaviour
         SetText(statusText, string.Empty);
     }
     /// <summary>
-    /// Останавливает текущий процесс или анимацию
+    /// Останавливает отложенное скрытие подсказки боя
     /// </summary>
     private void StopClearStatusRoutine()
     {
@@ -154,7 +154,7 @@ public sealed class BattleModalView : MonoBehaviour
         clearStatusRoutine = null;
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подставляет строку в TMP-текст, если ссылка на него задана
     /// </summary>
     private static void SetText(TextMeshProUGUI text, string value)
     {
@@ -162,7 +162,7 @@ public sealed class BattleModalView : MonoBehaviour
             text.text = value;
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подставляет спрайт в Image и скрывает картинку, если спрайта нет
     /// </summary>
     private static void SetImage(Image image, Sprite sprite)
     {

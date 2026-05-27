@@ -11,7 +11,7 @@ public sealed class MainMenuCursor : MonoBehaviour
 {
     private const string GlobalCursorPrefabPath = "UI/GlobalCursor";
     /// <summary>
-    /// Набор вариантов, из которых игра выбирает нужное состояние для CursorState
+    /// Внешний вид кастомного курсора в главном меню
     /// </summary>
     public enum CursorState
     {
@@ -48,7 +48,7 @@ public sealed class MainMenuCursor : MonoBehaviour
         EnsureGlobalCursor();
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Возвращает системный курсор на сценах, где нет кастомного курсора
     /// </summary>
     private static void HandleSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
@@ -116,7 +116,7 @@ public sealed class MainMenuCursor : MonoBehaviour
             SetPressed(false);
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Переключает курсор в режим наведения или обычный режим
     /// </summary>
     public void SetHover(bool isHovering)
     {
@@ -125,7 +125,7 @@ public sealed class MainMenuCursor : MonoBehaviour
             ApplyState(hoveringButton ? CursorState.Hover : CursorState.Normal);
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Переключает курсор в нажатый или отпущенный режим
     /// </summary>
     public void SetPressed(bool isPressed)
     {

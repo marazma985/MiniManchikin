@@ -51,14 +51,14 @@ public sealed class SingleRewardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Возвращает данные из сохранения или ранее запомненного состояния
+    /// Восстанавливает открытое окно одиночной награды из сохранения
     /// </summary>
     public bool RestoreReward(RewardData reward, Action onCompleted)
     {
         return ShowReward(reward, onCompleted, null);
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает одиночную награду на окно и изменения инвентаря
     /// </summary>
     private void OnEnable()
     {
@@ -66,7 +66,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
         SubscribeAvailability();
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает одиночную награду от окна и изменений инвентаря
     /// </summary>
     private void OnDisable()
     {
@@ -74,7 +74,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
         UnsubscribeAvailability();
     }
     /// <summary>
-    /// Подписывается на события другой системы
+    /// Подписывает систему одиночной награды на кнопки ее окна
     /// </summary>
     private void SubscribeModal()
     {
@@ -85,7 +85,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
         modalView.CloseRequested += HandleCloseRequested;
     }
     /// <summary>
-    /// Отписывается от событий другой системы
+    /// Отписывает систему одиночной награды от кнопок ее окна
     /// </summary>
     private void UnsubscribeModal()
     {
@@ -96,7 +96,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
         modalView.CloseRequested -= HandleCloseRequested;
     }
     /// <summary>
-    /// Подписывается на события другой системы
+    /// Подписывается на руку и экипировку, чтобы обновлять доступность награды
     /// </summary>
     private void SubscribeAvailability()
     {
@@ -107,7 +107,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
             playerInventory.OnEquipmentChanged += HandleEquipmentChanged;
     }
     /// <summary>
-    /// Отписывается от событий другой системы
+    /// Отписывается от руки и экипировки после закрытия награды
     /// </summary>
     private void UnsubscribeAvailability()
     {
@@ -118,7 +118,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
             playerInventory.OnEquipmentChanged -= HandleEquipmentChanged;
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Пытается выдать одиночную награду после нажатия кнопки
     /// </summary>
     private void HandleAcceptRequested()
     {
@@ -138,7 +138,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
         CompleteReward();
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Закрывает окно одиночной награды после завершения выдачи
     /// </summary>
     private void HandleCloseRequested()
     {
@@ -146,14 +146,14 @@ public sealed class SingleRewardSystem : MonoBehaviour
         CompleteReward();
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Обновляет кнопку принятия награды после изменения руки карт
     /// </summary>
     private void HandleHandChanged(IReadOnlyList<CardData> cards)
     {
         RefreshAcceptState();
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Обновляет кнопку принятия награды после изменения экипировки
     /// </summary>
     private void HandleEquipmentChanged(IReadOnlyList<ItemData> items)
     {

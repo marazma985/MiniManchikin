@@ -33,7 +33,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public CardData CurrentCard => currentCard;
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает карту на клики и готовит крестик удаления
     /// </summary>
     private void OnEnable()
     {
@@ -48,7 +48,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         RefreshVisual();
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает карту от кликов и сбрасывает подсветку
     /// </summary>
     private void OnDisable()
     {
@@ -63,7 +63,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         SetCardHover(false, true);
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подставляет карту в UI-слот и сразу обновляет ее вид
     /// </summary>
     public void SetCard(CardData card)
     {
@@ -93,7 +93,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         SetCardHover(hasCard && isPointerOver, true);
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сообщает, что игрок нажал на эту карту
     /// </summary>
     private void HandleClick()
     {
@@ -101,7 +101,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
             Clicked?.Invoke(currentCard);
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сообщает, что игрок нажал крестик удаления этой карты
     /// </summary>
     private void HandleRemoveClick()
     {
@@ -164,7 +164,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         return parentCanvas.worldCamera;
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Включает или выключает подсветку карты при наведении
     /// </summary>
     private void SetCardHover(bool highlighted, bool instant)
     {
@@ -251,7 +251,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         hoverOverlayImage.enabled = sprite != null;
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Меняет прозрачность подсветки карты через альфа-канал
     /// </summary>
     private void SetHoverOverlayAlpha(float alpha)
     {
@@ -261,7 +261,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         hoverOverlayImage.color = new Color(1f, 1f, 1f, alpha);
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Показывает или скрывает крестик удаления карты
     /// </summary>
     private void SetRemoveButtonVisible(bool visible, bool instant)
     {
@@ -308,7 +308,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         removeButtonFade = null;
     }
     /// <summary>
-    /// Останавливает текущий процесс или анимацию
+    /// Останавливает плавное появление или скрытие крестика карты
     /// </summary>
     private void StopRemoveButtonFade()
     {
@@ -319,7 +319,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         removeButtonFade = null;
     }
     /// <summary>
-    /// Останавливает текущий процесс или анимацию
+    /// Останавливает плавное появление или скрытие подсветки карты
     /// </summary>
     private void StopCardHoverFade()
     {

@@ -6,7 +6,7 @@ public static class GameResultContext
     public static GameResultType CurrentResult { get; private set; } = GameResultType.Lose;
     public static bool HasResult { get; private set; }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Запоминает итог партии перед переходом на финальную сцену
     /// </summary>
     public static void SetResult(GameResultType result)
     {

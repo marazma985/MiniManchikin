@@ -17,14 +17,14 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
     private bool isPointerOver;
     private bool isPointerPressed;
     /// <summary>
-    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
+    /// Автоматически находит SpriteRenderer для плавной смены спрайтов
     /// </summary>
     private void Reset()
     {
         mainRenderer = GetComponent<SpriteRenderer>();
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Показывает стартовый спрайт SpriteRenderer без плавного перехода
     /// </summary>
     private void OnEnable()
     {
@@ -32,7 +32,7 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         RefreshVisualState(true);
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Останавливает плавную смену спрайта при выключении объекта
     /// </summary>
     private void OnDisable()
     {
@@ -56,7 +56,7 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         RefreshVisualState(true);
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Передает SpriteRenderer состояние наведения и нажатия
     /// </summary>
     public void SetInteractionState(bool pointerOver, bool pointerPressed, bool instant)
     {
@@ -65,7 +65,7 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         RefreshVisualState(instant);
     }
     /// <summary>
-    /// Останавливает текущий процесс или анимацию
+    /// Останавливает плавную смену спрайта SpriteRenderer
     /// </summary>
     public void StopTransition()
     {
@@ -132,7 +132,7 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         return highlightedSprite != null ? highlightedSprite : normalSprite;
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Меняет спрайт SpriteRenderer сразу или с плавным переходом
     /// </summary>
     private void SetSprite(Sprite targetSprite, bool instant)
     {

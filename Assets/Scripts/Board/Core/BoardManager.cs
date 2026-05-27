@@ -60,7 +60,7 @@ public sealed class BoardManager : MonoBehaviour
         return GetTile(currentIndex);
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Ставит текущую позицию игрока на указанный индекс клетки
     /// </summary>
     public void SetCurrentIndex(int index)
     {
@@ -122,14 +122,14 @@ public sealed class BoardManager : MonoBehaviour
         });
     }
     /// <summary>
-    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
+    /// Собирает клетки поля из дочерних объектов при добавлении менеджера
     /// </summary>
     private void Reset()
     {
         CollectChildTiles();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Проверяет, что текущий индекс клетки остается в границах поля
     /// </summary>
     private void OnValidate()
     {

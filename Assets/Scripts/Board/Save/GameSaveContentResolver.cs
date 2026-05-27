@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 /// <summary>
-/// Помогает сохранению найти карты, предметы и монстров по их id
+/// Каталог ассетов, через который сохранение находит карты, предметы и монстров по их id
 /// </summary>
 
 public sealed class GameSaveContentResolver

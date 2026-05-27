@@ -37,7 +37,7 @@ public sealed class EventNotificationView : MonoBehaviour
         lifecycleCoroutine = StartCoroutine(LifecycleRoutine());
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Останавливает исчезновение всплывающей подсказки при выключении объекта
     /// </summary>
     private void OnDisable()
     {
@@ -72,7 +72,7 @@ public sealed class EventNotificationView : MonoBehaviour
         Destroy(gameObject);
     }
     /// <summary>
-    /// Останавливает текущий процесс или анимацию
+    /// Останавливает жизненный цикл всплывающей подсказки
     /// </summary>
     private void StopLifecycle()
     {

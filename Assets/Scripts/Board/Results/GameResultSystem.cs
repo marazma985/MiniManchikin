@@ -12,7 +12,7 @@ public sealed class GameResultSystem : MonoBehaviour
 
     private bool resultTriggered;
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает проверку конца игры на здоровье и уровень игрока
     /// </summary>
     private void OnEnable()
     {
@@ -36,7 +36,7 @@ public sealed class GameResultSystem : MonoBehaviour
         EvaluateResult();
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает проверку конца игры от здоровья и уровня игрока
     /// </summary>
     private void OnDisable()
     {
@@ -47,28 +47,28 @@ public sealed class GameResultSystem : MonoBehaviour
         playerStats.OnLevelChanged -= HandleLevelChanged;
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Подключает PlayerStats в редакторе, если ссылка еще не задана
     /// </summary>
     private void OnValidate()
     {
         winningLevel = Mathf.Max(1, winningLevel);
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Проверяет поражение после изменения здоровья игрока
     /// </summary>
     private void HandleHpChanged(int currentHp, int maxHp)
     {
         EvaluateResult();
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Проверяет победу после изменения уровня игрока
     /// </summary>
     private void HandleLevelChanged(int level)
     {
         EvaluateResult();
     }
     /// <summary>
-    /// Проверяет условия и выбирает дальнейший результат
+    /// Определяет, закончилась ли партия победой или поражением
     /// </summary>
     private void EvaluateResult()
     {

@@ -47,7 +47,7 @@ public sealed class BattleSystem : MonoBehaviour
     public bool IsBattleActive => currentBattleData != null;
     public bool CanUseBattleDice => IsBattleActive && phase == BattlePhase.WaitingForResolve && !battleDiceUsed && !escapeRollInProgress && GetPowerDifference() >= 0 && GetPowerDifference() < 6;
     /// <summary>
-    /// Набор вариантов, из которых игра выбирает нужное состояние для BattlePhase
+    /// Текущий этап боя: побег, награда, закрытие или обычное решение исхода
     /// </summary>
     private enum BattlePhase
     {
@@ -369,7 +369,7 @@ public sealed class BattleSystem : MonoBehaviour
             RollEscape();
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает систему боя на кнопку тестового боя и события наград
     /// </summary>
     private void OnEnable()
     {
@@ -377,7 +377,7 @@ public sealed class BattleSystem : MonoBehaviour
             battleModalView.ResolveRequested += ResolveCurrentBattle;
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает систему боя от тестовых кнопок и событий наград
     /// </summary>
     private void OnDisable()
     {
@@ -664,7 +664,7 @@ public sealed class BattleSystem : MonoBehaviour
         return indexes;
     }
     /// <summary>
-    /// Возвращает данные из сохранения или ранее запомненного состояния
+    /// Восстанавливает модификаторы монстра по индексам из сохранения
     /// </summary>
     private void RestoreModifierIndexes(EnemyData enemy, IReadOnlyList<int> modifierIndexes)
     {
@@ -701,7 +701,7 @@ public sealed class BattleSystem : MonoBehaviour
             CompleteBattle();
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Закрывает бой после того, как игрок забрал награду
     /// </summary>
     private void HandleRewardAccepted()
     {

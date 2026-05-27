@@ -68,7 +68,7 @@ public sealed class PlayerInventory : MonoBehaviour
         NotifyEquipmentChanged();
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Заменяет экипировку игрока списком предметов из сохранения
     /// </summary>
     public void SetEquipment(IReadOnlyList<ItemData> items)
     {
@@ -143,14 +143,14 @@ public sealed class PlayerInventory : MonoBehaviour
         return false;
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Сообщает HUD о текущей экипировке при включении инвентаря
     /// </summary>
     private void OnEnable()
     {
         NotifyEquipmentChanged();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Убирает лишние предметы, если в инспекторе экипировка превысила лимит
     /// </summary>
     private void OnValidate()
     {

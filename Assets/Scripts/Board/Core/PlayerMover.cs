@@ -52,7 +52,7 @@ public sealed class PlayerMover : MonoBehaviour
         moveCoroutine = StartCoroutine(MoveStepsRoutine(Mathf.Max(0, steps)));
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подключает движение фишки к указанному менеджеру поля
     /// </summary>
     public void SetBoardManager(BoardManager newBoardManager)
     {
@@ -129,7 +129,7 @@ public sealed class PlayerMover : MonoBehaviour
         moveCompletedCallback = null;
     }
     /// <summary>
-    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
+    /// Запоминает стартовое смещение фишки относительно клетки
     /// </summary>
     private void Reset()
     {
@@ -137,7 +137,7 @@ public sealed class PlayerMover : MonoBehaviour
         CacheTileLocalOffset();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Ограничивает длительность шага и обновляет смещение фишки в инспекторе
     /// </summary>
     private void OnValidate()
     {
@@ -164,7 +164,7 @@ public sealed class PlayerMover : MonoBehaviour
             CacheTileLocalOffset();
     }
     /// <summary>
-    /// Запоминает текущее значение для дальнейшего сравнения
+    /// Запоминает смещение фишки относительно клетки поля
     /// </summary>
     private void CacheTileLocalOffset()
     {

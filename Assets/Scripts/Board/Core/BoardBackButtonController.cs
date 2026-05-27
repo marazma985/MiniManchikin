@@ -22,7 +22,7 @@ public sealed class BoardBackButtonController : MonoBehaviour
     private bool isPointerOver;
     private bool isPointerPressed;
     /// <summary>
-    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
+    /// Автоматически находит SpriteRenderer кнопки выхода при добавлении компонента
     /// </summary>
     private void Reset()
     {
@@ -44,14 +44,14 @@ public sealed class BoardBackButtonController : MonoBehaviour
         AnchorToCamera();
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Возвращает кнопку выхода в нормальное визуальное состояние
     /// </summary>
     private void OnEnable()
     {
         RefreshVisualState(true);
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Сбрасывает наведение и нажатие кнопки выхода
     /// </summary>
     private void OnDisable()
     {

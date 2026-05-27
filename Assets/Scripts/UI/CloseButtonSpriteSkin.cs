@@ -14,21 +14,21 @@ public sealed class CloseButtonSpriteSkin : MonoBehaviour
 
     private SmoothSpriteButton spriteTransition;
     /// <summary>
-    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
+    /// Автоматически находит Button для нового крестика закрытия
     /// </summary>
     private void Reset()
     {
         ResolveReferences();
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Применяет спрайты крестика при включении кнопки закрытия
     /// </summary>
     private void OnEnable()
     {
         Apply();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Применяет спрайты крестика в инспекторе после изменения настроек
     /// </summary>
     private void OnValidate()
     {

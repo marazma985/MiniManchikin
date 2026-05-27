@@ -56,14 +56,14 @@ public sealed class RewardModalView : MonoBehaviour
         statusFade = StartCoroutine(FadeStatusRoutine());
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает окно награды на выбор варианта и кнопку закрытия
     /// </summary>
     private void OnEnable()
     {
         Subscribe();
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает окно награды и прячет его подсказку
     /// </summary>
     private void OnDisable()
     {
@@ -71,7 +71,7 @@ public sealed class RewardModalView : MonoBehaviour
         HideStatus(true);
     }
     /// <summary>
-    /// Подписывается на события другой системы
+    /// Подписывает варианты награды и кнопку закрытия на действия игрока
     /// </summary>
     private void Subscribe()
     {
@@ -95,7 +95,7 @@ public sealed class RewardModalView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Отписывается от событий другой системы
+    /// Отписывает варианты награды и кнопку закрытия от действий игрока
     /// </summary>
     private void Unsubscribe()
     {
@@ -132,14 +132,14 @@ public sealed class RewardModalView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Передает выбранную игроком награду в RewardSystem
     /// </summary>
     private void HandleRewardClicked(RewardData reward)
     {
         RewardSelected?.Invoke(reward);
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сообщает, что игрок нажал закрытие окна награды
     /// </summary>
     private void HandleCloseClicked()
     {
@@ -206,7 +206,7 @@ public sealed class RewardModalView : MonoBehaviour
         return statusText != null ? statusText.color.a : 0f;
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Меняет прозрачность подсказки в окне награды через альфа-канал
     /// </summary>
     private void SetStatusAlpha(float alpha)
     {
@@ -224,7 +224,7 @@ public sealed class RewardModalView : MonoBehaviour
         statusText.color = color;
     }
     /// <summary>
-    /// Останавливает текущий процесс или анимацию
+    /// Останавливает плавное появление или скрытие подсказки награды
     /// </summary>
     private void StopStatusFade()
     {

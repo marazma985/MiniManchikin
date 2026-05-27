@@ -24,7 +24,7 @@ public sealed class ItemData : ScriptableObject
     public ItemType ItemType => itemType;
     public IReadOnlyList<EffectData> Effects => effects;
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Автоматически подставляет id предмета по имени ассета, если id пустой
     /// </summary>
     private void OnValidate()
     {

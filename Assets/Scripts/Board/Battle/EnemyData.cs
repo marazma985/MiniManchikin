@@ -29,7 +29,7 @@ public sealed class EnemyData : ScriptableObject
     public IReadOnlyList<EnemyModifier> Modifiers => modifiers;
     public IReadOnlyList<EffectData> PenaltyEffects => penaltyEffects;
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Исправляет уровень монстра и настройки баланса после правок в инспекторе
     /// </summary>
     private void OnValidate()
     {

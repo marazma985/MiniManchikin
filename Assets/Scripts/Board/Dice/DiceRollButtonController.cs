@@ -25,7 +25,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
     private bool isSelected;
     private bool wasInteractable;
     /// <summary>
-    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
+    /// Автоматически находит компоненты кнопки кубика при добавлении скрипта
     /// </summary>
     private void Reset()
     {
@@ -34,7 +34,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         turnSystem = FindAnyObjectByType<TurnSystem>();
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает кнопку кубика на состояние хода, бой и собственное нажатие
     /// </summary>
     private void OnEnable()
     {
@@ -60,7 +60,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         RefreshVisualState(true);
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает кнопку кубика от событий и сбрасывает временный визуал
     /// </summary>
     private void OnDisable()
     {
@@ -81,7 +81,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
             spriteTransition.StopTransition();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Обновляет вид кнопки кубика в инспекторе после смены спрайтов или настроек
     /// </summary>
     private void OnValidate()
     {
@@ -122,21 +122,21 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         turnSystem.TryRollDice();
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Обновляет кнопку кубика после смены состояния хода
     /// </summary>
     private void HandleTurnStateChanged(TurnState state)
     {
         RefreshButtonState();
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Блокирует кнопку кубика после успешного броска
     /// </summary>
     private void HandleDiceRolled(int value)
     {
         Debug.Log($"Dice rolled: {value}");
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подключает кнопку кубика к указанной системе хода
     /// </summary>
     public void SetTurnSystem(TurnSystem newTurnSystem)
     {
@@ -156,7 +156,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         }
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подключает кнопку кубика к указанной системе боя
     /// </summary>
     public void SetBattleSystem(BattleSystem newBattleSystem)
     {
@@ -288,7 +288,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Останавливает текущий процесс или анимацию
+    /// Останавливает отложенное возвращение кнопки кубика в отпущенный вид
     /// </summary>
     private void StopReleaseVisualRefresh()
     {

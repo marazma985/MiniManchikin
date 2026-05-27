@@ -81,14 +81,14 @@ public sealed class GameSaveController : MonoBehaviour
         initialized = true;
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает автосохранение на изменения партии
     /// </summary>
     private void OnEnable()
     {
         Subscribe();
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает автосохранение от изменений партии
     /// </summary>
     private void OnDisable()
     {
@@ -229,7 +229,7 @@ public sealed class GameSaveController : MonoBehaviour
         }
     }
     /// <summary>
-    /// Возвращает данные из сохранения или ранее запомненного состояния
+    /// Восстанавливает руку игрока по id карт из сохранения
     /// </summary>
     private void RestoreCards(List<string> cardIds)
     {
@@ -250,7 +250,7 @@ public sealed class GameSaveController : MonoBehaviour
         cardSystem.SetHand(cards);
     }
     /// <summary>
-    /// Возвращает данные из сохранения или ранее запомненного состояния
+    /// Восстанавливает экипировку игрока по id предметов из сохранения
     /// </summary>
     private void RestoreItems(List<string> itemIds)
     {
@@ -335,7 +335,7 @@ public sealed class GameSaveController : MonoBehaviour
             : new RewardSaveData { rewardType = (int)reward.RewardType, contentId = contentId };
     }
     /// <summary>
-    /// Подписывается на события другой системы
+    /// Подписывает сохранение на важные изменения партии
     /// </summary>
     private void Subscribe()
     {
@@ -363,7 +363,7 @@ public sealed class GameSaveController : MonoBehaviour
             singleRewardSystem.RewardStateChanged += HandleRewardStateChanged;
     }
     /// <summary>
-    /// Отписывается от событий другой системы
+    /// Отписывает сохранение от событий игровой сцены
     /// </summary>
     private void Unsubscribe()
     {
@@ -391,39 +391,39 @@ public sealed class GameSaveController : MonoBehaviour
             singleRewardSystem.RewardStateChanged -= HandleRewardStateChanged;
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сохраняет партию после изменения здоровья игрока
     /// </summary>
     private void HandleStatsChanged(int currentHp, int maxHp) => SaveNow();
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сохраняет партию после изменения уровня игрока
     /// </summary>
     private void HandleLevelChanged(int level) => SaveNow();
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сохраняет партию после изменения экипировки
     /// </summary>
     private void HandleEquipmentChanged(IReadOnlyList<ItemData> items) => SaveNow();
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сохраняет партию после изменения руки карт
     /// </summary>
     private void HandleHandChanged(IReadOnlyList<CardData> cards) => SaveNow();
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сохраняет партию после смены состояния хода
     /// </summary>
     private void HandleTurnStateChanged(TurnState state) => SaveNow();
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сохраняет партию сразу после выпадения кубика
     /// </summary>
     private void HandleDiceRolled(int value) => SaveNow();
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сохраняет партию после завершения хода
     /// </summary>
     private void HandleTurnEnded() => SaveNow();
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сохраняет партию после изменения состояния боя
     /// </summary>
     private void HandleBattleStateChanged() => SaveNow();
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сохраняет партию после изменения состояния награды
     /// </summary>
     private void HandleRewardStateChanged() => SaveNow();
 }

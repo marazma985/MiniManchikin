@@ -38,7 +38,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         Hide();
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает кнопки и поля окна настроек на действия игрока
     /// </summary>
     private void OnEnable()
     {
@@ -50,7 +50,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
 
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает окно настроек от кнопок и полей ввода
     /// </summary>
     private void OnDisable()
     {
@@ -448,7 +448,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         return button;
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Выставляет RectTransform по центру с нужной позицией и размером
     /// </summary>
     private static void SetCentered(RectTransform rectTransform, Vector2 anchoredPosition, Vector2 size)
     {

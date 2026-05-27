@@ -9,7 +9,7 @@ public sealed class MainMenuQuitButton : MonoBehaviour
     [SerializeField] private Button button;
 
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает кнопку выхода из игры на нажатие
     /// </summary>
     private void OnEnable()
     {
@@ -20,7 +20,7 @@ public sealed class MainMenuQuitButton : MonoBehaviour
             button.onClick.AddListener(QuitGame);
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает кнопку выхода из игры от нажатия
     /// </summary>
     private void OnDisable()
     {
@@ -28,14 +28,14 @@ public sealed class MainMenuQuitButton : MonoBehaviour
             button.onClick.RemoveListener(QuitGame);
     }
     /// <summary>
-    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
+    /// Автоматически находит Button для выхода из игры
     /// </summary>
     private void Reset()
     {
         button = GetComponent<Button>();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Находит кнопку выхода в инспекторе, если ссылка еще не задана
     /// </summary>
     private void OnValidate()
     {

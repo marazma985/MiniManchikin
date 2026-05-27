@@ -242,7 +242,7 @@ public sealed class EventNotificationSystem : MonoBehaviour
             .Replace("{signedValue}", signedValue);
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Заполняет стандартные шаблоны подсказок после правок в инспекторе
     /// </summary>
     private void OnValidate()
     {

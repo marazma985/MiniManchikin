@@ -32,7 +32,7 @@ public sealed class SingleRewardModalView : MonoBehaviour
         gameObject.SetActive(false);
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подставляет карту или предмет в окно одиночной награды
     /// </summary>
     public void SetReward(RewardData reward)
     {
@@ -50,7 +50,7 @@ public sealed class SingleRewardModalView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Включает или блокирует кнопку принятия одиночной награды
     /// </summary>
     public void SetAcceptState(bool canAccept, string status)
     {
@@ -61,7 +61,7 @@ public sealed class SingleRewardModalView : MonoBehaviour
             statusText.text = status ?? string.Empty;
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает окно одиночной награды на кнопки принять и закрыть
     /// </summary>
     private void OnEnable()
     {
@@ -72,7 +72,7 @@ public sealed class SingleRewardModalView : MonoBehaviour
             closeButton.onClick.AddListener(HandleCloseClicked);
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает окно одиночной награды от кнопок
     /// </summary>
     private void OnDisable()
     {
@@ -83,14 +83,14 @@ public sealed class SingleRewardModalView : MonoBehaviour
             closeButton.onClick.RemoveListener(HandleCloseClicked);
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сообщает, что игрок нажал принятие одиночной награды
     /// </summary>
     private void HandleAcceptClicked()
     {
         AcceptRequested?.Invoke();
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сообщает, что игрок нажал закрытие окна одиночной награды
     /// </summary>
     private void HandleCloseClicked()
     {

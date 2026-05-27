@@ -10,7 +10,7 @@ public sealed class CardHandView : MonoBehaviour
     [SerializeField] private CardView[] cardViews;
 
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает отображение руки на изменения карт и сразу перерисовывает руку
     /// </summary>
     private void OnEnable()
     {
@@ -18,7 +18,7 @@ public sealed class CardHandView : MonoBehaviour
         Refresh();
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает отображение руки от событий карт
     /// </summary>
     private void OnDisable()
     {
@@ -32,7 +32,7 @@ public sealed class CardHandView : MonoBehaviour
         Refresh(cardSystem != null ? cardSystem.Hand : null);
     }
     /// <summary>
-    /// Подписывается на события другой системы
+    /// Подписывает все видимые карты в руке на клики и удаление
     /// </summary>
     private void Subscribe()
     {
@@ -42,7 +42,7 @@ public sealed class CardHandView : MonoBehaviour
         cardSystem.OnHandChanged += Refresh;
     }
     /// <summary>
-    /// Отписывается от событий другой системы
+    /// Отписывает карты в руке от кликов и удаления
     /// </summary>
     private void Unsubscribe()
     {
@@ -80,7 +80,7 @@ public sealed class CardHandView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Передает выбранную игроком карту в систему карт
     /// </summary>
     private void HandleCardClicked(CardData card)
     {
@@ -88,7 +88,7 @@ public sealed class CardHandView : MonoBehaviour
             cardSystem.UseCard(card);
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Передает запрос игрока на удаление карты из руки
     /// </summary>
     private void HandleCardRemoveClicked(CardData card)
     {

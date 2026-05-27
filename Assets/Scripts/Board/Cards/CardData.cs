@@ -23,7 +23,7 @@ public sealed class CardData : ScriptableObject
     public UsageContext UsageContext => usageContext;
     public IReadOnlyList<EffectData> Effects => effects;
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Автоматически подставляет id карты по имени ассета, если id пустой
     /// </summary>
     private void OnValidate()
     {

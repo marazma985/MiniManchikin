@@ -16,7 +16,7 @@ public sealed class RewardView : MonoBehaviour
 
     public event Action<RewardData> Clicked;
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подставляет карту или предмет в один вариант награды
     /// </summary>
     public void SetReward(RewardData reward)
     {
@@ -24,7 +24,7 @@ public sealed class RewardView : MonoBehaviour
         Refresh();
     }
     /// <summary>
-    /// Включает подписки и обновляет отображение, когда объект становится активным
+    /// Подписывает вариант награды на нажатие
     /// </summary>
     private void OnEnable()
     {
@@ -34,7 +34,7 @@ public sealed class RewardView : MonoBehaviour
         Refresh();
     }
     /// <summary>
-    /// Отключает подписки и временные процессы, когда объект выключается
+    /// Отписывает вариант награды от нажатия
     /// </summary>
     private void OnDisable()
     {
@@ -63,7 +63,7 @@ public sealed class RewardView : MonoBehaviour
             button.interactable = currentReward != null;
     }
     /// <summary>
-    /// Обрабатывает действие игрока или событие другой системы
+    /// Сообщает, что игрок нажал на этот вариант награды
     /// </summary>
     private void HandleClick()
     {

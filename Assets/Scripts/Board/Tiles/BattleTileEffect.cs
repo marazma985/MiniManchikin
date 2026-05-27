@@ -7,7 +7,7 @@ public sealed class BattleTileEffect : IDeferredTileEffect
 {
     private BattleSystem battleSystem;
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Подключает battle-клетку к системе боя
     /// </summary>
     public void SetBattleSystem(BattleSystem newBattleSystem)
     {

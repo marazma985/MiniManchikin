@@ -15,7 +15,7 @@ public static class GameLaunchIntent
 
     public static GameLaunchMode Mode => mode;
     /// <summary>
-    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
+    /// Запоминает, должна ли игровая сцена начать новую партию или продолжить сохранение
     /// </summary>
     public static void Set(GameLaunchMode launchMode)
     {

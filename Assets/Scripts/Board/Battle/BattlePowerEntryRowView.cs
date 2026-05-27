@@ -34,7 +34,7 @@ public sealed class BattlePowerEntryRowView : MonoBehaviour
         EnsureReferences();
     }
     /// <summary>
-    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
+    /// Перестраивает строку силы в инспекторе после изменения настроек
     /// </summary>
     private void OnValidate()
     {
