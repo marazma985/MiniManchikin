@@ -83,16 +83,4 @@ public sealed class GameResultSystem : MonoBehaviour
         Debug.Log($"Game result triggered: {result}. Loading scene '{resultSceneName}'.");
         SceneManager.LoadScene(resultSceneName);
     }
-
-    [ContextMenu("Test Trigger Win Result")]
-    private void TestTriggerWinResult()
-    {
-        OpenResult(GameResultType.Win);
-    }
-
-    [ContextMenu("Test Trigger Lose Result")]
-    private void TestTriggerLoseResult()
-    {
-        OpenResult(GameResultType.Lose);
-    }
 }

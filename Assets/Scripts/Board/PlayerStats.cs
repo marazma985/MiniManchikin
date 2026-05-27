@@ -52,30 +52,6 @@ public sealed class PlayerStats : MonoBehaviour
         NotifyLevelChanged();
     }
 
-    [ContextMenu("Test Take 1 Damage")]
-    private void TestTakeOneDamage()
-    {
-        TakeDamage(1);
-    }
-
-    [ContextMenu("Test Heal 1")]
-    private void TestHealOne()
-    {
-        Heal(1);
-    }
-
-    [ContextMenu("Test Set Level 10")]
-    private void TestSetLevelTen()
-    {
-        SetLevel(10);
-    }
-
-    [ContextMenu("Test Take Lethal Damage")]
-    private void TestTakeLethalDamage()
-    {
-        TakeDamage(maxHp);
-    }
-
     private void Awake()
     {
         currentHp = Mathf.Clamp(currentHp, 0, maxHp);

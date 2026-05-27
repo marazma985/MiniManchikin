@@ -7,10 +7,6 @@ public sealed class PlayerInventory : MonoBehaviour
     private const int MaxEquippedItems = 3;
 
     [SerializeField] private List<ItemData> equippedItems = new List<ItemData>(MaxEquippedItems);
-    [SerializeField] private ItemData testDagger;
-    [SerializeField] private ItemData testHelmet;
-    [SerializeField] private ItemData testNecklace;
-    [SerializeField] private ItemData testWingedBoot;
 
     public event Action<IReadOnlyList<ItemData>> OnEquipmentChanged;
 
@@ -126,36 +122,6 @@ public sealed class PlayerInventory : MonoBehaviour
         }
 
         return false;
-    }
-
-    [ContextMenu("Test Equip Dagger")]
-    private void TestEquipDagger()
-    {
-        TryEquip(testDagger);
-    }
-
-    [ContextMenu("Test Equip Helmet")]
-    private void TestEquipHelmet()
-    {
-        TryEquip(testHelmet);
-    }
-
-    [ContextMenu("Test Equip Necklace")]
-    private void TestEquipNecklace()
-    {
-        TryEquip(testNecklace);
-    }
-
-    [ContextMenu("Test Equip Winged Boot")]
-    private void TestEquipWingedBoot()
-    {
-        TryEquip(testWingedBoot);
-    }
-
-    [ContextMenu("Test Clear Equipment")]
-    private void TestClearEquipment()
-    {
-        ClearEquipment();
     }
 
     private void OnEnable()

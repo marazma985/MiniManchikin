@@ -4943,10 +4943,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
   equippedItems: []
-  testDagger: {fileID: 11400000, guid: a29dd636a92141d5a9dc8e2281a8852b, type: 2}
-  testHelmet: {fileID: 11400000, guid: dcc0063b33c9423c85117e9ca8b5e52d, type: 2}
-  testNecklace: {fileID: 11400000, guid: 84169528f2a34673b3dd86a682253267, type: 2}
-  testWingedBoot: {fileID: 11400000, guid: 522f5e14f9ad4a8bb46aaaf4535a4158, type: 2}
 --- !u!1 &1294733950
 GameObject:
   m_ObjectHideFlags: 0
@@ -6120,10 +6116,6 @@ MonoBehaviour:
   turnSystem: {fileID: 1294733953}
   boardManager: {fileID: 1294733952}
   eventNotificationSystem: {fileID: 1294733958}
-  testSmallHeal: {fileID: 11400000, guid: eedd5d3b66e8c6b4e9525f0100b0c7d9, type: 2}
-  testExperiencePotion: {fileID: 11400000, guid: e17850df428640a8b7ce143de4944925, type: 2}
-  testTreasureMap: {fileID: 11400000, guid: ffd5f84fcf7e4e4dad8d0313eccc5c00, type: 2}
-  testMonsterContract: {fileID: 11400000, guid: c68fb2e255ca466da51bdd8e1df7651f, type: 2}
   hand:
   - {fileID: 11400000, guid: effe9367ff144e0bbb60234e1fb3bb5c, type: 2}
   - {fileID: 11400000, guid: ffd5f84fcf7e4e4dad8d0313eccc5c00, type: 2}

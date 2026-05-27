@@ -11,10 +11,6 @@ public sealed class CardSystem : MonoBehaviour
     [SerializeField] private TurnSystem turnSystem;
     [SerializeField] private BoardManager boardManager;
     [SerializeField] private EventNotificationSystem eventNotificationSystem;
-    [SerializeField] private CardData testSmallHeal;
-    [SerializeField] private CardData testExperiencePotion;
-    [SerializeField] private CardData testTreasureMap;
-    [SerializeField] private CardData testMonsterContract;
     [SerializeField] private List<CardData> hand = new List<CardData>(MaxHandSize);
 
     public event Action<IReadOnlyList<CardData>> OnHandChanged;
@@ -321,35 +317,5 @@ public sealed class CardSystem : MonoBehaviour
     {
         if (eventNotificationSystem != null)
             eventNotificationSystem.ShowEffectNotification(effect, status, displayValue);
-    }
-
-    [ContextMenu("Test Add Small Heal")]
-    private void TestAddSmallHeal()
-    {
-        AddCard(testSmallHeal);
-    }
-
-    [ContextMenu("Test Add Experience Potion")]
-    private void TestAddExperiencePotion()
-    {
-        AddCard(testExperiencePotion);
-    }
-
-    [ContextMenu("Test Add Treasure Map")]
-    private void TestAddTreasureMap()
-    {
-        AddCard(testTreasureMap);
-    }
-
-    [ContextMenu("Test Add Monster Contract")]
-    private void TestAddMonsterContract()
-    {
-        AddCard(testMonsterContract);
-    }
-
-    [ContextMenu("Test Clear Hand")]
-    private void TestClearHand()
-    {
-        SetHand(null);
     }
 }

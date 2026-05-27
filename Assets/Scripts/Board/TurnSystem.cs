@@ -38,30 +38,6 @@ public sealed class TurnSystem : MonoBehaviour
         return true;
     }
 
-    [ContextMenu("Test Move 3 Tiles")]
-    public void TestMoveThreeTiles()
-    {
-        TryMoveFixedSteps(3);
-    }
-
-    [ContextMenu("Test Move 2 Tiles")]
-    public void TestMoveTwoTiles()
-    {
-        TryMoveFixedSteps(2);
-    }
-
-    [ContextMenu("Test Move 1 Tiles")]
-    public void TestMoveOneTiles()
-    {
-        TryMoveFixedSteps(1);
-    }
-
-    [ContextMenu("Test Move 6 Tiles")]
-    public void TestMoveSixTiles()
-    {
-        TryMoveFixedSteps(6);
-    }
-
     public bool TryMoveFixedSteps(int steps)
     {
         if (!CanRoll || steps <= 0)
