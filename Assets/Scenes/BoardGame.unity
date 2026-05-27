@@ -12900,16 +12900,16 @@ MonoBehaviour:
   diceFolderRelativeToAssets: Art/Board/Dice
   diceFileNameFormat: DiceRoll_{0}.png
   boardAnimation:
-    Size: {x: 420, y: 420}
-    AnchoredPosition: {x: 0, y: 0}
+    Size: {x: 300, y: 300}
+    AnchoredPosition: {x: 0, y: 50}
     SortingOrder: 32760
   battleAnimation:
-    Size: {x: 360, y: 360}
-    AnchoredPosition: {x: 0, y: 0}
+    Size: {x: 230, y: 230}
+    AnchoredPosition: {x: -2, y: 70}
     SortingOrder: 32760
   escapeAnimation:
-    Size: {x: 360, y: 360}
-    AnchoredPosition: {x: 0, y: 0}
+    Size: {x: 230, y: 230}
+    AnchoredPosition: {x: -2, y: 70}
     SortingOrder: 32760
   fallbackDisplaySeconds: 1.2
 --- !u!1660057539 &9223372036854775807
