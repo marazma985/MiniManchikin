@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,11 +33,12 @@ public sealed class BattleSystem : MonoBehaviour
     private int temporaryCardPowerBonus;
     private int temporaryEscapeBonus;
     private bool battleDiceUsed;
+    private bool escapeRollInProgress;
 
     public event Action BattleStateChanged;
 
     public bool IsBattleActive => currentBattleData != null;
-    public bool CanUseBattleDice => IsBattleActive && phase == BattlePhase.WaitingForResolve && !battleDiceUsed && GetPowerDifference() >= 0 && GetPowerDifference() <= 6;
+    public bool CanUseBattleDice => IsBattleActive && phase == BattlePhase.WaitingForResolve && !battleDiceUsed && !escapeRollInProgress && GetPowerDifference() >= 0 && GetPowerDifference() <= 6;
 
     private enum BattlePhase
     {
@@ -96,6 +98,7 @@ public sealed class BattleSystem : MonoBehaviour
         temporaryCardPowerBonus = 0;
         temporaryEscapeBonus = 0;
         battleDiceUsed = false;
+        escapeRollInProgress = false;
         currentBattleData = CreateBattleData(enemy);
         phase = BattlePhase.WaitingForResolve;
         battleModalView.Show(currentBattleData);
@@ -136,15 +139,27 @@ public sealed class BattleSystem : MonoBehaviour
             return false;
         }
 
-        currentBattleDiceBonus = diceSystem.Roll();
+        var diceValue = diceSystem.Roll();
         battleDiceUsed = true;
+        StartCoroutine(ApplyBattleDiceAfterAnimation(diceValue));
+        BattleStateChanged?.Invoke();
+        return true;
+    }
+
+    private IEnumerator ApplyBattleDiceAfterAnimation(int diceValue)
+    {
+        yield return DiceRollAnimationPlayer.PlayGlobalRoutine(diceValue, DiceRollAnimationContext.Battle);
+
+        if (!IsBattleActive || currentEnemy == null)
+            yield break;
+
+        currentBattleDiceBonus = diceValue;
         currentBattleData = CreateBattleData(currentEnemy);
         battleModalView.Show(currentBattleData);
         RefreshActionButton();
         battleModalView.ShowTemporaryStatus($"Сила кубика: +{currentBattleDiceBonus}", TemporaryBattleStatusDuration);
         Debug.Log($"Battle dice used: +{currentBattleDiceBonus}. Player total is now {currentBattleData.PlayerTotalPower}.");
         BattleStateChanged?.Invoke();
-        return true;
     }
 
     public bool AddTemporaryCardPower(int value)
@@ -186,6 +201,9 @@ public sealed class BattleSystem : MonoBehaviour
     public void ResolveCurrentBattle()
     {
         if (currentBattleData == null)
+            return;
+
+        if (escapeRollInProgress)
             return;
 
         if (phase == BattlePhase.WaitingForEscapeRoll)
@@ -230,6 +248,18 @@ public sealed class BattleSystem : MonoBehaviour
     private void RollEscape()
     {
         var escapeRoll = diceSystem.Roll();
+        escapeRollInProgress = true;
+        StartCoroutine(ResolveEscapeAfterAnimation(escapeRoll));
+    }
+
+    private IEnumerator ResolveEscapeAfterAnimation(int escapeRoll)
+    {
+        yield return DiceRollAnimationPlayer.PlayGlobalRoutine(escapeRoll, DiceRollAnimationContext.Escape);
+
+        if (!IsBattleActive)
+            yield break;
+
+        escapeRollInProgress = false;
         var escapeBonus = GetEquipmentEffectBonus(EffectType.EscapeBonus) + temporaryEscapeBonus;
         var finalEscapeValue = escapeRoll + escapeBonus;
         if (finalEscapeValue >= EscapeSuccessRoll)
@@ -425,6 +455,7 @@ public sealed class BattleSystem : MonoBehaviour
         temporaryCardPowerBonus = 0;
         temporaryEscapeBonus = 0;
         battleDiceUsed = false;
+        escapeRollInProgress = false;
         BattleStateChanged?.Invoke();
 
         var onCompleted = battleCompleted;

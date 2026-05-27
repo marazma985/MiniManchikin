@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public sealed class TurnSystem : MonoBehaviour
@@ -89,7 +90,7 @@ public sealed class TurnSystem : MonoBehaviour
         var steps = diceSystem.Roll();
         DiceRolled?.Invoke(steps);
 
-        StartMovement(steps);
+        StartCoroutine(PlayDiceAnimationThenMove(steps));
     }
 
     private void StartTurnWithSteps(int steps)
@@ -102,6 +103,12 @@ public sealed class TurnSystem : MonoBehaviour
 
         SetState(TurnState.RollingDice);
         DiceRolled?.Invoke(steps);
+        StartMovement(steps);
+    }
+
+    private IEnumerator PlayDiceAnimationThenMove(int steps)
+    {
+        yield return DiceRollAnimationPlayer.PlayGlobalRoutine(steps);
         StartMovement(steps);
     }
 
