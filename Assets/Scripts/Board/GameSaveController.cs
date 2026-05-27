@@ -17,12 +17,13 @@ public sealed class GameSaveController : MonoBehaviour
     private readonly GameSaveContentResolver contentResolver = new GameSaveContentResolver();
     private bool isRestoring;
     private bool initialized;
+    private bool savingDisabled;
 
     public static GameSaveController Instance { get; private set; }
 
     public void SaveNow()
     {
-        if (isRestoring || !initialized)
+        if (savingDisabled || isRestoring || !initialized)
             return;
 
         GameSaveService.Save(CreateSaveData());
@@ -30,13 +31,19 @@ public sealed class GameSaveController : MonoBehaviour
 
     public void SaveNowEvenIfInitializing()
     {
-        if (isRestoring)
+        if (savingDisabled || isRestoring)
             return;
 
         if (!initialized && GameLaunchIntent.Mode == GameLaunchMode.Continue)
             return;
 
         GameSaveService.Save(CreateSaveData());
+    }
+
+    public void DeleteSaveAndDisableSaving()
+    {
+        savingDisabled = true;
+        GameSaveService.DeleteSave();
     }
 
     private void Awake()

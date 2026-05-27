@@ -197,6 +197,7 @@ public sealed class BattleSystem : MonoBehaviour
         else
         {
             battleModalView.Show(currentBattleData);
+            battleModalView.ClearStatus();
             RefreshActionButton();
         }
 

@@ -12954,6 +12954,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f50a9377e3e4b9ca091673e760807a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  diceFolderRelativeToStreamingAssets: Board/Dice
   diceFolderRelativeToAssets: Art/Board/Dice
   diceFileNameFormat: DiceRoll_{0}.png
   boardAnimation:

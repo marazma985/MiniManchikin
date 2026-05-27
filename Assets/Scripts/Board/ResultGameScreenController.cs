@@ -37,6 +37,7 @@ public sealed class ResultGameScreenController : MonoBehaviour
 
     private void LoadMainMenu()
     {
+        GameSaveService.DeleteSave();
         GameResultContext.Clear();
         SceneManager.LoadScene(mainMenuSceneName);
     }

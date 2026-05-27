@@ -11,6 +11,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
     private const int MaxDiceValue = 6;
     private const float DefaultFrameDelay = 1f / 60f;
 
+    [SerializeField] private string diceFolderRelativeToStreamingAssets = "Board/Dice";
     [SerializeField] private string diceFolderRelativeToAssets = "Art/Board/Dice";
     [SerializeField] private string diceFileNameFormat = "DiceRoll_{0}.png";
     [SerializeField] private DiceRollAnimationSettings boardAnimation = new DiceRollAnimationSettings
@@ -95,6 +96,8 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         else
         {
             Debug.LogWarning($"Dice animation file not found: {filePath}");
+            animationImage.texture = null;
+            animationImage.enabled = false;
             yield return new WaitForSecondsRealtime(fallbackDisplaySeconds);
         }
 
@@ -215,6 +218,10 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
     private string GetDiceFilePath(int result)
     {
         var fileName = string.Format(diceFileNameFormat, result);
+        var streamingPath = Path.Combine(Application.streamingAssetsPath, diceFolderRelativeToStreamingAssets, fileName);
+        if (File.Exists(streamingPath))
+            return streamingPath;
+
         return Path.Combine(Application.dataPath, diceFolderRelativeToAssets, fileName);
     }
 
@@ -270,6 +277,8 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         else
         {
             Debug.LogWarning("Dice animation PNG could not be loaded.");
+            animationImage.texture = null;
+            animationImage.enabled = false;
             yield return new WaitForSecondsRealtime(fallbackDisplaySeconds);
         }
 
