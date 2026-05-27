@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+/// <summary>
+/// Управляет постоянным проигрывателем фоновой музыки, плейлистом и громкостью через аудио миксер
+/// </summary>
 
 [DisallowMultipleComponent]
 public sealed class BackgroundMusicPlayer : MonoBehaviour
@@ -18,7 +21,9 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
     private int shuffledOrderPosition;
 
     public static BackgroundMusicPlayer Instance { get; private set; }
-
+    /// <summary>
+    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// </summary>
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -36,7 +41,9 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         if (playOnAwake)
             Play();
     }
-
+    /// <summary>
+    /// Каждый кадр проверяет ввод или обновляет визуальное состояние
+    /// </summary>
     private void Update()
     {
         if (!loopPlaylist || musicClips == null || musicClips.Length <= 1 || audioSource == null || audioSource.isPlaying || audioSource.clip == null)
@@ -44,13 +51,17 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
 
         PlayClip(GetNextClipIndex());
     }
-
+    /// <summary>
+    /// Освобождает подписки и временные ресурсы перед уничтожением объекта
+    /// </summary>
     private void OnDestroy()
     {
         if (Instance == this)
             Instance = null;
     }
-
+    /// <summary>
+    /// Запускает музыку, анимацию или другой визуальный процесс
+    /// </summary>
     public void Play()
     {
         if (musicClips == null || musicClips.Length == 0)
@@ -62,7 +73,9 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         currentClipIndex = shufflePlaylist ? GetNextShuffledClipIndex() : Mathf.Clamp(currentClipIndex, 0, musicClips.Length - 1);
         PlayClip(currentClipIndex);
     }
-
+    /// <summary>
+    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// </summary>
     private void ConfigureAudioSource()
     {
         audioSource = GetComponent<AudioSource>();
@@ -74,7 +87,9 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         audioSource.spatialBlend = 0f;
         audioSource.outputAudioMixerGroup = outputMixerGroup;
     }
-
+    /// <summary>
+    /// Запускает музыку, анимацию или другой визуальный процесс
+    /// </summary>
     private void PlayClip(int clipIndex)
     {
         if (audioSource == null || musicClips == null || musicClips.Length == 0)
@@ -90,7 +105,9 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         audioSource.Play();
         lastPlayedClipIndex = currentClipIndex;
     }
-
+    /// <summary>
+    /// Возвращает сохраненное или рассчитанное значение
+    /// </summary>
     private int GetNextClipIndex()
     {
         if (musicClips == null || musicClips.Length <= 1)
@@ -101,7 +118,9 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
 
         return GetNextShuffledClipIndex();
     }
-
+    /// <summary>
+    /// Достает следующий трек из перемешанного мешка плейлиста, чтобы треки не повторялись до конца мешка
+    /// </summary>
     private int GetNextShuffledClipIndex()
     {
         if (musicClips == null || musicClips.Length == 0)
@@ -115,7 +134,9 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
 
         return shuffledClipOrder[shuffledOrderPosition++];
     }
-
+    /// <summary>
+    /// Собирает новый перемешанный мешок индексов треков для следующего прохода плейлиста
+    /// </summary>
     private void RebuildShuffledOrder()
     {
         shuffledClipOrder.Clear();
@@ -139,7 +160,9 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
 
         shuffledOrderPosition = 0;
     }
-
+    /// <summary>
+    /// Читает сохраненную громкость музыки и применяет ее к параметру AudioMixer
+    /// </summary>
     private void ApplySavedMixerVolume()
     {
         if (outputMixerGroup == null || outputMixerGroup.audioMixer == null)

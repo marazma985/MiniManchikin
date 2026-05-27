@@ -3,11 +3,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+/// <summary>
+/// Отвечает за часть игровой логики или интерфейса, связанную с MainMenuCursor
+/// </summary>
 
 public sealed class MainMenuCursor : MonoBehaviour
 {
     private const string GlobalCursorPrefabPath = "UI/GlobalCursor";
-
+    /// <summary>
+    /// Перечисляет варианты cursor state, которые используются в игровой логике вместо строковых значений
+    /// </summary>
     public enum CursorState
     {
         Normal,
@@ -32,7 +37,9 @@ public sealed class MainMenuCursor : MonoBehaviour
     private readonly List<RaycastResult> pointerRaycastResults = new List<RaycastResult>();
     private EventSystem pointerEventSystem;
     private PointerEventData pointerEventData;
-
+    /// <summary>
+    /// Регистрирует данные или подписки, которые нужны другим системам
+    /// </summary>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void RegisterGlobalCursor()
     {
@@ -40,12 +47,16 @@ public sealed class MainMenuCursor : MonoBehaviour
         SceneManager.sceneLoaded += HandleSceneLoaded;
         EnsureGlobalCursor();
     }
-
+    /// <summary>
+    /// Обрабатывает событие от UI или другой игровой системы
+    /// </summary>
     private static void HandleSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
         EnsureGlobalCursor();
     }
-
+    /// <summary>
+    /// Гарантирует, что нужный объект, ресурс или ссылка существует
+    /// </summary>
     private static void EnsureGlobalCursor()
     {
         if (Instance != null || FindAnyObjectByType<MainMenuCursor>() != null)
@@ -60,7 +71,9 @@ public sealed class MainMenuCursor : MonoBehaviour
 
         Instantiate(cursorPrefab);
     }
-
+    /// <summary>
+    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// </summary>
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -74,7 +87,9 @@ public sealed class MainMenuCursor : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         ApplyState(CursorState.Normal);
     }
-
+    /// <summary>
+    /// Освобождает подписки и временные ресурсы перед уничтожением объекта
+    /// </summary>
     private void OnDestroy()
     {
         if (Instance == this)
@@ -82,12 +97,16 @@ public sealed class MainMenuCursor : MonoBehaviour
 
         Cursor.visible = true;
     }
-
+    /// <summary>
+    /// Реагирует на получение или потерю фокуса приложением
+    /// </summary>
     private void OnApplicationFocus(bool hasFocus)
     {
         Cursor.visible = !hasFocus ? true : false;
     }
-
+    /// <summary>
+    /// Каждый кадр проверяет ввод или обновляет визуальное состояние
+    /// </summary>
     private void Update()
     {
         FollowMouse();
@@ -96,20 +115,26 @@ public sealed class MainMenuCursor : MonoBehaviour
         if (!Input.GetMouseButton(0) && pressingButton)
             SetPressed(false);
     }
-
+    /// <summary>
+    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// </summary>
     public void SetHover(bool isHovering)
     {
         hoveringButton = isHovering;
         if (!pressingButton)
             ApplyState(hoveringButton ? CursorState.Hover : CursorState.Normal);
     }
-
+    /// <summary>
+    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// </summary>
     public void SetPressed(bool isPressed)
     {
         pressingButton = isPressed;
         ApplyState(pressingButton ? CursorState.Pressed : hoveringButton ? CursorState.Hover : CursorState.Normal);
     }
-
+    /// <summary>
+    /// Выполняет вспомогательную часть логики метода FollowMouse
+    /// </summary>
     private void FollowMouse()
     {
         if (canvas == null || cursorTransform == null)
@@ -120,7 +145,9 @@ public sealed class MainMenuCursor : MonoBehaviour
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, Input.mousePosition, camera, out var localPosition))
             cursorTransform.anchoredPosition = localPosition;
     }
-
+    /// <summary>
+    /// Обновляет отображение на основе текущих данных
+    /// </summary>
     private void RefreshAutomaticUiState()
     {
         var hoveringSelectable = IsPointerOverSelectable();
@@ -132,7 +159,9 @@ public sealed class MainMenuCursor : MonoBehaviour
         else if (Input.GetMouseButtonUp(0))
             SetPressed(false);
     }
-
+    /// <summary>
+    /// Выполняет вспомогательную часть логики метода IsPointerOverSelectable
+    /// </summary>
     private bool IsPointerOverSelectable()
     {
         var eventSystem = EventSystem.current;
@@ -159,7 +188,9 @@ public sealed class MainMenuCursor : MonoBehaviour
 
         return false;
     }
-
+    /// <summary>
+    /// Применяет изменение к игровому или визуальному состоянию
+    /// </summary>
     private void ApplyState(CursorState nextState)
     {
         state = nextState;
@@ -179,7 +210,9 @@ public sealed class MainMenuCursor : MonoBehaviour
         cursorImage.preserveAspect = true;
         cursorImage.raycastTarget = false;
     }
-
+    /// <summary>
+    /// Выбирает значение, подходящее для текущего состояния
+    /// </summary>
     private Sprite PickSprite(CursorState cursorState)
     {
         switch (cursorState)

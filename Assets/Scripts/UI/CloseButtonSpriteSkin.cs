@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+/// <summary>
+/// Отвечает за часть игровой логики или интерфейса, связанную с CloseButtonSpriteSkin
+/// </summary>
 
 public sealed class CloseButtonSpriteSkin : MonoBehaviour
 {
@@ -10,22 +13,30 @@ public sealed class CloseButtonSpriteSkin : MonoBehaviour
     [SerializeField] private CloseButtonSpriteSet spriteSet;
 
     private SmoothSpriteButton spriteTransition;
-
+    /// <summary>
+    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// </summary>
     private void Reset()
     {
         ResolveReferences();
     }
-
+    /// <summary>
+    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// </summary>
     private void OnEnable()
     {
         Apply();
     }
-
+    /// <summary>
+    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// </summary>
     private void OnValidate()
     {
         ResolveReferences();
     }
-
+    /// <summary>
+    /// Применяет изменение к игровому или визуальному состоянию
+    /// </summary>
     public static void ApplyTo(Button targetButton)
     {
         if (targetButton == null)
@@ -38,7 +49,9 @@ public sealed class CloseButtonSpriteSkin : MonoBehaviour
         skin.button = targetButton;
         skin.Apply();
     }
-
+    /// <summary>
+    /// Применяет изменение к игровому или визуальному состоянию
+    /// </summary>
     public void Apply()
     {
         ResolveReferences();
@@ -69,7 +82,9 @@ public sealed class CloseButtonSpriteSkin : MonoBehaviour
 
         spriteTransition.Configure(button, targetImage, spriteSet.NormalSprite, spriteSet.HighlightedSprite, spriteSet.PressedSprite, null, spriteSet.FadeDuration);
     }
-
+    /// <summary>
+    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// </summary>
     private void ResolveReferences()
     {
         if (button == null)
@@ -78,7 +93,9 @@ public sealed class CloseButtonSpriteSkin : MonoBehaviour
         if (targetImage == null)
             targetImage = GetComponent<Image>();
     }
-
+    /// <summary>
+    /// Скрывает нужное окно или визуальное состояние
+    /// </summary>
     private void HideTextMarkers()
     {
         var textComponents = GetComponentsInChildren<Text>(true);
@@ -89,7 +106,9 @@ public sealed class CloseButtonSpriteSkin : MonoBehaviour
                 text.gameObject.SetActive(false);
         }
     }
-
+    /// <summary>
+    /// Выполняет вспомогательную часть логики метода IsCloseMarker
+    /// </summary>
     private static bool IsCloseMarker(string value)
     {
         if (string.IsNullOrWhiteSpace(value))

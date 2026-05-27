@@ -1,5 +1,8 @@
 using System.Collections;
 using UnityEngine;
+/// <summary>
+/// Отвечает за часть игровой логики или интерфейса, связанную с SmoothSpriteRendererTransition
+/// </summary>
 
 public sealed class SmoothSpriteRendererTransition : MonoBehaviour
 {
@@ -13,25 +16,33 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
     private Coroutine spriteFade;
     private bool isPointerOver;
     private bool isPointerPressed;
-
+    /// <summary>
+    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// </summary>
     private void Reset()
     {
         mainRenderer = GetComponent<SpriteRenderer>();
     }
-
+    /// <summary>
+    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// </summary>
     private void OnEnable()
     {
         ConfigureRenderers();
         RefreshVisualState(true);
     }
-
+    /// <summary>
+    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// </summary>
     private void OnDisable()
     {
         StopTransition();
         isPointerOver = false;
         isPointerPressed = false;
     }
-
+    /// <summary>
+    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// </summary>
     public void Configure(SpriteRenderer sourceRenderer, SpriteRenderer sourceTransitionRenderer, Sprite normal, Sprite highlighted, Sprite pressed, float duration)
     {
         mainRenderer = sourceRenderer != null ? sourceRenderer : GetComponent<SpriteRenderer>();
@@ -44,14 +55,18 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         ConfigureRenderers();
         RefreshVisualState(true);
     }
-
+    /// <summary>
+    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// </summary>
     public void SetInteractionState(bool pointerOver, bool pointerPressed, bool instant)
     {
         isPointerOver = pointerOver;
         isPointerPressed = pointerPressed;
         RefreshVisualState(instant);
     }
-
+    /// <summary>
+    /// Останавливает текущий процесс, корутину или визуальный переход
+    /// </summary>
     public void StopTransition()
     {
         if (spriteFade != null)
@@ -69,7 +84,9 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         if (mainRenderer != null)
             mainRenderer.color = Color.white;
     }
-
+    /// <summary>
+    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// </summary>
     private void ConfigureRenderers()
     {
         if (mainRenderer != null)
@@ -87,12 +104,16 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
             transitionRenderer.sortingOrder = mainRenderer.sortingOrder + 1;
         }
     }
-
+    /// <summary>
+    /// Обновляет отображение на основе текущих данных
+    /// </summary>
     private void RefreshVisualState(bool instant)
     {
         SetSprite(GetStateSprite(), instant);
     }
-
+    /// <summary>
+    /// Возвращает сохраненное или рассчитанное значение
+    /// </summary>
     private Sprite GetStateSprite()
     {
         if (isPointerPressed)
@@ -103,12 +124,16 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
 
         return normalSprite;
     }
-
+    /// <summary>
+    /// Возвращает сохраненное или рассчитанное значение
+    /// </summary>
     private Sprite GetHighlightedSprite()
     {
         return highlightedSprite != null ? highlightedSprite : normalSprite;
     }
-
+    /// <summary>
+    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// </summary>
     private void SetSprite(Sprite targetSprite, bool instant)
     {
         if (mainRenderer == null || targetSprite == null)
@@ -140,7 +165,9 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         transitionRenderer.enabled = true;
         spriteFade = StartCoroutine(FadePreviousSprite());
     }
-
+    /// <summary>
+    /// Выполняет вспомогательную часть логики метода FadePreviousSprite
+    /// </summary>
     private IEnumerator FadePreviousSprite()
     {
         var elapsed = 0f;

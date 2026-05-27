@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+/// <summary>
+/// Строит и обновляет модальное окно настроек главного меню: разрешение, полноэкранный режим и громкость музыки
+/// </summary>
 
 public sealed class MainMenuSettingsModalView : MonoBehaviour
 {
@@ -25,14 +28,18 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
     private readonly List<Text> resolutionOptionTexts = new List<Text>();
     private Coroutine showRoutine;
     private int selectedResolutionIndex = 1;
-
+    /// <summary>
+    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// </summary>
     private void Awake()
     {
         EnsureUi();
         PopulateResolutionDropdown();
         Hide();
     }
-
+    /// <summary>
+    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// </summary>
     private void OnEnable()
     {
         if (openButton != null)
@@ -42,7 +49,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
             saveButton.onClick.AddListener(Save);
 
     }
-
+    /// <summary>
+    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// </summary>
     private void OnDisable()
     {
         if (openButton != null)
@@ -52,7 +61,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
             saveButton.onClick.RemoveListener(Save);
 
     }
-
+    /// <summary>
+    /// Показывает нужное окно или визуальное состояние игроку
+    /// </summary>
     public void Show()
     {
         if (settingsService != null)
@@ -76,7 +87,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
             showRoutine = StartCoroutine(ShowAfterBlurCapture());
         }
     }
-
+    /// <summary>
+    /// Скрывает нужное окно или визуальное состояние
+    /// </summary>
     public void Hide()
     {
         if (showRoutine != null)
@@ -91,7 +104,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         if (resolutionOptionsRoot != null)
             resolutionOptionsRoot.SetActive(false);
     }
-
+    /// <summary>
+    /// Сохраняет текущее состояние
+    /// </summary>
     private void Save()
     {
         if (settingsService != null)
@@ -105,7 +120,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
 
         Hide();
     }
-
+    /// <summary>
+    /// Выполняет вспомогательную часть логики метода PopulateResolutionDropdown
+    /// </summary>
     private void PopulateResolutionDropdown()
     {
         if (resolutionCaptionText == null || settingsService == null)
@@ -120,7 +137,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
 
         SetSelectedResolutionIndex(selectedResolutionIndex, false);
     }
-
+    /// <summary>
+    /// Гарантирует, что нужный объект, ресурс или ссылка существует
+    /// </summary>
     private void EnsureUi()
     {
         if (canvas == null)
@@ -135,6 +154,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         if (modalRoot != null)
             return;
 
+        // Модальное окно настроек собирается кодом, поэтому в сцене достаточно ссылок на арт и кнопку открытия
         var parent = canvas != null ? canvas.transform : transform;
         modalRoot = CreateRect("Settings Modal", parent, Vector2.zero, Vector2.zero).gameObject;
         Stretch(modalRoot.transform as RectTransform);
@@ -169,7 +189,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
 
         saveButton = CreateButton("Save Button", panel.transform, "Сохранить", new Vector2(0f, -175f), new Vector2(220f, 58f));
     }
-
+    /// <summary>
+    /// Показывает нужное окно или визуальное состояние игроку
+    /// </summary>
     private IEnumerator ShowAfterBlurCapture()
     {
         if (inputBlockerObject != null)
@@ -191,7 +213,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
 
         showRoutine = null;
     }
-
+    /// <summary>
+    /// Выполняет вспомогательную часть логики метода UpdateResolutionCaption
+    /// </summary>
     private void UpdateResolutionCaption(int optionIndex)
     {
         if (settingsService == null || resolutionCaptionText == null)
@@ -201,11 +225,14 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         resolutionCaptionText.text = settingsService.GetResolutionLabel(clampedIndex);
         resolutionCaptionText.color = Color.white;
     }
-
+    /// <summary>
+    /// Создает объект или набор данных, который дальше использует система
+    /// </summary>
     private void CreateResolutionSelector(Transform parent, Vector2 anchoredPosition, Vector2 size)
     {
         resolutionOptionTexts.Clear();
 
+        // Это собственный выпадающий список, потому что меню использует спрайтовые кнопки вместо стандартного Unity Dropdown
         resolutionButton = CreateButtonSurface("Resolution Dropdown", parent, new Color(0.16f, 0.24f, 0.28f, 0.96f), anchoredPosition, size);
         resolutionButton.onClick.AddListener(ToggleResolutionOptions);
 
@@ -233,6 +260,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
 
         for (var i = 0; i < 3; i++)
         {
+            // Индекс сохраняется в локальную переменную, чтобы каждая кнопка держала свое значение разрешения
             var optionIndex = i;
             var optionButton = CreateButtonSurface($"Resolution Option {i + 1}", optionsImage.transform, new Color(0.22f, 0.32f, 0.36f, 1f), Vector2.zero, new Vector2(size.x, 42f));
             var optionRect = optionButton.transform as RectTransform;
@@ -254,7 +282,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
 
         resolutionOptionsRoot.SetActive(false);
     }
-
+    /// <summary>
+    /// Выполняет вспомогательную часть логики метода ToggleResolutionOptions
+    /// </summary>
     private void ToggleResolutionOptions()
     {
         if (resolutionOptionsRoot == null)
@@ -269,7 +299,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
 
         resolutionOptionsRoot.SetActive(showOptions);
     }
-
+    /// <summary>
+    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// </summary>
     private void SetSelectedResolutionIndex(int optionIndex, bool hideOptions)
     {
         selectedResolutionIndex = settingsService != null
@@ -281,7 +313,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         if (hideOptions && resolutionOptionsRoot != null)
             resolutionOptionsRoot.SetActive(false);
     }
-
+    /// <summary>
+    /// Создает объект или набор данных, который дальше использует система
+    /// </summary>
     private static RectTransform CreateRect(string name, Transform parent, Vector2 anchoredPosition, Vector2 size)
     {
         var gameObject = new GameObject(name, typeof(RectTransform));
@@ -295,7 +329,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         rectTransform.sizeDelta = size;
         return rectTransform;
     }
-
+    /// <summary>
+    /// Создает объект или набор данных, который дальше использует система
+    /// </summary>
     private static Image CreateImage(string name, Transform parent, Sprite sprite)
     {
         var gameObject = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
@@ -308,7 +344,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         image.raycastTarget = false;
         return image;
     }
-
+    /// <summary>
+    /// Создает объект или набор данных, который дальше использует система
+    /// </summary>
     private static Text CreateText(string name, Transform parent, string value, Vector2 anchoredPosition, Vector2 size, int fontSize, TextAnchor alignment, FontStyle fontStyle)
     {
         var rectTransform = CreateRect(name, parent, anchoredPosition, size);
@@ -327,7 +365,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         text.resizeTextMaxSize = fontSize;
         return text;
     }
-
+    /// <summary>
+    /// Создает объект или набор данных, который дальше использует система
+    /// </summary>
     private static Toggle CreateToggle(string name, Transform parent, Vector2 anchoredPosition, Vector2 size)
     {
         var background = CreateImage(name, parent, null);
@@ -344,7 +384,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         toggle.graphic = checkmark;
         return toggle;
     }
-
+    /// <summary>
+    /// Создает объект или набор данных, который дальше использует система
+    /// </summary>
     private static Slider CreateSlider(string name, Transform parent, Vector2 anchoredPosition, Vector2 size)
     {
         var root = CreateRect(name, parent, anchoredPosition, size);
@@ -379,7 +421,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         slider.direction = Slider.Direction.LeftToRight;
         return slider;
     }
-
+    /// <summary>
+    /// Создает объект или набор данных, который дальше использует система
+    /// </summary>
     private static Button CreateButton(string name, Transform parent, string label, Vector2 anchoredPosition, Vector2 size)
     {
         var button = CreateButtonSurface(name, parent, new Color(0.58f, 0.16f, 0.86f, 1f), anchoredPosition, size);
@@ -388,7 +432,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         text.color = Color.white;
         return button;
     }
-
+    /// <summary>
+    /// Создает объект или набор данных, который дальше использует система
+    /// </summary>
     private static Button CreateButtonSurface(string name, Transform parent, Color color, Vector2 anchoredPosition, Vector2 size)
     {
         var image = CreateImage(name, parent, null);
@@ -401,7 +447,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         button.transition = Selectable.Transition.ColorTint;
         return button;
     }
-
+    /// <summary>
+    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// </summary>
     private static void SetCentered(RectTransform rectTransform, Vector2 anchoredPosition, Vector2 size)
     {
         rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
@@ -410,7 +458,9 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         rectTransform.anchoredPosition = anchoredPosition;
         rectTransform.sizeDelta = size;
     }
-
+    /// <summary>
+    /// Выполняет вспомогательную часть логики метода Stretch
+    /// </summary>
     private static void Stretch(RectTransform rectTransform)
     {
         rectTransform.anchorMin = Vector2.zero;
@@ -418,14 +468,18 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         rectTransform.offsetMin = Vector2.zero;
         rectTransform.offsetMax = Vector2.zero;
     }
-
+    /// <summary>
+    /// Выполняет вспомогательную часть логики метода StretchHorizontally
+    /// </summary>
     private static void StretchHorizontally(RectTransform rectTransform)
     {
         rectTransform.anchorMin = new Vector2(0f, 0.5f);
         rectTransform.anchorMax = new Vector2(1f, 0.5f);
         rectTransform.pivot = new Vector2(0.5f, 0.5f);
     }
-
+    /// <summary>
+    /// Возвращает сохраненное или рассчитанное значение
+    /// </summary>
     private static Font GetDefaultFont()
     {
         var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");

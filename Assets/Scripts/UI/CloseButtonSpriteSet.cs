@@ -1,4 +1,7 @@
 using UnityEngine;
+/// <summary>
+/// Отвечает за часть игровой логики или интерфейса, связанную с CloseButtonSpriteSet
+/// </summary>
 
 [CreateAssetMenu(menuName = "Board Game/UI/Close Button Sprite Set")]
 public sealed class CloseButtonSpriteSet : ScriptableObject

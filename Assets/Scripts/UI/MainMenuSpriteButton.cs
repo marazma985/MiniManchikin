@@ -1,8 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
+/// <summary>
+/// Отвечает за часть игровой логики или интерфейса, связанную с MainMenuSpriteButton
+/// </summary>
 
 public sealed class MainMenuSpriteButton : MonoBehaviour
 {
+    /// <summary>
+    /// Перечисляет варианты visual kind, которые используются в игровой логике вместо строковых значений
+    /// </summary>
     public enum VisualKind
     {
         Continue,
@@ -42,18 +48,24 @@ public sealed class MainMenuSpriteButton : MonoBehaviour
             ApplyVisual();
         }
     }
-
+    /// <summary>
+    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// </summary>
     private void Reset()
     {
         targetImage = GetComponent<Image>();
         button = GetComponent<Button>();
     }
-
+    /// <summary>
+    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// </summary>
     private void Awake()
     {
         ApplyVisual();
     }
-
+    /// <summary>
+    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// </summary>
     private void OnValidate()
     {
         if (targetImage == null)
@@ -63,7 +75,9 @@ public sealed class MainMenuSpriteButton : MonoBehaviour
 
         ApplyVisual();
     }
-
+    /// <summary>
+    /// Применяет изменение к игровому или визуальному состоянию
+    /// </summary>
     [ContextMenu("Apply Visual")]
     public void ApplyVisual()
     {
@@ -81,7 +95,9 @@ public sealed class MainMenuSpriteButton : MonoBehaviour
             button.interactable = kind != VisualKind.Continue || continueAvailable;
         }
     }
-
+    /// <summary>
+    /// Выбирает значение, подходящее для текущего состояния
+    /// </summary>
     private Sprite PickSprite()
     {
         switch (kind)
