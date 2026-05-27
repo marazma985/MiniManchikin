@@ -12,6 +12,10 @@ public sealed class SingleRewardSystem : MonoBehaviour
     private Action rewardCompleted;
     private Action<RewardData> rewardClaimed;
 
+    public event Action RewardStateChanged;
+
+    public RewardData CurrentReward => currentReward;
+
     public bool ShowReward(RewardData reward, Action onCompleted)
     {
         return ShowReward(reward, onCompleted, null);
@@ -36,7 +40,13 @@ public sealed class SingleRewardSystem : MonoBehaviour
         rewardClaimed = onClaimed;
         modalView.Show(reward);
         RefreshAcceptState();
+        RewardStateChanged?.Invoke();
         return true;
+    }
+
+    public bool RestoreReward(RewardData reward, Action onCompleted)
+    {
+        return ShowReward(reward, onCompleted, null);
     }
 
     private void OnEnable()
@@ -152,5 +162,6 @@ public sealed class SingleRewardSystem : MonoBehaviour
         rewardCompleted = null;
         rewardClaimed = null;
         onCompleted?.Invoke();
+        RewardStateChanged?.Invoke();
     }
 }

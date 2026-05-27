@@ -85,7 +85,12 @@ public sealed class BoardBackButtonController : MonoBehaviour
         RefreshVisualState(false);
 
         if (shouldLoadScene && !string.IsNullOrEmpty(targetSceneName))
+        {
+            if (GameSaveController.Instance != null)
+                GameSaveController.Instance.SaveNowEvenIfInitializing();
+
             SceneManager.LoadScene(targetSceneName);
+        }
     }
 
     private void ConfigureRenderers()

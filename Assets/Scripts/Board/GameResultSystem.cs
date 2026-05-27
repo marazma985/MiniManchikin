@@ -74,6 +74,7 @@ public sealed class GameResultSystem : MonoBehaviour
             return;
 
         resultTriggered = true;
+        GameSaveService.DeleteSave();
         GameResultContext.SetResult(result);
         Debug.Log($"Game result triggered: {result}. Loading scene '{resultSceneName}'.");
         SceneManager.LoadScene(resultSceneName);

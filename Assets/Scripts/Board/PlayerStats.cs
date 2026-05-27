@@ -44,6 +44,14 @@ public sealed class PlayerStats : MonoBehaviour
         NotifyLevelChanged();
     }
 
+    public void RestoreState(int restoredHp, int restoredLevel)
+    {
+        level = Mathf.Max(1, restoredLevel);
+        currentHp = Mathf.Clamp(restoredHp, 0, maxHp);
+        NotifyHpChanged();
+        NotifyLevelChanged();
+    }
+
     [ContextMenu("Test Take 1 Damage")]
     private void TestTakeOneDamage()
     {

@@ -57,6 +57,16 @@ public sealed class TileEffectSystem : MonoBehaviour
         effectsByTileType[tileType] = effect;
     }
 
+    public void RegisterSaveContent(GameSaveContentResolver resolver)
+    {
+        if (resolver == null)
+            return;
+
+        RegisterCards(resolver, possibleCommonCards);
+        RegisterCards(resolver, possibleRareCards);
+        RegisterItems(resolver, possibleRareItems);
+    }
+
     public void ResolveTile(BoardTile tile)
     {
         ResolveTile(tile, null);
@@ -206,5 +216,23 @@ public sealed class TileEffectSystem : MonoBehaviour
             rareEvents.Add(new EffectData(EffectType.HpRestore, 0, true));
             rareEvents.Add(new EffectData(EffectType.Level, 2));
         }
+    }
+
+    private static void RegisterCards(GameSaveContentResolver resolver, IReadOnlyList<CardData> cards)
+    {
+        if (cards == null)
+            return;
+
+        for (var i = 0; i < cards.Count; i++)
+            resolver.AddCard(cards[i]);
+    }
+
+    private static void RegisterItems(GameSaveContentResolver resolver, IReadOnlyList<ItemData> items)
+    {
+        if (items == null)
+            return;
+
+        for (var i = 0; i < items.Count; i++)
+            resolver.AddItem(items[i]);
     }
 }

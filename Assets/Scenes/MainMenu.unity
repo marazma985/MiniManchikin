@@ -695,6 +695,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuSceneLoader
   button: {fileID: 451411338}
   sceneName: BoardGame
+  launchMode: 0
+  spriteButton: {fileID: 451411336}
 --- !u!1 &672636691
 GameObject:
   m_ObjectHideFlags: 0
@@ -710,6 +712,7 @@ GameObject:
   - component: {fileID: 672636695}
   - component: {fileID: 672636694}
   - component: {fileID: 672636693}
+  - component: {fileID: 672636699}
   m_Layer: 0
   m_Name: Continue Button
   m_TagString: Untagged
@@ -829,6 +832,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &672636699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672636691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69dcfa04dba34f69a57803ac2ded01f8, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::MainMenuSceneLoader
+  button: {fileID: 672636696}
+  sceneName: BoardGame
+  launchMode: 1
+  spriteButton: {fileID: 672636694}
 --- !u!114 &672636697
 MonoBehaviour:
   m_ObjectHideFlags: 0

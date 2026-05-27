@@ -63,6 +63,22 @@ public sealed class PlayerInventory : MonoBehaviour
         NotifyEquipmentChanged();
     }
 
+    public void SetEquipment(IReadOnlyList<ItemData> items)
+    {
+        equippedItems.Clear();
+
+        if (items != null)
+        {
+            for (var i = 0; i < items.Count && equippedItems.Count < MaxEquippedItems; i++)
+            {
+                if (items[i] != null)
+                    equippedItems.Add(items[i]);
+            }
+        }
+
+        NotifyEquipmentChanged();
+    }
+
     public bool HasFreeSlot()
     {
         return equippedItems.Count < MaxEquippedItems;

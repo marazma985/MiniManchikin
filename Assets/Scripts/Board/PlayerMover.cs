@@ -47,6 +47,16 @@ public sealed class PlayerMover : MonoBehaviour
         boardManager = newBoardManager;
     }
 
+    public void SnapToCurrentTile()
+    {
+        if (boardManager == null || boardManager.CurrentTile == null)
+            return;
+
+        var tile = boardManager.CurrentTile;
+        transform.SetParent(tile.transform, true);
+        transform.localPosition = tileLocalOffset;
+    }
+
     private IEnumerator MoveStepsRoutine(int steps)
     {
         if (boardManager == null)

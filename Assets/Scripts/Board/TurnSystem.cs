@@ -10,6 +10,11 @@ public sealed class TurnSystem : MonoBehaviour
     [SerializeField] private TileEffectSystem tileEffectSystem;
     [SerializeField] private TurnState state = TurnState.WaitingForRoll;
 
+    private bool hasPendingBoardMove;
+    private int pendingBoardMoveSteps;
+    private bool pendingBoardMoveShowsDice;
+    private int pendingBoardMoveStartTileIndex;
+
     public event Action<TurnState> StateChanged;
     public event Action<int> DiceRolled;
     public event Action<BoardTile> PlayerMoveCompleted;
@@ -77,6 +82,50 @@ public sealed class TurnSystem : MonoBehaviour
         tileEffectSystem = newTileEffectSystem;
     }
 
+    public TurnSaveData CaptureSaveData()
+    {
+        return new TurnSaveData
+        {
+            state = (int)state,
+            hasPendingBoardMove = hasPendingBoardMove,
+            pendingBoardMoveSteps = pendingBoardMoveSteps,
+            pendingBoardMoveShowsDice = pendingBoardMoveShowsDice,
+            pendingBoardMoveStartTileIndex = pendingBoardMoveStartTileIndex
+        };
+    }
+
+    public void RestoreFromSave(TurnSaveData saveData, bool hasActiveModal)
+    {
+        if (saveData == null)
+        {
+            SetState(TurnState.WaitingForRoll);
+            return;
+        }
+
+        if (saveData.hasPendingBoardMove && !hasActiveModal)
+        {
+            hasPendingBoardMove = true;
+            pendingBoardMoveSteps = Mathf.Max(0, saveData.pendingBoardMoveSteps);
+            pendingBoardMoveShowsDice = saveData.pendingBoardMoveShowsDice;
+            pendingBoardMoveStartTileIndex = saveData.pendingBoardMoveStartTileIndex;
+            boardManager?.SetCurrentIndex(pendingBoardMoveStartTileIndex);
+            playerMover?.SnapToCurrentTile();
+            SetState(TurnState.RollingDice);
+            StartCoroutine(ResumePendingMove());
+            return;
+        }
+
+        if (hasActiveModal)
+            SetState((TurnState)Mathf.Clamp(saveData.state, (int)TurnState.WaitingForRoll, (int)TurnState.ResolvingTile));
+        else
+            SetState(TurnState.WaitingForRoll);
+    }
+
+    public void CompleteRestoredTileResolution()
+    {
+        EndTurn();
+    }
+
     private void StartTurn()
     {
         if (diceSystem == null || playerMover == null || boardManager == null || tileEffectSystem == null || playerMover.IsMoving)
@@ -88,6 +137,7 @@ public sealed class TurnSystem : MonoBehaviour
         SetState(TurnState.RollingDice);
 
         var steps = diceSystem.Roll();
+        SetPendingMove(steps, true);
         DiceRolled?.Invoke(steps);
 
         StartCoroutine(PlayDiceAnimationThenMove(steps));
@@ -102,6 +152,7 @@ public sealed class TurnSystem : MonoBehaviour
         }
 
         SetState(TurnState.RollingDice);
+        SetPendingMove(steps, false);
         DiceRolled?.Invoke(steps);
         StartMovement(steps);
     }
@@ -118,8 +169,18 @@ public sealed class TurnSystem : MonoBehaviour
         playerMover.MoveSteps(steps, OnPlayerMoveCompleted);
     }
 
+    private IEnumerator ResumePendingMove()
+    {
+        if (pendingBoardMoveShowsDice)
+            yield return DiceRollAnimationPlayer.PlayGlobalRoutine(pendingBoardMoveSteps);
+
+        StartMovement(pendingBoardMoveSteps);
+    }
+
     private void OnPlayerMoveCompleted()
     {
+        ClearPendingMove();
+
         var currentTile = boardManager != null ? boardManager.CurrentTile : null;
         PlayerMoveCompleted?.Invoke(currentTile);
 
@@ -135,9 +196,26 @@ public sealed class TurnSystem : MonoBehaviour
 
     private void EndTurn()
     {
+        ClearPendingMove();
         SetState(TurnState.TurnEnded);
         TurnEnded?.Invoke();
         SetState(TurnState.WaitingForRoll);
+    }
+
+    private void SetPendingMove(int steps, bool showsDice)
+    {
+        hasPendingBoardMove = true;
+        pendingBoardMoveSteps = Mathf.Max(0, steps);
+        pendingBoardMoveShowsDice = showsDice;
+        pendingBoardMoveStartTileIndex = boardManager != null ? boardManager.CurrentIndex : 0;
+    }
+
+    private void ClearPendingMove()
+    {
+        hasPendingBoardMove = false;
+        pendingBoardMoveSteps = 0;
+        pendingBoardMoveShowsDice = false;
+        pendingBoardMoveStartTileIndex = 0;
     }
 
     private void SetState(TurnState newState)

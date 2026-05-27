@@ -16,6 +16,10 @@ public sealed class RewardSystem : MonoBehaviour
     private readonly List<RewardData> currentRewards = new List<RewardData>(RewardOptionCount);
     private Action rewardAccepted;
 
+    public event Action RewardStateChanged;
+
+    public IReadOnlyList<RewardData> CurrentRewards => currentRewards;
+
     public bool ShowBattleRewards(Action onRewardAccepted)
     {
         if (rewardModalView == null)
@@ -40,7 +44,47 @@ public sealed class RewardSystem : MonoBehaviour
 
         rewardAccepted = onRewardAccepted;
         rewardModalView.Show(currentRewards);
+        RewardStateChanged?.Invoke();
         return true;
+    }
+
+    public bool RestoreBattleRewards(IReadOnlyList<RewardData> rewards, Action onRewardAccepted)
+    {
+        if (rewardModalView == null || rewards == null || rewards.Count == 0)
+            return false;
+
+        currentRewards.Clear();
+        for (var i = 0; i < rewards.Count; i++)
+        {
+            if (rewards[i] != null)
+                currentRewards.Add(rewards[i]);
+        }
+
+        if (currentRewards.Count == 0)
+            return false;
+
+        rewardAccepted = onRewardAccepted;
+        rewardModalView.Show(currentRewards);
+        RewardStateChanged?.Invoke();
+        return true;
+    }
+
+    public void RegisterSaveContent(GameSaveContentResolver resolver)
+    {
+        if (resolver == null)
+            return;
+
+        if (cardRewards != null)
+        {
+            for (var i = 0; i < cardRewards.Count; i++)
+                resolver.AddCard(cardRewards[i]);
+        }
+
+        if (itemRewards != null)
+        {
+            for (var i = 0; i < itemRewards.Count; i++)
+                resolver.AddItem(itemRewards[i]);
+        }
     }
 
     private void OnEnable()
@@ -167,6 +211,7 @@ public sealed class RewardSystem : MonoBehaviour
         var onAccepted = rewardAccepted;
         rewardAccepted = null;
         onAccepted?.Invoke();
+        RewardStateChanged?.Invoke();
     }
 
     private bool TryClaimReward(RewardData reward)

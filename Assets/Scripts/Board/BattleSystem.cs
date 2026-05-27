@@ -34,6 +34,10 @@ public sealed class BattleSystem : MonoBehaviour
     private int temporaryEscapeBonus;
     private bool battleDiceUsed;
     private bool escapeRollInProgress;
+    private bool hasPendingBattleDice;
+    private int pendingBattleDiceValue;
+    private bool hasPendingEscapeRoll;
+    private int pendingEscapeRollValue;
 
     public event Action BattleStateChanged;
 
@@ -99,6 +103,10 @@ public sealed class BattleSystem : MonoBehaviour
         temporaryEscapeBonus = 0;
         battleDiceUsed = false;
         escapeRollInProgress = false;
+        hasPendingBattleDice = false;
+        pendingBattleDiceValue = 0;
+        hasPendingEscapeRoll = false;
+        pendingEscapeRollValue = 0;
         currentBattleData = CreateBattleData(enemy);
         phase = BattlePhase.WaitingForResolve;
         battleModalView.Show(currentBattleData);
@@ -125,6 +133,91 @@ public sealed class BattleSystem : MonoBehaviour
         CompleteBattle();
     }
 
+    public BattleSaveData CaptureSaveData()
+    {
+        if (!IsBattleActive)
+            return null;
+
+        return new BattleSaveData
+        {
+            active = true,
+            enemyId = currentEnemy != null ? currentEnemy.EnemyId : string.Empty,
+            modifierIndexes = GetCurrentModifierIndexes(),
+            phase = (int)phase,
+            currentBattleDiceBonus = currentBattleDiceBonus,
+            temporaryCardPowerBonus = temporaryCardPowerBonus,
+            temporaryEscapeBonus = temporaryEscapeBonus,
+            battleDiceUsed = battleDiceUsed,
+            hasPendingBattleDice = hasPendingBattleDice,
+            pendingBattleDiceValue = pendingBattleDiceValue,
+            hasPendingEscapeRoll = hasPendingEscapeRoll,
+            pendingEscapeRollValue = pendingEscapeRollValue
+        };
+    }
+
+    public void RestoreFromSave(
+        BattleSaveData saveData,
+        GameSaveContentResolver resolver,
+        RewardSystem restoredRewardSystem,
+        IReadOnlyList<RewardSaveData> rewardOptions,
+        Action onBattleCompleted)
+    {
+        if (saveData == null || !saveData.active || resolver == null)
+            return;
+
+        var enemy = resolver.GetEnemy(saveData.enemyId);
+        if (enemy == null)
+        {
+            Debug.LogWarning($"Could not restore battle enemy '{saveData.enemyId}'.");
+            onBattleCompleted?.Invoke();
+            return;
+        }
+
+        battleCompleted = onBattleCompleted;
+        currentEnemy = enemy;
+        currentEnemyModifiers.Clear();
+        RestoreModifierIndexes(enemy, saveData.modifierIndexes);
+        currentBattleDiceBonus = saveData.currentBattleDiceBonus;
+        temporaryCardPowerBonus = saveData.temporaryCardPowerBonus;
+        temporaryEscapeBonus = saveData.temporaryEscapeBonus;
+        battleDiceUsed = saveData.battleDiceUsed;
+        hasPendingBattleDice = saveData.hasPendingBattleDice;
+        pendingBattleDiceValue = saveData.pendingBattleDiceValue;
+        hasPendingEscapeRoll = saveData.hasPendingEscapeRoll;
+        pendingEscapeRollValue = saveData.pendingEscapeRollValue;
+        escapeRollInProgress = saveData.hasPendingEscapeRoll;
+        phase = (BattlePhase)Mathf.Clamp(saveData.phase, (int)BattlePhase.WaitingForResolve, (int)BattlePhase.WaitingForClose);
+        currentBattleData = CreateBattleData(enemy);
+
+        if (phase == BattlePhase.WaitingForReward)
+        {
+            battleModalView.Hide();
+            RestoreBattleRewards(restoredRewardSystem, resolver, rewardOptions);
+        }
+        else
+        {
+            battleModalView.Show(currentBattleData);
+            RefreshActionButton();
+        }
+
+        if (hasPendingBattleDice)
+            StartCoroutine(ApplyBattleDiceAfterAnimation(pendingBattleDiceValue));
+
+        if (hasPendingEscapeRoll)
+            StartCoroutine(ResolveEscapeAfterAnimation(pendingEscapeRollValue));
+
+        BattleStateChanged?.Invoke();
+    }
+
+    public void RegisterSaveContent(GameSaveContentResolver resolver)
+    {
+        if (resolver == null || enemies == null)
+            return;
+
+        for (var i = 0; i < enemies.Count; i++)
+            resolver.AddEnemy(enemies[i]);
+    }
+
     public bool RollBattleDice()
     {
         if (!IsBattleActive)
@@ -141,6 +234,8 @@ public sealed class BattleSystem : MonoBehaviour
 
         var diceValue = diceSystem.Roll();
         battleDiceUsed = true;
+        hasPendingBattleDice = true;
+        pendingBattleDiceValue = diceValue;
         StartCoroutine(ApplyBattleDiceAfterAnimation(diceValue));
         BattleStateChanged?.Invoke();
         return true;
@@ -154,6 +249,8 @@ public sealed class BattleSystem : MonoBehaviour
             yield break;
 
         currentBattleDiceBonus = diceValue;
+        hasPendingBattleDice = false;
+        pendingBattleDiceValue = 0;
         currentBattleData = CreateBattleData(currentEnemy);
         battleModalView.Show(currentBattleData);
         RefreshActionButton();
@@ -249,6 +346,9 @@ public sealed class BattleSystem : MonoBehaviour
     {
         var escapeRoll = diceSystem.Roll();
         escapeRollInProgress = true;
+        hasPendingEscapeRoll = true;
+        pendingEscapeRollValue = escapeRoll;
+        BattleStateChanged?.Invoke();
         StartCoroutine(ResolveEscapeAfterAnimation(escapeRoll));
     }
 
@@ -260,6 +360,8 @@ public sealed class BattleSystem : MonoBehaviour
             yield break;
 
         escapeRollInProgress = false;
+        hasPendingEscapeRoll = false;
+        pendingEscapeRollValue = 0;
         var escapeBonus = GetEquipmentEffectBonus(EffectType.EscapeBonus) + temporaryEscapeBonus;
         var finalEscapeValue = escapeRoll + escapeBonus;
         if (finalEscapeValue >= EscapeSuccessRoll)
@@ -286,12 +388,17 @@ public sealed class BattleSystem : MonoBehaviour
         NotifyEffect(EffectType.Level, playerStats.Level - previousLevel, EffectNotificationStatus.Success);
         Debug.Log($"Battle won: {currentBattleData.PlayerName} defeated {currentBattleData.EnemyName}. Level is now {playerStats.Level}.");
 
-        if (rewardSystem != null && rewardSystem.ShowBattleRewards(HandleRewardAccepted))
+        if (rewardSystem != null)
         {
-            battleModalView.Hide();
             phase = BattlePhase.WaitingForReward;
-            BattleStateChanged?.Invoke();
-            return;
+            if (rewardSystem.ShowBattleRewards(HandleRewardAccepted))
+            {
+                battleModalView.Hide();
+                BattleStateChanged?.Invoke();
+                return;
+            }
+
+            phase = BattlePhase.WaitingForResolve;
         }
 
         CompleteBattle();
@@ -456,11 +563,70 @@ public sealed class BattleSystem : MonoBehaviour
         temporaryEscapeBonus = 0;
         battleDiceUsed = false;
         escapeRollInProgress = false;
+        hasPendingBattleDice = false;
+        pendingBattleDiceValue = 0;
+        hasPendingEscapeRoll = false;
+        pendingEscapeRollValue = 0;
         BattleStateChanged?.Invoke();
 
         var onCompleted = battleCompleted;
         battleCompleted = null;
         onCompleted?.Invoke();
+    }
+
+    private List<int> GetCurrentModifierIndexes()
+    {
+        var indexes = new List<int>();
+        if (currentEnemy == null || currentEnemy.Modifiers == null)
+            return indexes;
+
+        for (var i = 0; i < currentEnemyModifiers.Count; i++)
+        {
+            var modifier = currentEnemyModifiers[i];
+            for (var modifierIndex = 0; modifierIndex < currentEnemy.Modifiers.Count; modifierIndex++)
+            {
+                if (ReferenceEquals(currentEnemy.Modifiers[modifierIndex], modifier))
+                {
+                    indexes.Add(modifierIndex);
+                    break;
+                }
+            }
+        }
+
+        return indexes;
+    }
+
+    private void RestoreModifierIndexes(EnemyData enemy, IReadOnlyList<int> modifierIndexes)
+    {
+        if (enemy == null || enemy.Modifiers == null || modifierIndexes == null)
+            return;
+
+        for (var i = 0; i < modifierIndexes.Count; i++)
+        {
+            var modifierIndex = modifierIndexes[i];
+            if (modifierIndex >= 0 && modifierIndex < enemy.Modifiers.Count && enemy.Modifiers[modifierIndex] != null)
+                currentEnemyModifiers.Add(enemy.Modifiers[modifierIndex]);
+        }
+    }
+
+    private void RestoreBattleRewards(RewardSystem restoredRewardSystem, GameSaveContentResolver resolver, IReadOnlyList<RewardSaveData> rewardOptions)
+    {
+        if (restoredRewardSystem == null || resolver == null || rewardOptions == null)
+        {
+            CompleteBattle();
+            return;
+        }
+
+        var rewards = new List<RewardData>();
+        for (var i = 0; i < rewardOptions.Count; i++)
+        {
+            var reward = resolver.GetReward(rewardOptions[i]);
+            if (reward != null)
+                rewards.Add(reward);
+        }
+
+        if (!restoredRewardSystem.RestoreBattleRewards(rewards, HandleRewardAccepted))
+            CompleteBattle();
     }
 
     private void HandleRewardAccepted()
