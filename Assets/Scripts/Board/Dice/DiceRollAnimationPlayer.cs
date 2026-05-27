@@ -274,6 +274,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         outputTexture.filterMode = FilterMode.Bilinear;
         animationImage.texture = outputTexture;
 
+        var nextFrameTime = Time.realtimeSinceStartup;
         for (var i = 0; i < apngFile.Frames.Count; i++)
         {
             var frame = apngFile.Frames[i];
@@ -294,7 +295,12 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
             Destroy(frameTexture);
 
             var delay = frame.DelaySeconds > 0f ? frame.DelaySeconds : DefaultFrameDelay;
-            yield return new WaitForSecondsRealtime(delay);
+            nextFrameTime += delay;
+            var remainingDelay = nextFrameTime - Time.realtimeSinceStartup;
+            if (remainingDelay > 0f)
+                yield return new WaitForSecondsRealtime(remainingDelay);
+            else
+                yield return null;
 
             ApplyDispose(canvasPixels, apngFile.Width, apngFile.Height, frame, previousPixels);
         }
