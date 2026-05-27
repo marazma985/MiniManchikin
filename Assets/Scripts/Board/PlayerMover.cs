@@ -11,7 +11,9 @@ public sealed class PlayerMover : MonoBehaviour
     }
 
     [SerializeField] private BoardManager boardManager;
-    [SerializeField, Min(0.01f)] private float movementSpeed = 4f;
+    [SerializeField, HideInInspector] private float movementSpeed = 4f;
+    [SerializeField, Min(0.01f)] private float stepDuration = 0.3f;
+    [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
     [SerializeField, Min(0f)] private float stopDuration = 0.08f;
     [SerializeField] private Vector3 tileLocalOffset;
     [SerializeField] private MoveCompletedEvent onMoveCompleted = new MoveCompletedEvent();
@@ -22,6 +24,8 @@ public sealed class PlayerMover : MonoBehaviour
     public bool IsMoving => moveCoroutine != null;
     public BoardManager BoardManager => boardManager;
     public float MovementSpeed => movementSpeed;
+    public float StepDuration => stepDuration;
+    public AnimationCurve MovementCurve => movementCurve;
     public MoveCompletedEvent OnMoveCompleted => onMoveCompleted;
 
     public void MoveSteps(int steps)
@@ -70,11 +74,16 @@ public sealed class PlayerMover : MonoBehaviour
 
     private IEnumerator MoveToTile(BoardTile tile)
     {
+        var startPosition = transform.position;
         var targetPosition = tile.transform.TransformPoint(tileLocalOffset);
+        var elapsed = 0f;
 
-        while ((transform.position - targetPosition).sqrMagnitude > 0.0001f)
+        while (elapsed < stepDuration)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
+            elapsed += Time.deltaTime;
+            var normalizedTime = Mathf.Clamp01(elapsed / stepDuration);
+            var curveTime = movementCurve != null ? movementCurve.Evaluate(normalizedTime) : normalizedTime;
+            transform.position = Vector3.LerpUnclamped(startPosition, targetPosition, curveTime);
             yield return null;
         }
 
@@ -98,6 +107,14 @@ public sealed class PlayerMover : MonoBehaviour
 
     private void OnValidate()
     {
+        if (stepDuration <= 0f && movementSpeed > 0f)
+            stepDuration = 1f / movementSpeed;
+
+        stepDuration = Mathf.Max(0.01f, stepDuration);
+
+        if (movementCurve == null || movementCurve.length == 0)
+            movementCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+
         if (boardManager == null)
             boardManager = FindAnyObjectByType<BoardManager>();
 

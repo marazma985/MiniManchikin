@@ -4876,6 +4876,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMover
   boardManager: {fileID: 1294733952}
   movementSpeed: 4
+  stepDuration: 0.4
+  movementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.49926758
+      value: 0.50476074
+      inSlope: 3.0021937
+      outSlope: 3.0021937
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.038122468
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.9985359
+      value: 0.99761903
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   stopDuration: 0.08
   tileLocalOffset: {x: 0.85, y: -0.3, z: -0.25}
   onMoveCompleted:
