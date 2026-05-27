@@ -1,3 +1,4 @@
+// e
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за визуальное отображение окна боя и не принимает игровых решений
+// о
+/// Показывает игроку окно боя, кнопки боя, статусные подсказки и таблицу силы игрока и врага
 /// </summary>
 
 public sealed class BattleModalView : MonoBehaviour
@@ -33,7 +35,7 @@ public sealed class BattleModalView : MonoBehaviour
 
     public event Action ResolveRequested;
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Показывает окно боя с монстром, силой сторон и доступными действиями
     /// </summary>
     public void Show(BattleModalData data)
     {
@@ -52,7 +54,7 @@ public sealed class BattleModalView : MonoBehaviour
         gameObject.SetActive(true);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода UpdateState
+    /// Обновляет текст состояния боя и подпись главной кнопки
     /// </summary>
     public void UpdateState(string status, string buttonText)
     {
@@ -60,14 +62,14 @@ public sealed class BattleModalView : MonoBehaviour
         SetActionButtonText(buttonText);
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetActionButtonText(string buttonText)
     {
         SetText(actionButtonText, buttonText);
     }
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Показывает временную подсказку в окне боя
     /// </summary>
     public void ShowTemporaryStatus(string message, float duration)
     {
@@ -83,7 +85,7 @@ public sealed class BattleModalView : MonoBehaviour
         clearStatusRoutine = StartCoroutine(ClearStatusAfter(duration));
     }
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Показывает постоянную подсказку в окне боя
     /// </summary>
     public void ShowPersistentStatus(string message)
     {
@@ -91,7 +93,7 @@ public sealed class BattleModalView : MonoBehaviour
         SetText(statusText, message);
     }
     /// <summary>
-    /// Очищает текущее состояние и возвращает систему к пустому виду
+    /// Очищает текст подсказки в окне боя
     /// </summary>
     public void ClearStatus()
     {
@@ -99,7 +101,7 @@ public sealed class BattleModalView : MonoBehaviour
         SetText(statusText, string.Empty);
     }
     /// <summary>
-    /// Скрывает нужное окно или визуальное состояние
+    /// Закрывает окно боя и очищает его временные подсказки
     /// </summary>
     public void Hide()
     {
@@ -107,7 +109,7 @@ public sealed class BattleModalView : MonoBehaviour
         gameObject.SetActive(false);
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -115,7 +117,7 @@ public sealed class BattleModalView : MonoBehaviour
             resolveButton.onClick.AddListener(HandleResolveClicked);
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -125,14 +127,14 @@ public sealed class BattleModalView : MonoBehaviour
             resolveButton.onClick.RemoveListener(HandleResolveClicked);
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleResolveClicked()
     {
         ResolveRequested?.Invoke();
     }
     /// <summary>
-    /// Очищает текущее состояние и возвращает систему к пустому виду
+    /// Очищает данные или визуальное состояние этого элемента
     /// </summary>
     private IEnumerator ClearStatusAfter(float duration)
     {
@@ -141,7 +143,7 @@ public sealed class BattleModalView : MonoBehaviour
         SetText(statusText, string.Empty);
     }
     /// <summary>
-    /// Останавливает текущий процесс, корутину или визуальный переход
+    /// Останавливает текущий процесс или анимацию
     /// </summary>
     private void StopClearStatusRoutine()
     {
@@ -152,7 +154,7 @@ public sealed class BattleModalView : MonoBehaviour
         clearStatusRoutine = null;
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     private static void SetText(TextMeshProUGUI text, string value)
     {
@@ -160,7 +162,7 @@ public sealed class BattleModalView : MonoBehaviour
             text.text = value;
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     private static void SetImage(Image image, Sprite sprite)
     {
@@ -171,7 +173,7 @@ public sealed class BattleModalView : MonoBehaviour
         image.enabled = sprite != null;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода RenderPowerEntries
+    /// Заполняет список строк, из которых складывается сила игрока или монстра
     /// </summary>
     private static void RenderPowerEntries(
         IReadOnlyList<BattlePowerEntry> entries,
@@ -217,7 +219,7 @@ public sealed class BattleModalView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода RenderTotal
+    /// Показывает итоговую силу в нижней строке расчета
     /// </summary>
     private static void RenderTotal(string label, int value, BattlePowerTotalRowView totalRow, TextMeshProUGUI fallbackText)
     {
@@ -241,7 +243,7 @@ public sealed class BattleModalView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Настраивает контейнер строк силы, чтобы новые строки выравнивались как нужно окну боя
     /// </summary>
     private static void ConfigurePowerListRoot(Transform listRoot, TextAnchor childAlignment)
     {
@@ -258,7 +260,7 @@ public sealed class BattleModalView : MonoBehaviour
         layoutGroup.childForceExpandHeight = false;
     }
     /// <summary>
-    /// Формирует текст для отображения или вывода в лог
+    /// Собирает строки силы в один многострочный текст для старой версии окна боя
     /// </summary>
     private static string FormatEntries(IReadOnlyList<BattlePowerEntry> entries)
     {

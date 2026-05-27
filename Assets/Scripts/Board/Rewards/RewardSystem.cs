@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Генерирует варианты наград после боя, показывает окно выбора, восстанавливает награды и выдает выбранный приз
+/// Создает варианты наград после боя и выдает выбранную награду игроку
 /// </summary>
 
 public sealed class RewardSystem : MonoBehaviour
@@ -23,7 +23,7 @@ public sealed class RewardSystem : MonoBehaviour
 
     public IReadOnlyList<RewardData> CurrentRewards => currentRewards;
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Показывает игроку несколько наград после победы в бою
     /// </summary>
     public bool ShowBattleRewards(Action onRewardAccepted)
     {
@@ -34,7 +34,7 @@ public sealed class RewardSystem : MonoBehaviour
         }
 
         currentRewards.Clear();
-        // Конкретные варианты награды генерируются один раз и сохраняются, поэтому Продолжить показывает тот же набор
+        // Варианты награды создаются один раз и сохраняются, чтобы после Продолжить игрок видел тот же выбор
         for (var i = 0; i < RewardOptionCount; i++)
         {
             var reward = CreateRandomReward();
@@ -54,7 +54,7 @@ public sealed class RewardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Восстанавливает состояние из сохраненных данных
+    /// Возвращает на экран те же награды после продолжения сохранения
     /// </summary>
     public bool RestoreBattleRewards(IReadOnlyList<RewardData> rewards, Action onRewardAccepted)
     {
@@ -77,7 +77,7 @@ public sealed class RewardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Регистрирует данные или подписки, которые нужны другим системам
+    /// Передает системе сохранений данные, которые можно будет найти по id
     /// </summary>
     public void RegisterSaveContent(GameSaveContentResolver resolver)
     {
@@ -97,7 +97,7 @@ public sealed class RewardSystem : MonoBehaviour
         }
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -108,7 +108,7 @@ public sealed class RewardSystem : MonoBehaviour
         }
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -119,14 +119,14 @@ public sealed class RewardSystem : MonoBehaviour
         }
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Выбирает случайную награду из доступных карт и предметов
     /// </summary>
     private RewardData CreateRandomReward()
     {
         var hasCards = HasAnyCardReward();
         var hasItems = HasAnyItemReward();
 
-        // Пулы карт и предметов настраиваются независимо, поэтому случайный выбор сначала проверяет какие пулы доступны
+        // Карты и предметы могут быть настроены отдельно, поэтому сначала проверяется что вообще доступно
         if (!hasCards && !hasItems)
             return null;
 
@@ -136,21 +136,21 @@ public sealed class RewardSystem : MonoBehaviour
         return hasCards ? CreateRandomCardReward() : CreateRandomItemReward();
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает случайную награду-карту после победы
     /// </summary>
     private RewardData CreateRandomCardReward()
     {
         return RewardData.FromCard(GetRandomCardReward());
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает случайную награду-предмет после победы
     /// </summary>
     private RewardData CreateRandomItemReward()
     {
         return RewardData.FromItem(GetRandomItemReward());
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Выбирает случайную карту для награды
     /// </summary>
     private CardData GetRandomCardReward()
     {
@@ -167,7 +167,7 @@ public sealed class RewardSystem : MonoBehaviour
         return validCards.Count == 0 ? null : validCards[UnityEngine.Random.Range(0, validCards.Count)];
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Выбирает случайный предмет для награды
     /// </summary>
     private ItemData GetRandomItemReward()
     {
@@ -184,7 +184,7 @@ public sealed class RewardSystem : MonoBehaviour
         return validItems.Count == 0 ? null : validItems[UnityEngine.Random.Range(0, validItems.Count)];
     }
     /// <summary>
-    /// Проверяет, есть ли нужное состояние или данные
+    /// Проверяет, есть ли хотя бы одна карта, которую можно выдать как награду
     /// </summary>
     private bool HasAnyCardReward()
     {
@@ -200,7 +200,7 @@ public sealed class RewardSystem : MonoBehaviour
         return false;
     }
     /// <summary>
-    /// Проверяет, есть ли нужное состояние или данные
+    /// Проверяет, есть ли хотя бы один предмет, который можно выдать как награду
     /// </summary>
     private bool HasAnyItemReward()
     {
@@ -216,7 +216,7 @@ public sealed class RewardSystem : MonoBehaviour
         return false;
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleRewardSelected(RewardData reward)
     {
@@ -226,7 +226,7 @@ public sealed class RewardSystem : MonoBehaviour
         CompleteRewardFlow();
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleCloseRequested()
     {
@@ -234,7 +234,7 @@ public sealed class RewardSystem : MonoBehaviour
         CompleteRewardFlow();
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода CompleteRewardFlow
+    /// Закрывает награду и возвращает игру к следующему ходу
     /// </summary>
     private void CompleteRewardFlow()
     {
@@ -249,7 +249,7 @@ public sealed class RewardSystem : MonoBehaviour
         RewardStateChanged?.Invoke();
     }
     /// <summary>
-    /// Пытается выполнить действие и возвращает, получилось ли это сделать
+    /// Пытается забрать выбранную награду и показать причину, если это невозможно
     /// </summary>
     private bool TryClaimReward(RewardData reward)
     {
@@ -281,7 +281,7 @@ public sealed class RewardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Сообщает подписчикам, что состояние изменилось
+    /// Показывает подсказку о том, что награду нельзя забрать или эффект сработал
     /// </summary>
     private void NotifyEffect(EffectType effectType, int value, EffectNotificationStatus status)
     {
@@ -289,7 +289,7 @@ public sealed class RewardSystem : MonoBehaviour
             eventNotificationSystem.ShowEffectNotification(effectType, value, status);
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {

@@ -2,13 +2,13 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 /// <summary>
-/// Отвечает за механику или визуал кубика, связанные с DiceSystem
+/// Выдает случайное число от 1 до 6 и сообщает игре результат броска
 /// </summary>
 
 public sealed class DiceSystem : MonoBehaviour
 {
     /// <summary>
-    /// Отвечает за механику или визуал кубика, связанные с DiceRolledEvent
+    /// Событие, которое передает игре выпавшее число кубика
     /// </summary>
     [Serializable]
     public sealed class DiceRolledEvent : UnityEvent<int>
@@ -19,7 +19,7 @@ public sealed class DiceSystem : MonoBehaviour
 
     public DiceRolledEvent OnDiceRolled => onDiceRolled;
     /// <summary>
-    /// Выполняет бросок кубика или запускает связанную с ним логику
+    /// Бросает кубик от 1 до 6 и сообщает сцене выпавшее число
     /// </summary>
     public int Roll()
     {

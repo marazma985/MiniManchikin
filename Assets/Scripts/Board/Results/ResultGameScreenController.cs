@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за завершение партии и экран результата, связанные с ResultGameScreenController
+/// Показывает картинку победы или поражения и возвращает игрока в главное меню
 /// </summary>
 
 public sealed class ResultGameScreenController : MonoBehaviour
@@ -14,7 +14,7 @@ public sealed class ResultGameScreenController : MonoBehaviour
     [SerializeField] private string mainMenuSceneName = "MainMenu";
 
     /// <summary>
-    /// Показывает картинку результата и подписывает кнопку возврата в главное меню
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -24,7 +24,7 @@ public sealed class ResultGameScreenController : MonoBehaviour
             mainMenuButton.onClick.AddListener(LoadMainMenu);
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -32,7 +32,7 @@ public sealed class ResultGameScreenController : MonoBehaviour
             mainMenuButton.onClick.RemoveListener(LoadMainMenu);
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Подставляет картинку победы или поражения на финальном экране
     /// </summary>
     private void ApplyResultImage()
     {
@@ -45,7 +45,7 @@ public sealed class ResultGameScreenController : MonoBehaviour
         resultImage.preserveAspect = true;
     }
     /// <summary>
-    /// Загружает данные или сцену
+    /// Возвращает игрока в главное меню
     /// </summary>
     private void LoadMainMenu()
     {

@@ -1,12 +1,12 @@
 using UnityEngine;
 /// <summary>
-/// Отвечает за клетки поля и их эффекты, связанные с HealTileEffect
+/// Эффект лечебной клетки, который сообщает о попадании на клетку лечения
 /// </summary>
 
 public sealed class HealTileEffect : ITileEffect
 {
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     public void Resolve(BoardTile tile)
     {

@@ -1,12 +1,12 @@
 /// <summary>
-/// Отвечает за завершение партии и экран результата, связанные с GameResultContext
+/// Передает результат партии из игровой сцены на финальный экран
 /// </summary>
 public static class GameResultContext
 {
     public static GameResultType CurrentResult { get; private set; } = GameResultType.Lose;
     public static bool HasResult { get; private set; }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public static void SetResult(GameResultType result)
     {
@@ -14,7 +14,7 @@ public static class GameResultContext
         HasResult = true;
     }
     /// <summary>
-    /// Очищает текущее состояние и возвращает систему к пустому виду
+    /// Очищает данные результата после выхода с финального экрана
     /// </summary>
     public static void Clear()
     {

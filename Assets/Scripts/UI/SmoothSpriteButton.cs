@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за часть игровой логики или интерфейса, связанную с SmoothSpriteButton
+/// Плавно меняет картинку UI-кнопки при наведении, нажатии или блокировке
 /// </summary>
 
 public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, ISelectHandler, IDeselectHandler
@@ -23,7 +23,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
     private bool isSelected;
     private bool wasInteractable;
     /// <summary>
-    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
     /// </summary>
     private void Reset()
     {
@@ -31,7 +31,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         targetImage = GetComponent<Image>();
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -40,7 +40,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         RefreshVisualState(true);
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -50,14 +50,14 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         isSelected = false;
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
         ResolveReferences();
     }
     /// <summary>
-    /// Обновляет визуальное состояние в конце кадра после работы остальных систем
+    /// Обновляет отображение в конце кадра, когда остальные системы уже сработали
     /// </summary>
     private void LateUpdate()
     {
@@ -67,7 +67,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Подключает UI-кнопку, ее спрайты и время плавной смены состояния
     /// </summary>
     public void Configure(Button sourceButton, Image sourceImage, Sprite normal, Sprite highlighted, Sprite pressed, Sprite disabled, float duration)
     {
@@ -83,7 +83,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         RefreshVisualState(true);
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetInteractionState(bool pointerOver, bool pointerPressed, bool selected, bool instant)
     {
@@ -93,7 +93,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         RefreshVisualState(instant);
     }
     /// <summary>
-    /// Останавливает текущий процесс, корутину или визуальный переход
+    /// Останавливает текущий процесс или анимацию
     /// </summary>
     public void StopTransition()
     {
@@ -113,7 +113,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
             targetImage.color = Color.white;
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -121,7 +121,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
@@ -130,7 +130,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -141,7 +141,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerUp(PointerEventData eventData)
     {
@@ -149,7 +149,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Реагирует на событие select
+    /// Отмечает UI-кнопку как выбранную через клавиатуру или EventSystem
     /// </summary>
     public void OnSelect(BaseEventData eventData)
     {
@@ -157,7 +157,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Реагирует на событие deselect
+    /// Снимает выбранное состояние с UI-кнопки
     /// </summary>
     public void OnDeselect(BaseEventData eventData)
     {
@@ -165,7 +165,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     private void ResolveReferences()
     {
@@ -176,7 +176,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
             targetImage = GetComponent<Image>();
     }
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Настраивает переходы стандартной Button, чтобы визуалом управлял этот скрипт
     /// </summary>
     private void ConfigureButton()
     {
@@ -190,7 +190,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
             targetImage.color = Color.white;
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Обновляет спрайт кнопки с учетом наведения, нажатия и блокировки
     /// </summary>
     private void RefreshVisualState(bool instant)
     {
@@ -203,7 +203,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         SetButtonSprite(GetStateSprite(), instant);
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Выбирает спрайт для текущего состояния кнопки
     /// </summary>
     private Sprite GetStateSprite()
     {
@@ -219,14 +219,14 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         return normalSprite;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает спрайт наведения или обычный спрайт, если hover-версии нет
     /// </summary>
     private Sprite GetHighlightedSprite()
     {
         return highlightedSprite != null ? highlightedSprite : normalSprite;
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     private void SetButtonSprite(Sprite targetSprite, bool instant)
     {
@@ -264,7 +264,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         spriteFade = StartCoroutine(FadePreviousSprite());
     }
     /// <summary>
-    /// Гарантирует, что нужный объект, ресурс или ссылка существует
+    /// Создает или находит то, без чего объект не сможет работать
     /// </summary>
     private void EnsureTransitionImage()
     {
@@ -291,7 +291,7 @@ public sealed class SmoothSpriteButton : MonoBehaviour, IPointerEnterHandler, IP
         transitionImage.enabled = false;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода FadePreviousSprite
+    /// Плавно скрывает прошлый спрайт кнопки после смены состояния
     /// </summary>
     private IEnumerator FadePreviousSprite()
     {

@@ -1,15 +1,15 @@
 using UnityEngine;
 /// <summary>
-/// Следит, чтобы объект фоновой музыки был создан до загрузки первой сцены и не дублировался между сценами
+/// Нужен, чтобы фоновая музыка появилась сама при запуске игры и продолжала работать при переходе между сценами
 /// </summary>
 
 public static class BackgroundMusicBootstrap
 {
     private const string PlayerPrefabPath = "Audio/BackgroundMusicPlayer";
-    /// <summary>
-    /// Проверяет наличие постоянного проигрывателя музыки и создает его из Resources при первом запуске игры
-    /// </summary>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    /// <summary>
+    /// Проверяет, что музыкальный проигрыватель уже есть, или создает его перед загрузкой сцены
+    /// </summary>
     private static void EnsureMusicPlayer()
     {
         if (BackgroundMusicPlayer.Instance != null || Object.FindAnyObjectByType<BackgroundMusicPlayer>() != null)

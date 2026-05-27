@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 /// <summary>
-/// Отвечает за базовую механику игрового поля, связанную с BoardBackButtonController
+/// Кнопка возврата с игрового поля в главное меню, которая перед выходом сохраняет текущую партию
 /// </summary>
 
 public sealed class BoardBackButtonController : MonoBehaviour
@@ -22,7 +22,7 @@ public sealed class BoardBackButtonController : MonoBehaviour
     private bool isPointerOver;
     private bool isPointerPressed;
     /// <summary>
-    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
     /// </summary>
     private void Reset()
     {
@@ -30,7 +30,7 @@ public sealed class BoardBackButtonController : MonoBehaviour
         anchorCamera = Camera.main;
     }
     /// <summary>
-    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// Готовит кнопку возврата в главное меню на игровой сцене
     /// </summary>
     private void Awake()
     {
@@ -44,14 +44,14 @@ public sealed class BoardBackButtonController : MonoBehaviour
         AnchorToCamera();
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
         RefreshVisualState(true);
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -62,7 +62,7 @@ public sealed class BoardBackButtonController : MonoBehaviour
         isPointerPressed = false;
     }
     /// <summary>
-    /// Каждый кадр проверяет ввод или обновляет визуальное состояние
+    /// Каждый кадр проверяет ввод игрока или обновляет отображение
     /// </summary>
     private void Update()
     {
@@ -106,7 +106,7 @@ public sealed class BoardBackButtonController : MonoBehaviour
         }
     }
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Настраивает спрайты кнопки выхода и слой, на котором она рисуется
     /// </summary>
     private void ConfigureRenderers()
     {
@@ -132,7 +132,7 @@ public sealed class BoardBackButtonController : MonoBehaviour
         spriteTransition.Configure(mainRenderer, transitionRenderer, normalSprite, hoverSprite, pressedSprite, fadeDuration);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода AnchorToCamera
+    /// Прикрепляет кнопку возврата к нужному месту экрана
     /// </summary>
     private void AnchorToCamera()
     {
@@ -149,7 +149,7 @@ public sealed class BoardBackButtonController : MonoBehaviour
         transform.position += delta;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода IsInteractionBlocked
+    /// Проверяет, можно ли сейчас нажимать кнопку выхода в меню
     /// </summary>
     private bool IsInteractionBlocked()
     {
@@ -168,7 +168,7 @@ public sealed class BoardBackButtonController : MonoBehaviour
         return false;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода IsPointerOverButton
+    /// Проверяет, наведена ли мышь на кнопку выхода в меню
     /// </summary>
     private bool IsPointerOverButton()
     {
@@ -184,7 +184,7 @@ public sealed class BoardBackButtonController : MonoBehaviour
         return mainRenderer.bounds.Contains(worldPosition);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода ResetInteractionState
+    /// Сбрасывает наведение и нажатие кнопки выхода
     /// </summary>
     private void ResetInteractionState()
     {
@@ -196,7 +196,7 @@ public sealed class BoardBackButtonController : MonoBehaviour
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Обновляет внешний вид кнопки выхода по наведению, нажатию и блокировке
     /// </summary>
     private void RefreshVisualState(bool instant)
     {

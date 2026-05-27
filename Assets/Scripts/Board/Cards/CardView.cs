@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за работу карт и логику, связанную с CardView
+/// Отдельная карта на экране, которую игрок видит в руке и может нажать
 /// </summary>
 
 public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -33,7 +33,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public CardData CurrentCard => currentCard;
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -48,7 +48,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         RefreshVisual();
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -63,7 +63,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         SetCardHover(false, true);
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetCard(CardData card)
     {
@@ -72,7 +72,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         RefreshVisual();
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Обновляет картинку, текст и кнопку удаления на одной карте
     /// </summary>
     private void RefreshVisual()
     {
@@ -93,7 +93,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         SetCardHover(hasCard && isPointerOver, true);
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleClick()
     {
@@ -101,7 +101,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
             Clicked?.Invoke(currentCard);
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleRemoveClick()
     {
@@ -109,7 +109,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
             RemoveClicked?.Invoke(currentCard);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -118,7 +118,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         SetCardHover(isPointerOver, false);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
@@ -127,7 +127,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         SetRemoveButtonVisible(false, false);
     }
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Настраивает крестик удаления карты и его плавную смену спрайтов
     /// </summary>
     private void ConfigureButtonVisuals()
     {
@@ -140,7 +140,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         }
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода IsPointerOverCard
+    /// Проверяет, наведена ли мышь именно на эту карту
     /// </summary>
     private bool IsPointerOverCard(Vector2 screenPosition)
     {
@@ -151,7 +151,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
                RectTransformUtility.RectangleContainsScreenPoint(cardRectTransform, screenPosition, GetEventCamera());
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает камеру, через которую UI проверяет наведение на карту
     /// </summary>
     private Camera GetEventCamera()
     {
@@ -164,7 +164,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         return parentCanvas.worldCamera;
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     private void SetCardHover(bool highlighted, bool instant)
     {
@@ -187,7 +187,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         cardHoverFade = StartCoroutine(FadeCardHover(targetAlpha));
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода FadeCardHover
+    /// Плавно показывает или скрывает подсветку карты при наведении
     /// </summary>
     private IEnumerator FadeCardHover(float targetAlpha)
     {
@@ -206,7 +206,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         cardHoverFade = null;
     }
     /// <summary>
-    /// Гарантирует, что нужный объект, ресурс или ссылка существует
+    /// Создает или находит то, без чего объект не сможет работать
     /// </summary>
     private void EnsureHoverOverlay()
     {
@@ -238,7 +238,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         SetHoverOverlayAlpha(0f);
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Подставляет спрайт подсветки поверх карты
     /// </summary>
     private void RefreshHoverOverlaySprite(Sprite sprite)
     {
@@ -251,7 +251,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         hoverOverlayImage.enabled = sprite != null;
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     private void SetHoverOverlayAlpha(float alpha)
     {
@@ -261,7 +261,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         hoverOverlayImage.color = new Color(1f, 1f, 1f, alpha);
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     private void SetRemoveButtonVisible(bool visible, bool instant)
     {
@@ -289,7 +289,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         removeButtonFade = StartCoroutine(FadeRemoveButton(visible ? 1f : 0f));
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода FadeRemoveButton
+    /// Плавно показывает или скрывает крестик удаления карты
     /// </summary>
     private IEnumerator FadeRemoveButton(float targetAlpha)
     {
@@ -308,7 +308,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         removeButtonFade = null;
     }
     /// <summary>
-    /// Останавливает текущий процесс, корутину или визуальный переход
+    /// Останавливает текущий процесс или анимацию
     /// </summary>
     private void StopRemoveButtonFade()
     {
@@ -319,7 +319,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         removeButtonFade = null;
     }
     /// <summary>
-    /// Останавливает текущий процесс, корутину или визуальный переход
+    /// Останавливает текущий процесс или анимацию
     /// </summary>
     private void StopCardHoverFade()
     {

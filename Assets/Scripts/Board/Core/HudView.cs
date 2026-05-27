@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за базовую механику игрового поля, связанную с HudView
+/// Обновляет интерфейс игрока на поле: сердца, уровень, кнопку кубика и слоты предметов
 /// </summary>
 
 public sealed class HudView : MonoBehaviour
@@ -17,7 +17,7 @@ public sealed class HudView : MonoBehaviour
     [SerializeField] private InventorySlotView[] inventorySlots;
 
     /// <summary>
-    /// Подписывается на системы игрока и обновляет весь HUD при включении
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -26,7 +26,7 @@ public sealed class HudView : MonoBehaviour
         RefreshAll();
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -34,7 +34,7 @@ public sealed class HudView : MonoBehaviour
         UnsubscribeSlots();
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetPlayerStats(PlayerStats newPlayerStats)
     {
@@ -47,7 +47,7 @@ public sealed class HudView : MonoBehaviour
         RefreshAll();
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetPlayerInventory(PlayerInventory newPlayerInventory)
     {
@@ -60,7 +60,7 @@ public sealed class HudView : MonoBehaviour
         RefreshSlots();
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Полностью обновляет HUD игрока: здоровье, уровень и предметы
     /// </summary>
     public void RefreshAll()
     {
@@ -77,7 +77,7 @@ public sealed class HudView : MonoBehaviour
         RefreshSlots();
     }
     /// <summary>
-    /// Подписывает компонент на события зависимых систем
+    /// Подписывается на события другой системы
     /// </summary>
     private void Subscribe()
     {
@@ -85,7 +85,7 @@ public sealed class HudView : MonoBehaviour
         SubscribeInventory();
     }
     /// <summary>
-    /// Подписывает компонент на события зависимых систем
+    /// Подписывается на события другой системы
     /// </summary>
     private void SubscribeStats()
     {
@@ -96,7 +96,7 @@ public sealed class HudView : MonoBehaviour
         playerStats.OnLevelChanged += UpdateLevel;
     }
     /// <summary>
-    /// Снимает подписки, чтобы не оставить устаревшие ссылки
+    /// Отписывается от событий другой системы
     /// </summary>
     private void Unsubscribe()
     {
@@ -104,7 +104,7 @@ public sealed class HudView : MonoBehaviour
         UnsubscribeInventory();
     }
     /// <summary>
-    /// Снимает подписки, чтобы не оставить устаревшие ссылки
+    /// Отписывается от событий другой системы
     /// </summary>
     private void UnsubscribeStats()
     {
@@ -115,7 +115,7 @@ public sealed class HudView : MonoBehaviour
         playerStats.OnLevelChanged -= UpdateLevel;
     }
     /// <summary>
-    /// Подписывает компонент на события зависимых систем
+    /// Подписывается на события другой системы
     /// </summary>
     private void SubscribeInventory()
     {
@@ -125,7 +125,7 @@ public sealed class HudView : MonoBehaviour
         playerInventory.OnEquipmentChanged += UpdateEquipmentSlots;
     }
     /// <summary>
-    /// Снимает подписки, чтобы не оставить устаревшие ссылки
+    /// Отписывается от событий другой системы
     /// </summary>
     private void UnsubscribeInventory()
     {
@@ -135,7 +135,7 @@ public sealed class HudView : MonoBehaviour
         playerInventory.OnEquipmentChanged -= UpdateEquipmentSlots;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода UpdateHp
+    /// Обновляет сердечки здоровья игрока
     /// </summary>
     private void UpdateHp(int currentHp, int maxHp)
     {
@@ -155,7 +155,7 @@ public sealed class HudView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода UpdateLevel
+    /// Обновляет значок уровня игрока
     /// </summary>
     private void UpdateLevel(int newLevel)
     {
@@ -163,14 +163,14 @@ public sealed class HudView : MonoBehaviour
             levelText.text = $"LVL {newLevel}";
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Перерисовывает ячейки экипировки в HUD
     /// </summary>
     private void RefreshSlots()
     {
         UpdateEquipmentSlots(playerInventory != null ? playerInventory.GetEquippedItems() : null);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода UpdateEquipmentSlots
+    /// Раскладывает надетые предметы по ячейкам HUD
     /// </summary>
     private void UpdateEquipmentSlots(IReadOnlyList<ItemData> equippedItems)
     {
@@ -191,7 +191,7 @@ public sealed class HudView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Подписывает компонент на события зависимых систем
+    /// Подписывается на события другой системы
     /// </summary>
     private void SubscribeSlots()
     {
@@ -205,7 +205,7 @@ public sealed class HudView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Снимает подписки, чтобы не оставить устаревшие ссылки
+    /// Отписывается от событий другой системы
     /// </summary>
     private void UnsubscribeSlots()
     {
@@ -219,7 +219,7 @@ public sealed class HudView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleInventorySlotRemoveClicked(ItemData item)
     {

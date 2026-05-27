@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 /// <summary>
-/// Отвечает за клетки поля и их эффекты, связанные с RareTileEffect
+/// Эффект редкой клетки, который выбирает более особое событие
 /// </summary>
 
 public sealed class RareTileEffect : IDeferredTileEffect
@@ -10,7 +10,7 @@ public sealed class RareTileEffect : IDeferredTileEffect
     private EffectResolver effectResolver;
     private IReadOnlyList<EffectData> rareEvents;
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Подключает список редких эффектов, которые может выдать rare-клетка
     /// </summary>
     public void Configure(EffectResolver newEffectResolver, IReadOnlyList<EffectData> newRareEvents)
     {
@@ -18,14 +18,14 @@ public sealed class RareTileEffect : IDeferredTileEffect
         rareEvents = newRareEvents;
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     public void Resolve(BoardTile tile)
     {
         Resolve(tile, null);
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     public void Resolve(BoardTile tile, Action onResolved)
     {
@@ -40,7 +40,7 @@ public sealed class RareTileEffect : IDeferredTileEffect
         effectResolver.TryApply(effect, "Rare event tile", onResolved);
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Выбирает случайный редкий эффект для rare-клетки
     /// </summary>
     private EffectData GetRandomEffect()
     {

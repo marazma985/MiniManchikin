@@ -1,6 +1,6 @@
 using UnityEngine;
 /// <summary>
-/// Отвечает за часть игровой логики или интерфейса, связанную с CloseButtonSpriteSet
+/// Набор картинок для крестика закрытия: обычное состояние, наведение и нажатие
 /// </summary>
 
 [CreateAssetMenu(menuName = "Board Game/UI/Close Button Sprite Set")]

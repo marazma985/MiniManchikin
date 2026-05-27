@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за часть системы боя, связанную с BattlePowerEntryRowView
+/// Визуальная строка в окне боя, которая показывает один источник силы и его значение
 /// </summary>
 
 public sealed class BattlePowerEntryRowView : MonoBehaviour
@@ -14,7 +14,7 @@ public sealed class BattlePowerEntryRowView : MonoBehaviour
     [SerializeField] private float fontSize = 22f;
 
     /// <summary>
-    /// Заполняет строку детализации силы названием источника и его числовым значением
+    /// Заполняет визуальный элемент свежими данными перед показом игроку
     /// </summary>
     public void Bind(BattlePowerEntry entry)
     {
@@ -27,14 +27,14 @@ public sealed class BattlePowerEntryRowView : MonoBehaviour
             valueText.text = entry.Value.ToString();
     }
     /// <summary>
-    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// Готовит строку с названием бонуса и его числом в окне боя
     /// </summary>
     private void Awake()
     {
         EnsureReferences();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
@@ -42,7 +42,7 @@ public sealed class BattlePowerEntryRowView : MonoBehaviour
             backgroundImage = GetComponent<Image>();
     }
     /// <summary>
-    /// Гарантирует, что нужный объект, ресурс или ссылка существует
+    /// Создает или находит то, без чего объект не сможет работать
     /// </summary>
     private void EnsureReferences()
     {
@@ -65,7 +65,7 @@ public sealed class BattlePowerEntryRowView : MonoBehaviour
         ConfigureText(valueText, TextAlignmentOptions.MidlineRight);
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает текстовую ячейку для строки расчета силы
     /// </summary>
     private TextMeshProUGUI CreateText(string textObjectName, TextAlignmentOptions alignment)
     {
@@ -80,7 +80,7 @@ public sealed class BattlePowerEntryRowView : MonoBehaviour
         return text;
     }
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Настраивает текстовую ячейку строки силы: шрифт, цвет и выравнивание
     /// </summary>
     private void ConfigureText(TextMeshProUGUI text, TextAlignmentOptions alignment)
     {

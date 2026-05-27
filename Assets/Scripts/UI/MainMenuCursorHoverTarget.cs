@@ -1,14 +1,14 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 /// <summary>
-/// Отвечает за часть игровой логики или интерфейса, связанную с MainMenuCursorHoverTarget
+/// Сообщает игровому курсору, когда мышь наведена на кнопку или нажимает ее
 /// </summary>
 
 public sealed class MainMenuCursorHoverTarget : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     private bool hovering;
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -17,7 +17,7 @@ public sealed class MainMenuCursorHoverTarget : MonoBehaviour, IPointerEnterHand
             MainMenuCursor.Instance.SetHover(true);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
@@ -28,7 +28,7 @@ public sealed class MainMenuCursorHoverTarget : MonoBehaviour, IPointerEnterHand
         }
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -36,7 +36,7 @@ public sealed class MainMenuCursorHoverTarget : MonoBehaviour, IPointerEnterHand
             MainMenuCursor.Instance.SetPressed(true);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerUp(PointerEventData eventData)
     {

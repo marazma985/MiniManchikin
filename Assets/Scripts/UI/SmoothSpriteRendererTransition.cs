@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 /// <summary>
-/// Отвечает за часть игровой логики или интерфейса, связанную с SmoothSpriteRendererTransition
+/// Плавно меняет картинку кнопки, которая сделана через SpriteRenderer
 /// </summary>
 
 public sealed class SmoothSpriteRendererTransition : MonoBehaviour
@@ -17,14 +17,14 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
     private bool isPointerOver;
     private bool isPointerPressed;
     /// <summary>
-    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
     /// </summary>
     private void Reset()
     {
         mainRenderer = GetComponent<SpriteRenderer>();
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -32,7 +32,7 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         RefreshVisualState(true);
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -41,7 +41,7 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         isPointerPressed = false;
     }
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Подключает SpriteRenderer, его спрайты и время плавной смены состояния
     /// </summary>
     public void Configure(SpriteRenderer sourceRenderer, SpriteRenderer sourceTransitionRenderer, Sprite normal, Sprite highlighted, Sprite pressed, float duration)
     {
@@ -56,7 +56,7 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         RefreshVisualState(true);
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetInteractionState(bool pointerOver, bool pointerPressed, bool instant)
     {
@@ -65,7 +65,7 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         RefreshVisualState(instant);
     }
     /// <summary>
-    /// Останавливает текущий процесс, корутину или визуальный переход
+    /// Останавливает текущий процесс или анимацию
     /// </summary>
     public void StopTransition()
     {
@@ -85,7 +85,7 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
             mainRenderer.color = Color.white;
     }
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Создает второй SpriteRenderer для плавного исчезновения прошлого спрайта
     /// </summary>
     private void ConfigureRenderers()
     {
@@ -105,14 +105,14 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         }
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Обновляет спрайт объекта с учетом наведения, нажатия и блокировки
     /// </summary>
     private void RefreshVisualState(bool instant)
     {
         SetSprite(GetStateSprite(), instant);
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Выбирает спрайт для текущего состояния SpriteRenderer
     /// </summary>
     private Sprite GetStateSprite()
     {
@@ -125,14 +125,14 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         return normalSprite;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает hover-спрайт или обычный спрайт, если отдельного нет
     /// </summary>
     private Sprite GetHighlightedSprite()
     {
         return highlightedSprite != null ? highlightedSprite : normalSprite;
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     private void SetSprite(Sprite targetSprite, bool instant)
     {
@@ -166,7 +166,7 @@ public sealed class SmoothSpriteRendererTransition : MonoBehaviour
         spriteFade = StartCoroutine(FadePreviousSprite());
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода FadePreviousSprite
+    /// Плавно скрывает прошлый спрайт SpriteRenderer
     /// </summary>
     private IEnumerator FadePreviousSprite()
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Отвечает за базовую механику игрового поля, связанную с PlayerInventory
+/// Хранит надетые предметы игрока и считает бонусы, которые они дают
 /// </summary>
 
 public sealed class PlayerInventory : MonoBehaviour
@@ -16,7 +16,7 @@ public sealed class PlayerInventory : MonoBehaviour
     public int MaxItems => MaxEquippedItems;
     public int EquippedCount => equippedItems.Count;
     /// <summary>
-    /// Пытается выполнить действие и возвращает, получилось ли это сделать
+    /// Пытается надеть предмет, если в экипировке есть свободное место
     /// </summary>
     public bool TryEquip(ItemData item)
     {
@@ -38,7 +38,7 @@ public sealed class PlayerInventory : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода Unequip
+    /// Снимает предмет с игрока и обновляет инвентарь
     /// </summary>
     public bool Unequip(ItemData item)
     {
@@ -56,7 +56,7 @@ public sealed class PlayerInventory : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Очищает текущее состояние и возвращает систему к пустому виду
+    /// Очищает данные или визуальное состояние этого элемента
     /// </summary>
     public void ClearEquipment()
     {
@@ -68,7 +68,7 @@ public sealed class PlayerInventory : MonoBehaviour
         NotifyEquipmentChanged();
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetEquipment(IReadOnlyList<ItemData> items)
     {
@@ -86,21 +86,21 @@ public sealed class PlayerInventory : MonoBehaviour
         NotifyEquipmentChanged();
     }
     /// <summary>
-    /// Проверяет, есть ли нужное состояние или данные
+    /// Проверяет, осталось ли место для нового предмета экипировки
     /// </summary>
     public bool HasFreeSlot()
     {
         return equippedItems.Count < MaxEquippedItems;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает список предметов, которые сейчас надеты на игрока
     /// </summary>
     public IReadOnlyList<ItemData> GetEquippedItems()
     {
         return equippedItems;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Считает общий бонус экипировки для указанного типа эффекта
     /// </summary>
     public int GetTotalEffectValue(EffectType effectType)
     {
@@ -124,7 +124,7 @@ public sealed class PlayerInventory : MonoBehaviour
         return total;
     }
     /// <summary>
-    /// Пытается выполнить действие и возвращает, получилось ли это сделать
+    /// Пытается сломать броню вместо потери здоровья
     /// </summary>
     public bool TryBreakArmorForHpLoss()
     {
@@ -143,14 +143,14 @@ public sealed class PlayerInventory : MonoBehaviour
         return false;
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
         NotifyEquipmentChanged();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
@@ -165,7 +165,7 @@ public sealed class PlayerInventory : MonoBehaviour
             equippedItems.RemoveRange(MaxEquippedItems, equippedItems.Count - MaxEquippedItems);
     }
     /// <summary>
-    /// Сообщает подписчикам, что состояние изменилось
+    /// Сообщает HUD и другим системам, что экипировка игрока изменилась
     /// </summary>
     private void NotifyEquipmentChanged()
     {

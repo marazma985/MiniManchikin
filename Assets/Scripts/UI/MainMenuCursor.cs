@@ -4,14 +4,14 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за часть игровой логики или интерфейса, связанную с MainMenuCursor
+/// Показывает собственный курсор игры вместо стандартного курсора системы
 /// </summary>
 
 public sealed class MainMenuCursor : MonoBehaviour
 {
     private const string GlobalCursorPrefabPath = "UI/GlobalCursor";
     /// <summary>
-    /// Перечисляет варианты cursor state, которые используются в игровой логике вместо строковых значений
+    /// Набор вариантов, из которых игра выбирает нужное состояние для CursorState
     /// </summary>
     public enum CursorState
     {
@@ -37,10 +37,10 @@ public sealed class MainMenuCursor : MonoBehaviour
     private readonly List<RaycastResult> pointerRaycastResults = new List<RaycastResult>();
     private EventSystem pointerEventSystem;
     private PointerEventData pointerEventData;
-    /// <summary>
-    /// Регистрирует данные или подписки, которые нужны другим системам
-    /// </summary>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    /// <summary>
+    /// Передает данные другой системе, чтобы она могла ими пользоваться
+    /// </summary>
     private static void RegisterGlobalCursor()
     {
         SceneManager.sceneLoaded -= HandleSceneLoaded;
@@ -48,14 +48,14 @@ public sealed class MainMenuCursor : MonoBehaviour
         EnsureGlobalCursor();
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private static void HandleSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
         EnsureGlobalCursor();
     }
     /// <summary>
-    /// Гарантирует, что нужный объект, ресурс или ссылка существует
+    /// Создает или находит то, без чего объект не сможет работать
     /// </summary>
     private static void EnsureGlobalCursor()
     {
@@ -72,7 +72,7 @@ public sealed class MainMenuCursor : MonoBehaviour
         Instantiate(cursorPrefab);
     }
     /// <summary>
-    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// Находит картинку курсора и готовит ее к слежению за мышью
     /// </summary>
     private void Awake()
     {
@@ -88,7 +88,7 @@ public sealed class MainMenuCursor : MonoBehaviour
         ApplyState(CursorState.Normal);
     }
     /// <summary>
-    /// Освобождает подписки и временные ресурсы перед уничтожением объекта
+    /// Убирает ссылки и временные данные перед уничтожением объекта
     /// </summary>
     private void OnDestroy()
     {
@@ -98,14 +98,14 @@ public sealed class MainMenuCursor : MonoBehaviour
         Cursor.visible = true;
     }
     /// <summary>
-    /// Реагирует на получение или потерю фокуса приложением
+    /// Сохраняет или обновляет состояние при потере и возврате фокуса приложения
     /// </summary>
     private void OnApplicationFocus(bool hasFocus)
     {
         Cursor.visible = !hasFocus ? true : false;
     }
     /// <summary>
-    /// Каждый кадр проверяет ввод или обновляет визуальное состояние
+    /// Каждый кадр проверяет ввод игрока или обновляет отображение
     /// </summary>
     private void Update()
     {
@@ -116,7 +116,7 @@ public sealed class MainMenuCursor : MonoBehaviour
             SetPressed(false);
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetHover(bool isHovering)
     {
@@ -125,7 +125,7 @@ public sealed class MainMenuCursor : MonoBehaviour
             ApplyState(hoveringButton ? CursorState.Hover : CursorState.Normal);
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetPressed(bool isPressed)
     {
@@ -133,7 +133,7 @@ public sealed class MainMenuCursor : MonoBehaviour
         ApplyState(pressingButton ? CursorState.Pressed : hoveringButton ? CursorState.Hover : CursorState.Normal);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода FollowMouse
+    /// Перемещает игровой курсор в позицию мыши
     /// </summary>
     private void FollowMouse()
     {
@@ -146,7 +146,7 @@ public sealed class MainMenuCursor : MonoBehaviour
             cursorTransform.anchoredPosition = localPosition;
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Меняет вид курсора при наведении на кнопки и элементы интерфейса
     /// </summary>
     private void RefreshAutomaticUiState()
     {
@@ -160,7 +160,7 @@ public sealed class MainMenuCursor : MonoBehaviour
             SetPressed(false);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода IsPointerOverSelectable
+    /// Проверяет, находится ли курсор над интерактивным UI-элементом
     /// </summary>
     private bool IsPointerOverSelectable()
     {
@@ -189,7 +189,7 @@ public sealed class MainMenuCursor : MonoBehaviour
         return false;
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Меняет спрайт курсора под обычное состояние или наведение
     /// </summary>
     private void ApplyState(CursorState nextState)
     {
@@ -211,7 +211,7 @@ public sealed class MainMenuCursor : MonoBehaviour
         cursorImage.raycastTarget = false;
     }
     /// <summary>
-    /// Выбирает значение, подходящее для текущего состояния
+    /// Выбирает подходящий вариант
     /// </summary>
     private Sprite PickSprite(CursorState cursorState)
     {

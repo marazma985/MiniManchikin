@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 /// <summary>
-/// Отвечает за клетки поля и их эффекты, связанные с DebuffTileEffect
+/// Эффект отрицательной клетки, который выбирает неприятное событие для игрока
 /// </summary>
 
 public sealed class DebuffTileEffect : IDeferredTileEffect
@@ -10,7 +10,7 @@ public sealed class DebuffTileEffect : IDeferredTileEffect
     private EffectResolver effectResolver;
     private IReadOnlyList<EffectData> debuffEvents;
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Подключает список отрицательных эффектов, которые может выдать дебафф-клетка
     /// </summary>
     public void Configure(EffectResolver newEffectResolver, IReadOnlyList<EffectData> newDebuffEvents)
     {
@@ -18,14 +18,14 @@ public sealed class DebuffTileEffect : IDeferredTileEffect
         debuffEvents = newDebuffEvents;
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     public void Resolve(BoardTile tile)
     {
         Resolve(tile, null);
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     public void Resolve(BoardTile tile, Action onResolved)
     {
@@ -40,7 +40,7 @@ public sealed class DebuffTileEffect : IDeferredTileEffect
         effectResolver.TryApply(effect, "Debuff tile", onResolved);
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Выбирает случайный отрицательный эффект для дебафф-клетки
     /// </summary>
     private EffectData GetRandomEffect()
     {

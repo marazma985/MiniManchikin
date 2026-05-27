@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Координирует сохранение партии на сцене: собирает состояние систем, восстанавливает его и запускает autosave
+/// Собирает данные партии для сохранения и восстанавливает их при нажатии Продолжить
 /// </summary>
 
 public sealed class GameSaveController : MonoBehaviour
@@ -24,7 +24,7 @@ public sealed class GameSaveController : MonoBehaviour
 
     public static GameSaveController Instance { get; private set; }
     /// <summary>
-    /// Сохраняет текущее состояние
+    /// Сохраняет текущую партию, если сохранение сейчас разрешено
     /// </summary>
     public void SaveNow()
     {
@@ -34,7 +34,7 @@ public sealed class GameSaveController : MonoBehaviour
         GameSaveService.Save(CreateSaveData());
     }
     /// <summary>
-    /// Сохраняет игру даже во время восстановления сцены, например перед выходом в главное меню
+    /// Сохраняет партию перед выходом, даже если сцена еще не полностью готова
     /// </summary>
     public void SaveNowEvenIfInitializing()
     {
@@ -47,7 +47,7 @@ public sealed class GameSaveController : MonoBehaviour
         GameSaveService.Save(CreateSaveData());
     }
     /// <summary>
-    /// Удаляет файл сохранения и запрещает новым autosave пересоздать завершенную партию
+    /// Удаляет сохранение завершенной партии и запрещает создать его заново
     /// </summary>
     public void DeleteSaveAndDisableSaving()
     {
@@ -55,7 +55,7 @@ public sealed class GameSaveController : MonoBehaviour
         GameSaveService.DeleteSave();
     }
     /// <summary>
-    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// Находит системы сцены, которые нужно сохранить или восстановить
     /// </summary>
     private void Awake()
     {
@@ -70,7 +70,7 @@ public sealed class GameSaveController : MonoBehaviour
         BuildContentResolver();
     }
     /// <summary>
-    /// Выполняет настройку после того, как Unity инициализировал объекты сцены
+    /// Запускает начальную настройку после загрузки сцены
     /// </summary>
     private void Start()
     {
@@ -81,14 +81,14 @@ public sealed class GameSaveController : MonoBehaviour
         initialized = true;
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
         Subscribe();
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -98,7 +98,7 @@ public sealed class GameSaveController : MonoBehaviour
             Instance = null;
     }
     /// <summary>
-    /// Реагирует на постановку приложения на паузу
+    /// Реагирует на паузу приложения, например при сворачивании
     /// </summary>
     private void OnApplicationPause(bool pauseStatus)
     {
@@ -106,7 +106,7 @@ public sealed class GameSaveController : MonoBehaviour
             SaveNowEvenIfInitializing();
     }
     /// <summary>
-    /// Реагирует на получение или потерю фокуса приложением
+    /// Сохраняет или обновляет состояние при потере и возврате фокуса приложения
     /// </summary>
     private void OnApplicationFocus(bool hasFocus)
     {
@@ -114,14 +114,14 @@ public sealed class GameSaveController : MonoBehaviour
             SaveNowEvenIfInitializing();
     }
     /// <summary>
-    /// Реагирует на закрытие приложения
+    /// Сохраняет текущую партию при закрытии приложения
     /// </summary>
     private void OnApplicationQuit()
     {
         SaveNowEvenIfInitializing();
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     private void ResolveReferences()
     {
@@ -147,7 +147,7 @@ public sealed class GameSaveController : MonoBehaviour
             tileEffectSystem = FindAnyObjectByType<TileEffectSystem>();
     }
     /// <summary>
-    /// Собирает набор данных из отдельных частей
+    /// Собирает справочник карт, предметов и врагов для загрузки сохранения
     /// </summary>
     private void BuildContentResolver()
     {
@@ -170,11 +170,11 @@ public sealed class GameSaveController : MonoBehaviour
         }
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Собирает все данные партии в один объект для записи в файл
     /// </summary>
     private GameSaveData CreateSaveData()
     {
-        // Файл сохранения хранит только id и простые значения, а ссылки на Unity-объекты восстанавливаются через resolver
+        // В файл пишутся простые данные и id, а настоящие Unity-ссылки находятся заново при загрузке
         var saveData = new GameSaveData
         {
             currentHp = playerStats != null ? playerStats.CurrentHp : 0,
@@ -191,18 +191,18 @@ public sealed class GameSaveController : MonoBehaviour
         return saveData;
     }
     /// <summary>
-    /// Восстанавливает состояние из сохраненных данных
+    /// Восстанавливает игрока, поле, бой и награды из сохранения
     /// </summary>
     private void Restore(GameSaveData saveData)
     {
         if (saveData == null)
             return;
 
-        // Autosave приостанавливается на время восстановления, чтобы частично восстановленное состояние не перезаписало файл
+        // На время загрузки autosave выключается, чтобы не записать половину восстановленного состояния
         isRestoring = true;
         try
         {
-            // Сначала восстанавливается постоянное состояние игрока и поля, и только потом открываются модальные процессы
+            // Сначала возвращаются здоровье, уровень, позиция, карты и предметы игрока
             playerStats?.RestoreState(saveData.currentHp, saveData.level);
             boardManager?.SetCurrentIndex(saveData.currentTileIndex);
             playerMover?.SnapToCurrentTile();
@@ -213,7 +213,7 @@ public sealed class GameSaveController : MonoBehaviour
             var hasActiveSingleReward = saveData.singleReward != null && !string.IsNullOrEmpty(saveData.singleReward.contentId);
             turnSystem?.RestoreFromSave(saveData.turn, hasActiveBattle || hasActiveSingleReward);
 
-            // Модальные системы восстанавливаются последними, потому что они могут завершить сохраненный callback клетки
+            // Окна боя и наград восстанавливаются последними, потому что они могут завершить обработку клетки
             if (hasActiveBattle)
                 battleSystem?.RestoreFromSave(saveData.battle, contentResolver, rewardSystem, saveData.battleRewardOptions, turnSystem != null ? turnSystem.CompleteRestoredTileResolution : null);
             else if (hasActiveSingleReward && singleRewardSystem != null)
@@ -229,7 +229,7 @@ public sealed class GameSaveController : MonoBehaviour
         }
     }
     /// <summary>
-    /// Восстанавливает состояние из сохраненных данных
+    /// Возвращает данные из сохранения или ранее запомненного состояния
     /// </summary>
     private void RestoreCards(List<string> cardIds)
     {
@@ -250,7 +250,7 @@ public sealed class GameSaveController : MonoBehaviour
         cardSystem.SetHand(cards);
     }
     /// <summary>
-    /// Восстанавливает состояние из сохраненных данных
+    /// Возвращает данные из сохранения или ранее запомненного состояния
     /// </summary>
     private void RestoreItems(List<string> itemIds)
     {
@@ -271,7 +271,7 @@ public sealed class GameSaveController : MonoBehaviour
         playerInventory.SetEquipment(items);
     }
     /// <summary>
-    /// Добавляет данные в систему и обновляет зависимые представления
+    /// Добавляет новый элемент в игровое состояние
     /// </summary>
     private void AddCardIds(List<string> cardIds)
     {
@@ -287,7 +287,7 @@ public sealed class GameSaveController : MonoBehaviour
         }
     }
     /// <summary>
-    /// Добавляет данные в систему и обновляет зависимые представления
+    /// Добавляет новый элемент в игровое состояние
     /// </summary>
     private void AddItemIds(List<string> itemIds)
     {
@@ -303,7 +303,7 @@ public sealed class GameSaveController : MonoBehaviour
         }
     }
     /// <summary>
-    /// Добавляет данные в систему и обновляет зависимые представления
+    /// Добавляет новый элемент в игровое состояние
     /// </summary>
     private void AddRewardOptions(List<RewardSaveData> rewards)
     {
@@ -319,7 +319,7 @@ public sealed class GameSaveController : MonoBehaviour
         }
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает данные сохранения для карты или предмета-награды
     /// </summary>
     private static RewardSaveData CreateRewardSaveData(RewardData reward)
     {
@@ -335,7 +335,7 @@ public sealed class GameSaveController : MonoBehaviour
             : new RewardSaveData { rewardType = (int)reward.RewardType, contentId = contentId };
     }
     /// <summary>
-    /// Подписывает компонент на события зависимых систем
+    /// Подписывается на события другой системы
     /// </summary>
     private void Subscribe()
     {
@@ -363,7 +363,7 @@ public sealed class GameSaveController : MonoBehaviour
             singleRewardSystem.RewardStateChanged += HandleRewardStateChanged;
     }
     /// <summary>
-    /// Снимает подписки, чтобы не оставить устаревшие ссылки
+    /// Отписывается от событий другой системы
     /// </summary>
     private void Unsubscribe()
     {
@@ -391,39 +391,39 @@ public sealed class GameSaveController : MonoBehaviour
             singleRewardSystem.RewardStateChanged -= HandleRewardStateChanged;
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleStatsChanged(int currentHp, int maxHp) => SaveNow();
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleLevelChanged(int level) => SaveNow();
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleEquipmentChanged(IReadOnlyList<ItemData> items) => SaveNow();
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleHandChanged(IReadOnlyList<CardData> cards) => SaveNow();
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleTurnStateChanged(TurnState state) => SaveNow();
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleDiceRolled(int value) => SaveNow();
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleTurnEnded() => SaveNow();
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleBattleStateChanged() => SaveNow();
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleRewardStateChanged() => SaveNow();
 }

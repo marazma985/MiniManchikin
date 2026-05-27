@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за выдачу или показ наград, связанные с SingleRewardModalView
+/// Окно с одной наградой, которое открывается после некоторых клеток поля
 /// </summary>
 
 public sealed class SingleRewardModalView : MonoBehaviour
@@ -17,7 +17,7 @@ public sealed class SingleRewardModalView : MonoBehaviour
     public event Action AcceptRequested;
     public event Action CloseRequested;
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Показывает окно с одной полученной наградой
     /// </summary>
     public void Show(RewardData reward)
     {
@@ -25,14 +25,14 @@ public sealed class SingleRewardModalView : MonoBehaviour
         SetReward(reward);
     }
     /// <summary>
-    /// Скрывает нужное окно или визуальное состояние
+    /// Закрывает окно одиночной награды
     /// </summary>
     public void Hide()
     {
         gameObject.SetActive(false);
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetReward(RewardData reward)
     {
@@ -50,7 +50,7 @@ public sealed class SingleRewardModalView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetAcceptState(bool canAccept, string status)
     {
@@ -61,7 +61,7 @@ public sealed class SingleRewardModalView : MonoBehaviour
             statusText.text = status ?? string.Empty;
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -72,7 +72,7 @@ public sealed class SingleRewardModalView : MonoBehaviour
             closeButton.onClick.AddListener(HandleCloseClicked);
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -83,14 +83,14 @@ public sealed class SingleRewardModalView : MonoBehaviour
             closeButton.onClick.RemoveListener(HandleCloseClicked);
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleAcceptClicked()
     {
         AcceptRequested?.Invoke();
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleCloseClicked()
     {

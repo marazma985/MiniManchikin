@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за игровые события и уведомления, связанные с EventNotificationView
+/// Одна всплывающая подсказка на экране, которая появляется и затем плавно исчезает
 /// </summary>
 
 public sealed class EventNotificationView : MonoBehaviour
@@ -17,7 +17,7 @@ public sealed class EventNotificationView : MonoBehaviour
 
     private Coroutine lifecycleCoroutine;
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Показывает короткую подсказку события с текстом и иконкой
     /// </summary>
     public void Show(string message, Sprite icon)
     {
@@ -37,14 +37,14 @@ public sealed class EventNotificationView : MonoBehaviour
         lifecycleCoroutine = StartCoroutine(LifecycleRoutine());
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
         StopLifecycle();
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода LifecycleRoutine
+    /// Держит подсказку на экране и затем плавно убирает ее
     /// </summary>
     private IEnumerator LifecycleRoutine()
     {
@@ -72,7 +72,7 @@ public sealed class EventNotificationView : MonoBehaviour
         Destroy(gameObject);
     }
     /// <summary>
-    /// Останавливает текущий процесс, корутину или визуальный переход
+    /// Останавливает текущий процесс или анимацию
     /// </summary>
     private void StopLifecycle()
     {

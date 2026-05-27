@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Хранит руку игрока, проверяет где карту можно применить, применяет эффекты карты и уведомляет UI
+/// Хранит карты игрока и решает, можно ли применить карту в текущий момент игры
 /// </summary>
 
 public sealed class CardSystem : MonoBehaviour
@@ -21,7 +21,7 @@ public sealed class CardSystem : MonoBehaviour
     public IReadOnlyList<CardData> Hand => hand;
     public int MaxCards => MaxHandSize;
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetHand(List<CardData> cards)
     {
@@ -39,7 +39,7 @@ public sealed class CardSystem : MonoBehaviour
         NotifyHandChanged();
     }
     /// <summary>
-    /// Добавляет данные в систему и обновляет зависимые представления
+    /// Добавляет новый элемент в игровое состояние
     /// </summary>
     public bool AddCard(CardData card)
     {
@@ -60,7 +60,7 @@ public sealed class CardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Удаляет данные из системы и обновляет зависимые представления
+    /// Удаляет элемент из игрового состояния
     /// </summary>
     public bool RemoveCard(CardData card)
     {
@@ -71,7 +71,7 @@ public sealed class CardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Удаляет данные из системы и обновляет зависимые представления
+    /// Удаляет элемент из игрового состояния
     /// </summary>
     public bool RemoveRandomCard(Rarity rarity)
     {
@@ -97,7 +97,7 @@ public sealed class CardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода UseCard
+    /// Пытается применить выбранную карту из руки игрока
     /// </summary>
     public bool UseCard(CardData card)
     {
@@ -112,7 +112,7 @@ public sealed class CardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
@@ -125,21 +125,21 @@ public sealed class CardSystem : MonoBehaviour
         hand.RemoveRange(MaxHandSize, hand.Count - MaxHandSize);
     }
     /// <summary>
-    /// Выполняет настройку после того, как Unity инициализировал объекты сцены
+    /// Запускает начальную настройку после загрузки сцены
     /// </summary>
     private void Start()
     {
         NotifyHandChanged();
     }
     /// <summary>
-    /// Сообщает подписчикам, что состояние изменилось
+    /// Сообщает интерфейсу, что руку карт нужно перерисовать
     /// </summary>
     private void NotifyHandChanged()
     {
         OnHandChanged?.Invoke(hand);
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     private bool ResolveCard(CardData card)
     {
@@ -158,7 +158,7 @@ public sealed class CardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Проверяет, разрешено ли выполнить действие в текущем состоянии игры
+    /// Проверяет, можно ли сейчас выполнить это действие
     /// </summary>
     private bool CanUseCardInCurrentContext(CardData card)
     {
@@ -185,7 +185,7 @@ public sealed class CardSystem : MonoBehaviour
         }
     }
     /// <summary>
-    /// Проверяет, разрешено ли выполнить действие в текущем состоянии игры
+    /// Проверяет, можно ли сейчас выполнить это действие
     /// </summary>
     private bool CanApplyAllEffects(CardData card)
     {
@@ -204,7 +204,7 @@ public sealed class CardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Проверяет, разрешено ли выполнить действие в текущем состоянии игры
+    /// Проверяет, можно ли сейчас выполнить это действие
     /// </summary>
     private bool CanApplyEffect(CardData card, EffectData effect)
     {
@@ -243,7 +243,7 @@ public sealed class CardSystem : MonoBehaviour
         }
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Применяет все эффекты выбранной карты по очереди
     /// </summary>
     private bool ApplyAllEffects(CardData card)
     {
@@ -256,7 +256,7 @@ public sealed class CardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Применяет один эффект карты к игроку, бою или полю
     /// </summary>
     private bool ApplyEffect(EffectData effect)
     {
@@ -297,7 +297,7 @@ public sealed class CardSystem : MonoBehaviour
         }
     }
     /// <summary>
-    /// Проверяет, разрешено ли выполнить действие в текущем состоянии игры
+    /// Проверяет, можно ли сейчас выполнить это действие
     /// </summary>
     private bool CanApplyChangePosition(CardData card, EffectData effect)
     {
@@ -332,7 +332,7 @@ public sealed class CardSystem : MonoBehaviour
         return false;
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Перемещает игрока на нужную клетку по эффекту карты
     /// </summary>
     private bool ApplyChangePosition(EffectData effect)
     {
@@ -342,7 +342,7 @@ public sealed class CardSystem : MonoBehaviour
         return turnSystem.TryMoveFixedSteps(steps);
     }
     /// <summary>
-    /// Сообщает подписчикам, что состояние изменилось
+    /// Показывает подсказку о результате применения эффекта карты
     /// </summary>
     private void NotifyEffect(EffectData effect, EffectNotificationStatus status)
     {
@@ -350,7 +350,7 @@ public sealed class CardSystem : MonoBehaviour
             eventNotificationSystem.ShowEffectNotification(effect, status);
     }
     /// <summary>
-    /// Сообщает подписчикам, что состояние изменилось
+    /// Показывает подсказку о результате эффекта карты с уже посчитанным числом
     /// </summary>
     private void NotifyEffect(EffectData effect, EffectNotificationStatus status, int displayValue)
     {

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 /// <summary>
-/// Отвечает за часть игровой логики или интерфейса, связанную с MainMenuButtonFeedback
+/// Добавляет кнопкам главного меню легкое движение при наведении мыши
 /// </summary>
 
 public sealed class MainMenuButtonFeedback : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -15,21 +15,21 @@ public sealed class MainMenuButtonFeedback : MonoBehaviour, IPointerEnterHandler
     private bool initialized;
     private bool hovering;
     /// <summary>
-    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// Подключает звуковой или визуальный отклик кнопки главного меню
     /// </summary>
     private void Awake()
     {
         Initialize();
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
         Initialize();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
@@ -37,7 +37,7 @@ public sealed class MainMenuButtonFeedback : MonoBehaviour, IPointerEnterHandler
             target = transform as RectTransform;
     }
     /// <summary>
-    /// Каждый кадр проверяет ввод или обновляет визуальное состояние
+    /// Каждый кадр проверяет ввод игрока или обновляет отображение
     /// </summary>
     private void Update()
     {
@@ -47,21 +47,21 @@ public sealed class MainMenuButtonFeedback : MonoBehaviour, IPointerEnterHandler
         target.anchoredPosition = Vector2.SmoothDamp(target.anchoredPosition, desiredPosition, ref moveVelocity, moveSmoothTime);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
         hovering = true;
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
         hovering = false;
     }
     /// <summary>
-    /// Готовит систему к работе и заполняет недостающие ссылки
+    /// Подготавливает объект к работе
     /// </summary>
     private void Initialize()
     {

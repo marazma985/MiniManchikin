@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за часть игровой логики или интерфейса, связанную с MainMenuQuitButton
+/// Кнопка Выход в главном меню, которая закрывает игру
 /// </summary>
 
 public sealed class MainMenuQuitButton : MonoBehaviour
@@ -9,7 +9,7 @@ public sealed class MainMenuQuitButton : MonoBehaviour
     [SerializeField] private Button button;
 
     /// <summary>
-    /// Подписывается на кнопку выхода при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -20,7 +20,7 @@ public sealed class MainMenuQuitButton : MonoBehaviour
             button.onClick.AddListener(QuitGame);
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -28,14 +28,14 @@ public sealed class MainMenuQuitButton : MonoBehaviour
             button.onClick.RemoveListener(QuitGame);
     }
     /// <summary>
-    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
     /// </summary>
     private void Reset()
     {
         button = GetComponent<Button>();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
@@ -43,7 +43,7 @@ public sealed class MainMenuQuitButton : MonoBehaviour
             button = GetComponent<Button>();
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода QuitGame
+    /// Закрывает игру в сборке или останавливает Play Mode в редакторе
     /// </summary>
     private void QuitGame()
     {

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 /// <summary>
-/// Отвечает за часть игровой логики или интерфейса, связанную с GameSettingsService
+/// Хранит и применяет настройки игрока: размер окна, полный экран и громкость музыки
 /// </summary>
 
 public sealed class GameSettingsService : MonoBehaviour
@@ -24,14 +24,14 @@ public sealed class GameSettingsService : MonoBehaviour
     public int ResolutionCount => WindowSizes.Length;
     public AudioMixer MainAudioMixer => mainAudioMixer;
     /// <summary>
-    /// Выполняет настройку после того, как Unity инициализировал объекты сцены
+    /// Запускает начальную настройку после загрузки сцены
     /// </summary>
     private void Start()
     {
         ApplySavedSettings();
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает подпись разрешения экрана для списка настроек
     /// </summary>
     public string GetResolutionLabel(int index)
     {
@@ -39,28 +39,28 @@ public sealed class GameSettingsService : MonoBehaviour
         return $"{size.x}x{size.y}";
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает сохраненный игроком пункт разрешения экрана
     /// </summary>
     public int GetSavedResolutionIndex()
     {
         return Mathf.Clamp(PlayerPrefs.GetInt(ResolutionIndexKey, 1), 0, WindowSizes.Length - 1);
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает сохраненный режим полного экрана
     /// </summary>
     public bool GetSavedFullscreen()
     {
         return PlayerPrefs.GetInt(FullscreenKey, Screen.fullScreen ? 1 : 0) == 1;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает сохраненную громкость музыки
     /// </summary>
     public float GetSavedMusicVolume()
     {
         return Mathf.Clamp01(PlayerPrefs.GetFloat(MusicVolumeKey, 0.5f));
     }
     /// <summary>
-    /// Сохраняет текущее состояние
+    /// Сохраняет данные партии или настроек
     /// </summary>
     public void SaveAndApply(int resolutionIndex, bool fullscreen, float musicVolume)
     {
@@ -75,14 +75,14 @@ public sealed class GameSettingsService : MonoBehaviour
         ApplySettings(clampedResolutionIndex, fullscreen, clampedMusicVolume);
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Применяет сохраненные настройки графики и музыки при запуске меню
     /// </summary>
     public void ApplySavedSettings()
     {
         ApplySettings(GetSavedResolutionIndex(), GetSavedFullscreen(), GetSavedMusicVolume());
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Применяет выбранные разрешение, режим экрана и громкость музыки
     /// </summary>
     private void ApplySettings(int resolutionIndex, bool fullscreen, float musicVolume)
     {
@@ -91,7 +91,7 @@ public sealed class GameSettingsService : MonoBehaviour
         ApplyMusicVolume(musicVolume);
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Передает громкость музыки в AudioMixer
     /// </summary>
     private void ApplyMusicVolume(float musicVolume)
     {
@@ -101,7 +101,7 @@ public sealed class GameSettingsService : MonoBehaviour
         mainAudioMixer.SetFloat(MusicVolumeMixerParameter, GetMusicVolumeDecibels(musicVolume));
     }
     /// <summary>
-    /// Преобразует значение ползунка громкости в децибелы для AudioMixer
+    /// Переводит значение ползунка громкости в децибелы для AudioMixer
     /// </summary>
     public static float GetMusicVolumeDecibels(float musicVolume)
     {
@@ -109,7 +109,7 @@ public sealed class GameSettingsService : MonoBehaviour
         return scaledVolume <= 0.0001f ? -80f : Mathf.Log10(scaledVolume) * 20f;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает размер окна для выбранного пункта разрешения
     /// </summary>
     private static Vector2Int GetWindowSize(int index)
     {

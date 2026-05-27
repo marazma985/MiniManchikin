@@ -1,27 +1,27 @@
 using UnityEngine;
 /// <summary>
-/// Отвечает за клетки поля и их эффекты, связанные с BattleTileEffect
+/// Эффект боевой клетки, который открывает бой с монстром
 /// </summary>
 
 public sealed class BattleTileEffect : IDeferredTileEffect
 {
     private BattleSystem battleSystem;
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetBattleSystem(BattleSystem newBattleSystem)
     {
         battleSystem = newBattleSystem;
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     public void Resolve(BoardTile tile)
     {
         Resolve(tile, null);
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     public void Resolve(BoardTile tile, System.Action onResolved)
     {

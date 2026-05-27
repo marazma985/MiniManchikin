@@ -1,13 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за часть игровой логики или интерфейса, связанную с MainMenuSpriteButton
+/// Кнопка главного меню со спрайтами для разных состояний: обычная, наведенная и заблокированная
 /// </summary>
 
 public sealed class MainMenuSpriteButton : MonoBehaviour
 {
     /// <summary>
-    /// Перечисляет варианты visual kind, которые используются в игровой логике вместо строковых значений
+    /// Набор вариантов, из которых игра выбирает нужное состояние для VisualKind
     /// </summary>
     public enum VisualKind
     {
@@ -49,7 +49,7 @@ public sealed class MainMenuSpriteButton : MonoBehaviour
         }
     }
     /// <summary>
-    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
     /// </summary>
     private void Reset()
     {
@@ -57,14 +57,14 @@ public sealed class MainMenuSpriteButton : MonoBehaviour
         button = GetComponent<Button>();
     }
     /// <summary>
-    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// Находит компоненты кнопки главного меню и выставляет стартовый спрайт
     /// </summary>
     private void Awake()
     {
         ApplyVisual();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
@@ -75,10 +75,10 @@ public sealed class MainMenuSpriteButton : MonoBehaviour
 
         ApplyVisual();
     }
-    /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
-    /// </summary>
     [ContextMenu("Apply Visual")]
+    /// <summary>
+    /// Обновляет картинку кнопки главного меню под ее текущий режим
+    /// </summary>
     public void ApplyVisual()
     {
         if (targetImage == null)
@@ -96,7 +96,7 @@ public sealed class MainMenuSpriteButton : MonoBehaviour
         }
     }
     /// <summary>
-    /// Выбирает значение, подходящее для текущего состояния
+    /// Выбирает подходящий вариант
     /// </summary>
     private Sprite PickSprite()
     {

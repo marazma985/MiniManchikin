@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за выдачу или показ наград, связанные с RewardView
+/// Одна карточка награды внутри окна выбора
 /// </summary>
 
 public sealed class RewardView : MonoBehaviour
@@ -16,7 +16,7 @@ public sealed class RewardView : MonoBehaviour
 
     public event Action<RewardData> Clicked;
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetReward(RewardData reward)
     {
@@ -24,7 +24,7 @@ public sealed class RewardView : MonoBehaviour
         Refresh();
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -34,7 +34,7 @@ public sealed class RewardView : MonoBehaviour
         Refresh();
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -42,7 +42,7 @@ public sealed class RewardView : MonoBehaviour
             button.onClick.RemoveListener(HandleClick);
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Обновляет картинку и текст одной награды
     /// </summary>
     private void Refresh()
     {
@@ -63,7 +63,7 @@ public sealed class RewardView : MonoBehaviour
             button.interactable = currentReward != null;
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleClick()
     {

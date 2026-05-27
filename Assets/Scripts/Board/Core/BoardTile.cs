@@ -2,13 +2,13 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 /// <summary>
-/// Отвечает за базовую механику игрового поля, связанную с BoardTile
+/// Одна клетка на игровом поле, которая сообщает игре, когда игрок на нее попал
 /// </summary>
 
 public class BoardTile : MonoBehaviour
 {
     /// <summary>
-    /// Отвечает за базовую механику игрового поля, связанную с BoardTileEvent
+    /// Событие, которое передает игре клетку, на которую попал игрок
     /// </summary>
     [Serializable]
     public sealed class BoardTileEvent : UnityEvent<BoardTile>
@@ -23,7 +23,7 @@ public class BoardTile : MonoBehaviour
     public TileType TileType => tileType;
     public BoardTileEvent Entered => entered;
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Задает клетке ее номер на поле и игровой тип
     /// </summary>
     public void Configure(int newIndex, TileType newTileType)
     {
@@ -32,7 +32,7 @@ public class BoardTile : MonoBehaviour
         ApplyName();
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода Enter
+    /// Запускает эффект клетки, когда игрок на нее попадает
     /// </summary>
     public void Enter()
     {
@@ -40,20 +40,20 @@ public class BoardTile : MonoBehaviour
         entered.Invoke(this);
     }
     /// <summary>
-    /// Реагирует на событие enter
+    /// Вызывается, когда фишка игрока входит на эту клетку
     /// </summary>
     protected virtual void OnEnter()
     {
     }
     /// <summary>
-    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
     /// </summary>
     private void Reset()
     {
         ApplyName();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
@@ -61,14 +61,14 @@ public class BoardTile : MonoBehaviour
         ApplyName();
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Обновляет имя объекта клетки в иерархии по ее индексу и типу
     /// </summary>
     private void ApplyName()
     {
         gameObject.name = $"Tile_{index:00}";
     }
     /// <summary>
-    /// Реагирует на событие draw gizmos
+    /// Рисует подсказку клетки в окне сцены Unity
     /// </summary>
     private void OnDrawGizmos()
     {
@@ -82,7 +82,7 @@ public class BoardTile : MonoBehaviour
         Gizmos.DrawWireCube(transform.position, new Vector3(1.8f, 0.8f, 0.05f));
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает цвет gizmo для типа клетки в редакторе
     /// </summary>
     private static Color GetGizmoColor(TileType type)
     {

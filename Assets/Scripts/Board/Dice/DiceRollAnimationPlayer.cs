@@ -5,7 +5,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Проигрывает APNG-анимации кубика для разных игровых контекстов и сообщает, когда анимация закончилась
+/// Показывает анимацию кубика на экране и ждет ее завершения перед следующим действием
 /// </summary>
 
 public sealed class DiceRollAnimationPlayer : MonoBehaviour
@@ -45,28 +45,28 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
 
     public bool IsPlaying => currentRoutine != null;
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода TestBoardAnimation
+    /// Метод для тестирования анимации кубика на игровом поле
     /// </summary>
     public void TestBoardAnimation()
     {
         PlayRandomPreview(DiceRollAnimationContext.Board);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода TestBattleAnimation
+    /// Метод для тестирования анимации кубика в окне боя
     /// </summary>
     public void TestBattleAnimation()
     {
         PlayRandomPreview(DiceRollAnimationContext.Battle);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода TestEscapeAnimation
+    /// Метод для тестирования анимации кубика при попытке побега
     /// </summary>
     public void TestEscapeAnimation()
     {
         PlayRandomPreview(DiceRollAnimationContext.Escape);
     }
     /// <summary>
-    /// Запускает музыку, анимацию или другой визуальный процесс
+    /// Проигрывает глобальную анимацию кубика, даже если объект еще не найден на сцене
     /// </summary>
     public static IEnumerator PlayGlobalRoutine(int result, DiceRollAnimationContext context = DiceRollAnimationContext.Board)
     {
@@ -80,7 +80,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         yield return player.PlayRoutine(result, context);
     }
     /// <summary>
-    /// Запускает музыку, анимацию или другой визуальный процесс
+    /// Запускает анимацию кубика и вызывает действие после завершения
     /// </summary>
     public Coroutine Play(int result, DiceRollAnimationContext context = DiceRollAnimationContext.Board, Action onCompleted = null)
     {
@@ -91,7 +91,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         return currentRoutine;
     }
     /// <summary>
-    /// Запускает музыку, анимацию или другой визуальный процесс
+    /// Проигрывает анимированную PNG-картинку кубика с указанным результатом
     /// </summary>
     public IEnumerator PlayRoutine(int result, DiceRollAnimationContext context = DiceRollAnimationContext.Board)
     {
@@ -121,7 +121,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         overlayCanvas.enabled = false;
     }
     /// <summary>
-    /// Запускает музыку, анимацию или другой визуальный процесс
+    /// Проигрывает анимацию кубика и сообщает вызывающему коду о завершении
     /// </summary>
     private IEnumerator PlayAndNotify(int result, DiceRollAnimationContext context, Action onCompleted)
     {
@@ -130,7 +130,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         onCompleted?.Invoke();
     }
     /// <summary>
-    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// Создает экранный слой для показа анимации кубика поверх сцены
     /// </summary>
     private void Awake()
     {
@@ -144,7 +144,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         EnsureOverlay();
     }
     /// <summary>
-    /// Освобождает подписки и временные ресурсы перед уничтожением объекта
+    /// Убирает ссылки и временные данные перед уничтожением объекта
     /// </summary>
     private void OnDestroy()
     {
@@ -152,14 +152,14 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
             Instance = null;
     }
     /// <summary>
-    /// Гарантирует, что нужный объект, ресурс или ссылка существует
+    /// Создает экранный слой, на котором показывается анимация кубика
     /// </summary>
     private void EnsureOverlay()
     {
         if (overlayCanvas != null && animationImage != null)
             return;
 
-        // Оверлей создается по требованию, чтобы сцены могли настраивать компонент без ручного создания дочерних объектов
+        // Слой для анимации создается сам, чтобы его не приходилось вручную добавлять в каждую сцену
         overlayCanvas = GetComponentInChildren<Canvas>(true);
         if (overlayCanvas == null)
         {
@@ -199,7 +199,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         ApplySettings(boardAnimation);
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает настройки размера, позиции и слоя для нужного места показа кубика
     /// </summary>
     private DiceRollAnimationSettings GetSettings(DiceRollAnimationContext context)
     {
@@ -214,7 +214,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         }
     }
     /// <summary>
-    /// Запускает музыку, анимацию или другой визуальный процесс
+    /// Запускает случайную тестовую анимацию кубика для выбранного места
     /// </summary>
     private void PlayRandomPreview(DiceRollAnimationContext context)
     {
@@ -227,7 +227,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         Play(UnityEngine.Random.Range(MinDiceValue, MaxDiceValue + 1), context);
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Применяет размер, позицию и слой к картинке анимации кубика
     /// </summary>
     private void ApplySettings(DiceRollAnimationSettings settings)
     {
@@ -245,7 +245,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         rectTransform.sizeDelta = settings.Size;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает путь к APNG-файлу для выпавшего значения кубика
     /// </summary>
     private string GetDiceFilePath(int result)
     {
@@ -257,7 +257,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         return Path.Combine(Application.dataPath, diceFolderRelativeToAssets, fileName);
     }
     /// <summary>
-    /// Запускает музыку, анимацию или другой визуальный процесс
+    /// Проигрывает анимированную PNG-картинку кубика
     /// </summary>
     private IEnumerator PlayApng(byte[] bytes)
     {
@@ -267,7 +267,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
             yield break;
         }
 
-        // Кадры APNG собираются на одном холсте, потому что многие кадры содержат только изменившиеся пиксели
+        // APNG хранит не всегда полный кадр, поэтому кадры собираются на общем прозрачном холсте
         var canvasPixels = CreateTransparentPixels(apngFile.Width, apngFile.Height);
         var outputTexture = new Texture2D(apngFile.Width, apngFile.Height, TextureFormat.RGBA32, false);
         outputTexture.wrapMode = TextureWrapMode.Clamp;
@@ -285,7 +285,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
                 continue;
             }
 
-            // Для DisposeOp.Previous нужна копия холста до отрисовки текущего кадра
+            // Некоторые APNG-кадры требуют вернуть холст к предыдущему виду после показа
             var previousPixels = frame.DisposeOp == ApngDisposeOp.Previous ? ClonePixels(canvasPixels) : null;
             BlendFrame(canvasPixels, apngFile.Width, apngFile.Height, frame, frameTexture.GetPixels32());
             outputTexture.SetPixels32(canvasPixels);
@@ -302,7 +302,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         Destroy(outputTexture);
     }
     /// <summary>
-    /// Запускает музыку, анимацию или другой визуальный процесс
+    /// Показывает обычную PNG-картинку, если анимация не разобралась
     /// </summary>
     private IEnumerator PlayFallbackPng(byte[] bytes)
     {
@@ -323,14 +323,14 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         Destroy(texture);
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает прозрачный холст нужного размера для сборки кадров APNG
     /// </summary>
     private static Color32[] CreateTransparentPixels(int width, int height)
     {
         return new Color32[width * height];
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода ClonePixels
+    /// Создает копию пикселей холста, чтобы можно было вернуть предыдущий кадр
     /// </summary>
     private static Color32[] ClonePixels(Color32[] pixels)
     {
@@ -339,7 +339,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         return clone;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода BlendFrame
+    /// Накладывает кадр APNG на общий холст с учетом прозрачности
     /// </summary>
     private static void BlendFrame(Color32[] canvasPixels, int canvasWidth, int canvasHeight, ApngFrame frame, Color32[] framePixels)
     {
@@ -365,7 +365,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         }
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода AlphaBlend
+    /// Вспомогательная функция для смешивания цветов с учетом альфа канала
     /// </summary>
     private static Color32 AlphaBlend(Color32 source, Color32 destination)
     {
@@ -392,7 +392,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
             (byte)Mathf.RoundToInt(outputAlpha * 255f));
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Применяет правило APNG о том, что нужно сделать с кадром после показа
     /// </summary>
     private static void ApplyDispose(Color32[] canvasPixels, int canvasWidth, int canvasHeight, ApngFrame frame, Color32[] previousPixels)
     {
@@ -408,7 +408,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         }
     }
     /// <summary>
-    /// Очищает текущее состояние и возвращает систему к пустому виду
+    /// Очищает область кадра на общем холсте APNG
     /// </summary>
     private static void ClearFrameArea(Color32[] canvasPixels, int canvasWidth, int canvasHeight, ApngFrame frame)
     {
@@ -430,7 +430,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         }
     }
     /// <summary>
-    /// Перечисляет варианты apng dispose op, которые используются в игровой логике вместо строковых значений
+    /// Набор вариантов, из которых игра выбирает нужное состояние для ApngDisposeOp
     /// </summary>
     private enum ApngDisposeOp
     {
@@ -439,7 +439,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         Previous = 2
     }
     /// <summary>
-    /// Перечисляет варианты apng blend op, которые используются в игровой логике вместо строковых значений
+    /// Набор вариантов, из которых игра выбирает нужное состояние для ApngBlendOp
     /// </summary>
     private enum ApngBlendOp
     {
@@ -447,7 +447,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         Over = 1
     }
     /// <summary>
-    /// Отвечает за механику или визуал кубика, связанные с ApngFrame
+    /// Данные одного кадра APNG: размер, задержка, смещение и куски изображения
     /// </summary>
     private sealed class ApngFrame
     {
@@ -461,14 +461,14 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         public readonly List<byte[]> ImageParts = new List<byte[]>();
     }
     /// <summary>
-    /// Отвечает за механику или визуал кубика, связанные с PngChunk
+    /// Один блок PNG-файла с типом и набором байтов
     /// </summary>
     private sealed class PngChunk
     {
         public string Type;
         public byte[] Data;
         /// <summary>
-        /// Создает экземпляр PngChunk и заполняет его начальными данными
+        /// Запоминает тип и содержимое PNG-блока
         /// </summary>
         public PngChunk(string type, byte[] data)
         {
@@ -477,7 +477,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         }
     }
     /// <summary>
-    /// Отвечает за механику или визуал кубика, связанные с ApngFile
+    /// Разобранный APNG-файл, из которого можно получить кадры для проигрывания
     /// </summary>
     private sealed class ApngFile
     {
@@ -490,7 +490,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         public int Height { get; private set; }
         public List<ApngFrame> Frames { get; } = new List<ApngFrame>();
         /// <summary>
-        /// Создает экземпляр ApngFile и заполняет его начальными данными
+        /// Запоминает заголовок APNG и определяет общий размер анимации
         /// </summary>
         private ApngFile(byte[] ihdrData, List<PngChunk> headerChunks)
         {
@@ -500,7 +500,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
             Height = ReadInt32BigEndian(ihdrData, 4);
         }
         /// <summary>
-        /// Пытается выполнить действие и возвращает, получилось ли это сделать
+        /// Пытается разобрать байты APNG и собрать список кадров
         /// </summary>
         public static bool TryParse(byte[] bytes, out ApngFile apngFile)
         {
@@ -568,7 +568,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
             return true;
         }
         /// <summary>
-        /// Собирает набор данных из отдельных частей
+        /// Собирает PNG одного кадра из данных APNG
         /// </summary>
         public byte[] BuildFramePng(ApngFrame frame)
         {
@@ -590,7 +590,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
             return chunks.ToArray();
         }
         /// <summary>
-        /// Выполняет вспомогательную часть логики метода ParseFrameControl
+        /// Читает из APNG размер, задержку и правила показа одного кадра
         /// </summary>
         private static ApngFrame ParseFrameControl(byte[] data)
         {
@@ -611,7 +611,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
             };
         }
         /// <summary>
-        /// Проверяет, есть ли нужное состояние или данные
+        /// Проверяет, начинается ли файл с обычной PNG-сигнатуры
         /// </summary>
         private static bool HasPngSignature(byte[] bytes)
         {
@@ -624,7 +624,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
             return true;
         }
         /// <summary>
-        /// Выполняет вспомогательную часть логики метода WriteChunk
+        /// Записывает PNG-блок вместе с длиной и контрольной суммой
         /// </summary>
         private static void WriteChunk(List<byte> output, string type, byte[] data)
         {
@@ -644,7 +644,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
             output.AddRange(crcBytes);
         }
         /// <summary>
-        /// Выполняет вспомогательную часть логики метода CopyBytes
+        /// Копирует часть массива байтов для сборки PNG-кадра
         /// </summary>
         private static byte[] CopyBytes(byte[] source, int offset, int length)
         {
@@ -653,28 +653,28 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
             return copy;
         }
         /// <summary>
-        /// Выполняет вспомогательную часть логики метода ReadAscii
+        /// Читает ASCII-текст из байтов PNG или APNG
         /// </summary>
         private static string ReadAscii(byte[] bytes, int offset, int count)
         {
             return System.Text.Encoding.ASCII.GetString(bytes, offset, count);
         }
         /// <summary>
-        /// Выполняет вспомогательную часть логики метода ReadInt32BigEndian
+        /// Читает 32-битное число из PNG-байтов в big-endian порядке
         /// </summary>
         private static int ReadInt32BigEndian(byte[] bytes, int offset)
         {
             return (bytes[offset] << 24) | (bytes[offset + 1] << 16) | (bytes[offset + 2] << 8) | bytes[offset + 3];
         }
         /// <summary>
-        /// Выполняет вспомогательную часть логики метода ReadUInt16BigEndian
+        /// Читает 16-битное число из PNG-байтов в big-endian порядке
         /// </summary>
         private static ushort ReadUInt16BigEndian(byte[] bytes, int offset)
         {
             return (ushort)((bytes[offset] << 8) | bytes[offset + 1]);
         }
         /// <summary>
-        /// Выполняет вспомогательную часть логики метода WriteInt32BigEndian
+        /// Записывает 32-битное число в PNG-байты в big-endian порядке
         /// </summary>
         private static void WriteInt32BigEndian(byte[] bytes, int offset, int value)
         {
@@ -684,7 +684,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
             bytes[offset + 3] = (byte)(value & 0xff);
         }
         /// <summary>
-        /// Выполняет вспомогательную часть логики метода WriteUInt32BigEndian
+        /// Записывает 32-битное беззнаковое число в PNG-байты в big-endian порядке
         /// </summary>
         private static void WriteUInt32BigEndian(byte[] bytes, int offset, uint value)
         {
@@ -695,14 +695,14 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
         }
     }
     /// <summary>
-    /// Отвечает за механику или визуал кубика, связанные с Crc32
+    /// Помощник для подсчета контрольной суммы PNG-блоков
     /// </summary>
     private static class Crc32
     {
         private const uint Polynomial = 0xedb88320u;
         private static readonly uint[] Table = BuildTable();
         /// <summary>
-        /// Выполняет вспомогательную часть логики метода Compute
+        /// Считает CRC32 для PNG-блока
         /// </summary>
         public static uint Compute(byte[] bytes)
         {
@@ -713,7 +713,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
             return crc ^ 0xffffffffu;
         }
         /// <summary>
-        /// Собирает набор данных из отдельных частей
+        /// Создает таблицу CRC32 для быстрого подсчета контрольной суммы
         /// </summary>
         private static uint[] BuildTable()
         {
@@ -732,7 +732,7 @@ public sealed class DiceRollAnimationPlayer : MonoBehaviour
     }
 }
 /// <summary>
-/// Перечисляет варианты dice roll animation context, которые используются в игровой логике вместо строковых значений
+/// Места, где используется анимация кубика: поле, бой или попытка побега
 /// </summary>
 public enum DiceRollAnimationContext
 {
@@ -741,7 +741,7 @@ public enum DiceRollAnimationContext
     Escape
 }
 /// <summary>
-/// Отвечает за механику или визуал кубика, связанные с DiceRollAnimationSettings
+/// Настройки размера, положения и слоя анимации кубика для конкретного места в игре
 /// </summary>
 [Serializable]
 public sealed class DiceRollAnimationSettings

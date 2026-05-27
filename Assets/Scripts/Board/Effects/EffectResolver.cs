@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Применяет универсальные эффекты событий, предметов и наград к игроку, картам, инвентарю и уведомлениям
+/// Применяет эффекты событий и наград к игроку, его картам, предметам и уведомлениям
 /// </summary>
 
 public sealed class EffectResolver
@@ -16,7 +16,7 @@ public sealed class EffectResolver
     private IReadOnlyList<CardData> possibleRareCards;
     private IReadOnlyList<ItemData> possibleRareItems;
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Подключает системы игрока, карт, наград и подсказок, чтобы эффекты могли менять игру
     /// </summary>
     public void Configure(
         PlayerStats newPlayerStats,
@@ -38,14 +38,14 @@ public sealed class EffectResolver
         possibleRareItems = newPossibleRareItems;
     }
     /// <summary>
-    /// Пытается выполнить действие и возвращает, получилось ли это сделать
+    /// Пытается применить игровой эффект к текущей партии
     /// </summary>
     public bool TryApply(EffectData effect, string sourceName)
     {
         return TryApply(effect, sourceName, null);
     }
     /// <summary>
-    /// Пытается выполнить действие и возвращает, получилось ли это сделать
+    /// Пытается применить игровой эффект к текущей партии
     /// </summary>
     public bool TryApply(EffectData effect, string sourceName, Action onResolved)
     {
@@ -56,7 +56,7 @@ public sealed class EffectResolver
             return false;
         }
 
-        // Эффекты, открывающие награду, завершаются раньше, потому что само окно позже продолжит обработку клетки
+        // Эффекты с наградой открывают отдельное окно, поэтому завершение обработки происходит позже
         bool result;
         switch (effect.EffectType)
         {
@@ -83,7 +83,7 @@ public sealed class EffectResolver
         return result;
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Применяет лечение, полный хил или урон по здоровью
     /// </summary>
     private bool ApplyHpRestore(EffectData effect, string sourceName)
     {
@@ -93,7 +93,7 @@ public sealed class EffectResolver
             return false;
         }
 
-        // Эффекты HP используют один тип данных для лечения, полного лечения и урона, поэтому каждый случай разобран отдельно
+        // Один HP-эффект может лечить, полностью лечить или наносить урон, поэтому случаи разделены
         if (effect.RestoreToFull)
         {
             var previousHp = playerStats.CurrentHp;
@@ -139,7 +139,7 @@ public sealed class EffectResolver
         return false;
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Изменяет уровень игрока и показывает подсказку о результате
     /// </summary>
     private bool ApplyLevel(int value, string sourceName)
     {
@@ -170,11 +170,11 @@ public sealed class EffectResolver
         return true;
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Открывает награду-карту для игрока
     /// </summary>
     private bool ApplyGiveCard(EffectData effect, string sourceName, Action onResolved)
     {
-        // Награды проходят через SingleRewardSystem, чтобы проверки заполнения руки и инвентаря оставались в одном месте
+        // Награда проходит через окно одиночной награды, чтобы одинаково проверять руку и инвентарь
         var rarity = effect.RarityFilter;
         var card = GetRandomCard(rarity);
         if (card == null)
@@ -205,7 +205,7 @@ public sealed class EffectResolver
         return true;
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Открывает награду-предмет для игрока
     /// </summary>
     private bool ApplyGiveItem(EffectData effect, string sourceName, Action onResolved)
     {
@@ -239,7 +239,7 @@ public sealed class EffectResolver
         return true;
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Удаляет случайные карты из руки игрока по эффекту
     /// </summary>
     private bool ApplyRemoveCard(EffectData effect, string sourceName)
     {
@@ -270,7 +270,7 @@ public sealed class EffectResolver
         return true;
     }
     /// <summary>
-    /// Сообщает подписчикам, что состояние изменилось
+    /// Сообщает слушателям, что игрок забрал награду от эффекта
     /// </summary>
     private void NotifyRewardClaimed(RewardData reward)
     {
@@ -280,7 +280,7 @@ public sealed class EffectResolver
         NotifyEffect(reward.ClaimEffectType, 1, EffectNotificationStatus.Success);
     }
     /// <summary>
-    /// Сообщает подписчикам, что состояние изменилось
+    /// Показывает подсказку о результате эффекта клетки или карты
     /// </summary>
     private void NotifyEffect(EffectData effect, EffectNotificationStatus status)
     {
@@ -288,7 +288,7 @@ public sealed class EffectResolver
             eventNotificationSystem.ShowEffectNotification(effect, status);
     }
     /// <summary>
-    /// Сообщает подписчикам, что состояние изменилось
+    /// Показывает подсказку об эффекте с уже посчитанным числом
     /// </summary>
     private void NotifyEffect(EffectData effect, EffectNotificationStatus status, int displayValue)
     {
@@ -296,7 +296,7 @@ public sealed class EffectResolver
             eventNotificationSystem.ShowEffectNotification(effect, status, displayValue);
     }
     /// <summary>
-    /// Сообщает подписчикам, что состояние изменилось
+    /// Показывает подсказку по типу эффекта, числу и статусу применения
     /// </summary>
     private void NotifyEffect(EffectType effectType, int value, EffectNotificationStatus status)
     {
@@ -304,7 +304,7 @@ public sealed class EffectResolver
             eventNotificationSystem.ShowEffectNotification(effectType, value, status);
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Выбирает случайную карту нужной редкости
     /// </summary>
     private CardData GetRandomCard(Rarity rarity)
     {
@@ -323,7 +323,7 @@ public sealed class EffectResolver
         return validCards.Count == 0 ? null : validCards[UnityEngine.Random.Range(0, validCards.Count)];
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Выбирает случайный предмет нужной редкости
     /// </summary>
     private ItemData GetRandomItem(Rarity rarity)
     {

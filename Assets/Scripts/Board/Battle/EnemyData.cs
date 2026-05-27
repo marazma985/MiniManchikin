@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 /// <summary>
-/// Отвечает за часть системы боя, связанную с EnemyData
+/// Настройки конкретного монстра: его имя, картинка, уровень, возможные усиления, награды и штрафы
 /// </summary>
 
 [CreateAssetMenu(fileName = "EnemyData", menuName = "Board Game/Enemy Data")]
@@ -29,7 +29,7 @@ public sealed class EnemyData : ScriptableObject
     public IReadOnlyList<EnemyModifier> Modifiers => modifiers;
     public IReadOnlyList<EffectData> PenaltyEffects => penaltyEffects;
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {

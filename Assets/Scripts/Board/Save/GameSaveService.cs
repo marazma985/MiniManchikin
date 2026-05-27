@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using UnityEngine;
 /// <summary>
-/// Работает с JSON-файлом сохранения на диске и скрывает детали пути, загрузки и удаления
+/// Читает, записывает и удаляет файл сохранения партии
 /// </summary>
 
 public static class GameSaveService
@@ -12,14 +12,14 @@ public static class GameSaveService
 
     public static string SavePath => Path.Combine(Application.persistentDataPath, SaveFileName);
     /// <summary>
-    /// Проверяет, есть ли нужное состояние или данные
+    /// Проверяет, есть ли файл сохранения партии
     /// </summary>
     public static bool HasSave()
     {
         return File.Exists(SavePath);
     }
     /// <summary>
-    /// Сохраняет текущее состояние
+    /// Сохраняет данные партии или настроек
     /// </summary>
     public static void Save(GameSaveData data)
     {
@@ -45,7 +45,7 @@ public static class GameSaveService
         }
     }
     /// <summary>
-    /// Пытается выполнить действие и возвращает, получилось ли это сделать
+    /// Пытается прочитать файл сохранения и превратить его в данные партии
     /// </summary>
     public static bool TryLoad(out GameSaveData data)
     {
@@ -77,7 +77,7 @@ public static class GameSaveService
         }
     }
     /// <summary>
-    /// Удаляет сохраненные данные или временный объект
+    /// Удаляет сохраненные или временные данные
     /// </summary>
     public static void DeleteSave()
     {

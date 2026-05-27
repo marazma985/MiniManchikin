@@ -1,6 +1,6 @@
 using System;
 /// <summary>
-/// Задает общий контракт ideferred tile effect, чтобы разные реализации можно было вызывать одинаково
+/// Общее правило для клеток, эффект которых может завершиться не сразу из-за окна или награды
 /// </summary>
 
 public interface IDeferredTileEffect : ITileEffect

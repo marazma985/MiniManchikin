@@ -3,13 +3,13 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 /// <summary>
-/// Отвечает за базовую механику игрового поля, связанную с PlayerMover
+/// Двигает фишку игрока по клеткам поля после броска кубика или действия карты
 /// </summary>
 
 public sealed class PlayerMover : MonoBehaviour
 {
     /// <summary>
-    /// Отвечает за базовую механику игрового поля, связанную с MoveCompletedEvent
+    /// Событие, которое сообщает игре, на какой клетке закончилась остановка фишки
     /// </summary>
     [Serializable]
     public sealed class MoveCompletedEvent : UnityEvent<BoardTile>
@@ -34,14 +34,14 @@ public sealed class PlayerMover : MonoBehaviour
     public AnimationCurve MovementCurve => movementCurve;
     public MoveCompletedEvent OnMoveCompleted => onMoveCompleted;
     /// <summary>
-    /// Перемещает игровой объект или состояние в новую позицию
+    /// Перемещает объект или игровое состояние
     /// </summary>
     public void MoveSteps(int steps)
     {
         MoveSteps(steps, null);
     }
     /// <summary>
-    /// Перемещает игровой объект или состояние в новую позицию
+    /// Перемещает объект или игровое состояние
     /// </summary>
     public void MoveSteps(int steps, Action onCompleted)
     {
@@ -52,14 +52,14 @@ public sealed class PlayerMover : MonoBehaviour
         moveCoroutine = StartCoroutine(MoveStepsRoutine(Mathf.Max(0, steps)));
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetBoardManager(BoardManager newBoardManager)
     {
         boardManager = newBoardManager;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода SnapToCurrentTile
+    /// Мгновенно ставит фигурку игрока на текущую клетку поля
     /// </summary>
     public void SnapToCurrentTile()
     {
@@ -71,7 +71,7 @@ public sealed class PlayerMover : MonoBehaviour
         transform.localPosition = tileLocalOffset;
     }
     /// <summary>
-    /// Перемещает игровой объект или состояние в новую позицию
+    /// Перемещает объект или игровое состояние
     /// </summary>
     private IEnumerator MoveStepsRoutine(int steps)
     {
@@ -98,7 +98,7 @@ public sealed class PlayerMover : MonoBehaviour
         CompleteMove(currentTile ?? boardManager.CurrentTile);
     }
     /// <summary>
-    /// Перемещает игровой объект или состояние в новую позицию
+    /// Перемещает объект или игровое состояние
     /// </summary>
     private IEnumerator MoveToTile(BoardTile tile)
     {
@@ -119,7 +119,7 @@ public sealed class PlayerMover : MonoBehaviour
         transform.localPosition = tileLocalOffset;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода CompleteMove
+    /// Завершает перемещение фигурки и сообщает о достигнутой клетке
     /// </summary>
     private void CompleteMove(BoardTile finalTile)
     {
@@ -129,7 +129,7 @@ public sealed class PlayerMover : MonoBehaviour
         moveCompletedCallback = null;
     }
     /// <summary>
-    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
     /// </summary>
     private void Reset()
     {
@@ -137,7 +137,7 @@ public sealed class PlayerMover : MonoBehaviour
         CacheTileLocalOffset();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
@@ -156,7 +156,7 @@ public sealed class PlayerMover : MonoBehaviour
             CacheTileLocalOffset();
     }
     /// <summary>
-    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// Сохраняет стартовый масштаб фигурки игрока для анимации движения
     /// </summary>
     private void Awake()
     {
@@ -164,7 +164,7 @@ public sealed class PlayerMover : MonoBehaviour
             CacheTileLocalOffset();
     }
     /// <summary>
-    /// Сохраняет текущие значения, чтобы позже обнаружить изменения
+    /// Запоминает текущее значение для дальнейшего сравнения
     /// </summary>
     private void CacheTileLocalOffset()
     {

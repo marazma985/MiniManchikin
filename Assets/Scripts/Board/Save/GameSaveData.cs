@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 /// <summary>
-/// Отвечает за сохранение или восстановление данных партии, связанное с GameSaveData
+/// Все данные сохраненной партии, которые записываются в JSON-файл
 /// </summary>
 
 [Serializable]
@@ -19,7 +19,7 @@ public sealed class GameSaveData
     public RewardSaveData singleReward;
 }
 /// <summary>
-/// Отвечает за сохранение или восстановление данных партии, связанное с TurnSaveData
+/// Данные сохраненного хода, если игрок закрыл игру во время движения или обработки клетки
 /// </summary>
 [Serializable]
 public sealed class TurnSaveData
@@ -31,7 +31,7 @@ public sealed class TurnSaveData
     public int pendingBoardMoveStartTileIndex;
 }
 /// <summary>
-/// Отвечает за сохранение или восстановление данных партии, связанное с BattleSaveData
+/// Данные сохраненного боя, включая монстра, модификаторы, фазу боя и уже выпавшие броски
 /// </summary>
 [Serializable]
 public sealed class BattleSaveData
@@ -50,7 +50,7 @@ public sealed class BattleSaveData
     public int pendingEscapeRollValue;
 }
 /// <summary>
-/// Отвечает за сохранение или восстановление данных партии, связанное с RewardSaveData
+/// Данные сохраненной награды, чтобы после продолжения показать тот же приз
 /// </summary>
 [Serializable]
 public sealed class RewardSaveData

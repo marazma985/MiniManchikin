@@ -2,13 +2,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за часть игровой логики или интерфейса, связанную с MainMenuSceneLoader
+/// Кнопки главного меню, которые запускают новую игру или продолжают сохранение
 /// </summary>
 
 public sealed class MainMenuSceneLoader : MonoBehaviour
 {
     /// <summary>
-    /// Перечисляет варианты launch mode, которые используются в игровой логике вместо строковых значений
+    /// Набор вариантов, из которых игра выбирает нужное состояние для LaunchMode
     /// </summary>
     private enum LaunchMode
     {
@@ -22,7 +22,7 @@ public sealed class MainMenuSceneLoader : MonoBehaviour
     [SerializeField] private MainMenuSpriteButton spriteButton;
 
     /// <summary>
-    /// Обновляет доступность продолжения и подписывается на кнопку загрузки сцены
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -32,7 +32,7 @@ public sealed class MainMenuSceneLoader : MonoBehaviour
             button.onClick.AddListener(LoadScene);
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -40,7 +40,7 @@ public sealed class MainMenuSceneLoader : MonoBehaviour
             button.onClick.RemoveListener(LoadScene);
     }
     /// <summary>
-    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
     /// </summary>
     private void Reset()
     {
@@ -48,7 +48,7 @@ public sealed class MainMenuSceneLoader : MonoBehaviour
         spriteButton = GetComponent<MainMenuSpriteButton>();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
@@ -60,7 +60,7 @@ public sealed class MainMenuSceneLoader : MonoBehaviour
         RefreshContinueState();
     }
     /// <summary>
-    /// Загружает данные или сцену
+    /// Загружает сцену, файл или данные
     /// </summary>
     private void LoadScene()
     {
@@ -80,7 +80,7 @@ public sealed class MainMenuSceneLoader : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Включает или блокирует кнопку продолжения в зависимости от наличия сохранения
     /// </summary>
     private void RefreshContinueState()
     {

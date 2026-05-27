@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Отвечает за работу карт и логику, связанную с CardHandView
+/// Показывает карты в руке игрока и обновляет их, когда рука меняется
 /// </summary>
 
 public sealed class CardHandView : MonoBehaviour
@@ -10,7 +10,7 @@ public sealed class CardHandView : MonoBehaviour
     [SerializeField] private CardView[] cardViews;
 
     /// <summary>
-    /// Подписывается на изменения руки и сразу обновляет слоты карт
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -18,21 +18,21 @@ public sealed class CardHandView : MonoBehaviour
         Refresh();
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
         Unsubscribe();
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Перерисовывает карты в руке игрока
     /// </summary>
     public void Refresh()
     {
         Refresh(cardSystem != null ? cardSystem.Hand : null);
     }
     /// <summary>
-    /// Подписывает компонент на события зависимых систем
+    /// Подписывается на события другой системы
     /// </summary>
     private void Subscribe()
     {
@@ -42,7 +42,7 @@ public sealed class CardHandView : MonoBehaviour
         cardSystem.OnHandChanged += Refresh;
     }
     /// <summary>
-    /// Снимает подписки, чтобы не оставить устаревшие ссылки
+    /// Отписывается от событий другой системы
     /// </summary>
     private void Unsubscribe()
     {
@@ -52,7 +52,7 @@ public sealed class CardHandView : MonoBehaviour
         cardSystem.OnHandChanged -= Refresh;
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Перерисовывает карты в руке игрока
     /// </summary>
     private void Refresh(IReadOnlyList<CardData> cards)
     {
@@ -80,7 +80,7 @@ public sealed class CardHandView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleCardClicked(CardData card)
     {
@@ -88,7 +88,7 @@ public sealed class CardHandView : MonoBehaviour
             cardSystem.UseCard(card);
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleCardRemoveClicked(CardData card)
     {

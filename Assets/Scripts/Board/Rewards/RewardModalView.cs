@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за выдачу или показ наград, связанные с RewardModalView
+/// Окно выбора награды после победы в бою
 /// </summary>
 
 public sealed class RewardModalView : MonoBehaviour
@@ -21,7 +21,7 @@ public sealed class RewardModalView : MonoBehaviour
     public event Action<RewardData> RewardSelected;
     public event Action CloseRequested;
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Показывает окно выбора награды после боя
     /// </summary>
     public void Show(IReadOnlyList<RewardData> rewards)
     {
@@ -30,7 +30,7 @@ public sealed class RewardModalView : MonoBehaviour
         Refresh(rewards);
     }
     /// <summary>
-    /// Скрывает нужное окно или визуальное состояние
+    /// Закрывает окно выбора награды
     /// </summary>
     public void Hide()
     {
@@ -38,7 +38,7 @@ public sealed class RewardModalView : MonoBehaviour
         gameObject.SetActive(false);
     }
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Показывает подсказку внутри окна выбора награды
     /// </summary>
     public void ShowStatus(string message)
     {
@@ -56,14 +56,14 @@ public sealed class RewardModalView : MonoBehaviour
         statusFade = StartCoroutine(FadeStatusRoutine());
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
         Subscribe();
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -71,7 +71,7 @@ public sealed class RewardModalView : MonoBehaviour
         HideStatus(true);
     }
     /// <summary>
-    /// Подписывает компонент на события зависимых систем
+    /// Подписывается на события другой системы
     /// </summary>
     private void Subscribe()
     {
@@ -95,7 +95,7 @@ public sealed class RewardModalView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Снимает подписки, чтобы не оставить устаревшие ссылки
+    /// Отписывается от событий другой системы
     /// </summary>
     private void Unsubscribe()
     {
@@ -113,7 +113,7 @@ public sealed class RewardModalView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Заполняет окно выбора награды доступными вариантами
     /// </summary>
     private void Refresh(IReadOnlyList<RewardData> rewards)
     {
@@ -132,21 +132,21 @@ public sealed class RewardModalView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleRewardClicked(RewardData reward)
     {
         RewardSelected?.Invoke(reward);
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleCloseClicked()
     {
         CloseRequested?.Invoke();
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода FadeStatusRoutine
+    /// Показывает подсказку награды на короткое время
     /// </summary>
     private IEnumerator FadeStatusRoutine()
     {
@@ -159,7 +159,7 @@ public sealed class RewardModalView : MonoBehaviour
         statusFade = null;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода FadeStatusTo
+    /// Плавно меняет прозрачность подсказки награды
     /// </summary>
     private IEnumerator FadeStatusTo(float targetAlpha)
     {
@@ -183,7 +183,7 @@ public sealed class RewardModalView : MonoBehaviour
         SetStatusAlpha(targetAlpha);
     }
     /// <summary>
-    /// Скрывает нужное окно или визуальное состояние
+    /// Скрывает подсказку в окне выбора награды
     /// </summary>
     private void HideStatus(bool instant)
     {
@@ -196,7 +196,7 @@ public sealed class RewardModalView : MonoBehaviour
             SetStatusAlpha(0f);
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает текущую прозрачность подсказки награды
     /// </summary>
     private float GetStatusAlpha()
     {
@@ -206,7 +206,7 @@ public sealed class RewardModalView : MonoBehaviour
         return statusText != null ? statusText.color.a : 0f;
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     private void SetStatusAlpha(float alpha)
     {
@@ -224,7 +224,7 @@ public sealed class RewardModalView : MonoBehaviour
         statusText.color = color;
     }
     /// <summary>
-    /// Останавливает текущий процесс, корутину или визуальный переход
+    /// Останавливает текущий процесс или анимацию
     /// </summary>
     private void StopStatusFade()
     {

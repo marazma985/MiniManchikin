@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 /// <summary>
-/// Отвечает за выдачу или показ наград, связанные с RewardData
+/// Общая обертка для награды, чтобы карта и предмет выбирались одинаково
 /// </summary>
 
 [Serializable]
@@ -16,22 +16,22 @@ public abstract class RewardData
     public virtual CardData CardData => null;
     public virtual ItemData ItemData => null;
     /// <summary>
-    /// Проверяет, разрешено ли выполнить действие в текущем состоянии игры
+    /// Проверяет, можно ли сейчас выполнить это действие
     /// </summary>
     public abstract bool CanClaim(CardSystem cardSystem, PlayerInventory playerInventory, out string status);
     /// <summary>
-    /// Пытается выполнить действие и возвращает, получилось ли это сделать
+    /// Пытается выдать награду игроку и сообщает, получилось ли ее забрать
     /// </summary>
     public abstract bool TryClaim(CardSystem cardSystem, PlayerInventory playerInventory);
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода FromCard
+    /// Создает данные награды из карты
     /// </summary>
     public static RewardData FromCard(CardData card)
     {
         return card != null ? new CardRewardData(card) : null;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода FromItem
+    /// Создает данные награды из предмета
     /// </summary>
     public static RewardData FromItem(ItemData item)
     {
@@ -39,14 +39,14 @@ public abstract class RewardData
     }
 }
 /// <summary>
-/// Отвечает за выдачу или показ наград, связанные с CardRewardData
+/// Награда в виде карты, которую можно добавить игроку в руку
 /// </summary>
 [Serializable]
 public sealed class CardRewardData : RewardData
 {
     private readonly CardData cardData;
     /// <summary>
-    /// Создает экземпляр CardRewardData и заполняет его начальными данными
+    /// Создает награду, которая добавляет карту в руку игрока
     /// </summary>
     public CardRewardData(CardData cardData)
     {
@@ -60,7 +60,7 @@ public sealed class CardRewardData : RewardData
     public override string DisplayDescription => cardData != null ? cardData.Description : string.Empty;
     public override EffectType ClaimEffectType => EffectType.GiveCard;
     /// <summary>
-    /// Проверяет, разрешено ли выполнить действие в текущем состоянии игры
+    /// Проверяет, можно ли сейчас выполнить это действие
     /// </summary>
     public override bool CanClaim(CardSystem cardSystem, PlayerInventory playerInventory, out string status)
     {
@@ -80,7 +80,7 @@ public sealed class CardRewardData : RewardData
         return true;
     }
     /// <summary>
-    /// Пытается выполнить действие и возвращает, получилось ли это сделать
+    /// Пытается добавить карту-награду в руку игрока
     /// </summary>
     public override bool TryClaim(CardSystem cardSystem, PlayerInventory playerInventory)
     {
@@ -88,14 +88,14 @@ public sealed class CardRewardData : RewardData
     }
 }
 /// <summary>
-/// Отвечает за выдачу или показ наград, связанные с ItemRewardData
+/// Награда в виде предмета, который можно экипировать игроку
 /// </summary>
 [Serializable]
 public sealed class ItemRewardData : RewardData
 {
     private readonly ItemData itemData;
     /// <summary>
-    /// Создает экземпляр ItemRewardData и заполняет его начальными данными
+    /// Создает награду, которая добавляет предмет в экипировку игрока
     /// </summary>
     public ItemRewardData(ItemData itemData)
     {
@@ -109,7 +109,7 @@ public sealed class ItemRewardData : RewardData
     public override string DisplayDescription => itemData != null ? itemData.Description : string.Empty;
     public override EffectType ClaimEffectType => EffectType.GiveItem;
     /// <summary>
-    /// Проверяет, разрешено ли выполнить действие в текущем состоянии игры
+    /// Проверяет, можно ли сейчас выполнить это действие
     /// </summary>
     public override bool CanClaim(CardSystem cardSystem, PlayerInventory playerInventory, out string status)
     {
@@ -129,7 +129,7 @@ public sealed class ItemRewardData : RewardData
         return true;
     }
     /// <summary>
-    /// Пытается выполнить действие и возвращает, получилось ли это сделать
+    /// Пытается надеть предмет-награду на игрока
     /// </summary>
     public override bool TryClaim(CardSystem cardSystem, PlayerInventory playerInventory)
     {

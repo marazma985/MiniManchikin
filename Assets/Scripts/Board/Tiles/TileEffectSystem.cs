@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Связывает тип клетки с конкретной логикой эффекта и запускает ее при остановке игрока
+/// Определяет, что должно произойти после остановки игрока на конкретном типе клетки
 /// </summary>
 
 [RequireComponent(typeof(SingleRewardSystem))]
@@ -52,7 +52,7 @@ public sealed class TileEffectSystem : MonoBehaviour
     public event Action<BoardTile> TileResolving;
     public event Action<BoardTile> TileResolved;
     /// <summary>
-    /// Регистрирует данные или подписки, которые нужны другим системам
+    /// Передает данные другой системе, чтобы она могла ими пользоваться
     /// </summary>
     public void RegisterEffect(TileType tileType, ITileEffect effect)
     {
@@ -62,7 +62,7 @@ public sealed class TileEffectSystem : MonoBehaviour
         effectsByTileType[tileType] = effect;
     }
     /// <summary>
-    /// Регистрирует данные или подписки, которые нужны другим системам
+    /// Передает системе сохранений данные, которые можно будет найти по id
     /// </summary>
     public void RegisterSaveContent(GameSaveContentResolver resolver)
     {
@@ -74,14 +74,14 @@ public sealed class TileEffectSystem : MonoBehaviour
         RegisterItems(resolver, possibleRareItems);
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     public void ResolveTile(BoardTile tile)
     {
         ResolveTile(tile, null);
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     public void ResolveTile(BoardTile tile, Action onResolved)
     {
@@ -107,7 +107,7 @@ public sealed class TileEffectSystem : MonoBehaviour
         CompleteTileResolution(tile, onResolved);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода CompleteTileResolution
+    /// Завершает обработку клетки и передает ход дальше
     /// </summary>
     private void CompleteTileResolution(BoardTile tile, Action onResolved)
     {
@@ -115,7 +115,7 @@ public sealed class TileEffectSystem : MonoBehaviour
         onResolved?.Invoke();
     }
     /// <summary>
-    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// Создает набор обработчиков для всех типов клеток
     /// </summary>
     private void Awake()
     {
@@ -123,7 +123,7 @@ public sealed class TileEffectSystem : MonoBehaviour
         InitializeEffects();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
@@ -131,7 +131,7 @@ public sealed class TileEffectSystem : MonoBehaviour
         InitializeEffects();
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает обработчик эффекта для типа клетки
     /// </summary>
     private ITileEffect GetEffect(TileType tileType)
     {
@@ -141,7 +141,7 @@ public sealed class TileEffectSystem : MonoBehaviour
         return effectsByTileType.TryGetValue(tileType, out var effect) ? effect : eventTileEffect;
     }
     /// <summary>
-    /// Готовит систему к работе и заполняет недостающие ссылки
+    /// Подготавливает объект к работе
     /// </summary>
     private void InitializeEffects()
     {
@@ -164,7 +164,7 @@ public sealed class TileEffectSystem : MonoBehaviour
         _ = healTileEffect;
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     private SingleRewardSystem ResolveSingleRewardSystem()
     {
@@ -181,7 +181,7 @@ public sealed class TileEffectSystem : MonoBehaviour
         return null;
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     private EventNotificationSystem ResolveEventNotificationSystem()
     {
@@ -198,7 +198,7 @@ public sealed class TileEffectSystem : MonoBehaviour
         return null;
     }
     /// <summary>
-    /// Гарантирует, что нужный объект, ресурс или ссылка существует
+    /// Создает или находит то, без чего объект не сможет работать
     /// </summary>
     private void EnsureDefaultEvents()
     {
@@ -245,7 +245,7 @@ public sealed class TileEffectSystem : MonoBehaviour
         }
     }
     /// <summary>
-    /// Регистрирует данные или подписки, которые нужны другим системам
+    /// Передает данные другой системе, чтобы она могла ими пользоваться
     /// </summary>
     private static void RegisterCards(GameSaveContentResolver resolver, IReadOnlyList<CardData> cards)
     {
@@ -256,7 +256,7 @@ public sealed class TileEffectSystem : MonoBehaviour
             resolver.AddCard(cards[i]);
     }
     /// <summary>
-    /// Регистрирует данные или подписки, которые нужны другим системам
+    /// Передает данные другой системе, чтобы она могла ими пользоваться
     /// </summary>
     private static void RegisterItems(GameSaveContentResolver resolver, IReadOnlyList<ItemData> items)
     {

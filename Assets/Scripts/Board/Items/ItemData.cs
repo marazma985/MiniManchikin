@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 /// <summary>
-/// Описывает данные предметов экипировки, связанные с ItemData
+/// Настройки предмета: название, картинка, тип, редкость и бонусы
 /// </summary>
 
 [CreateAssetMenu(fileName = "ItemData", menuName = "Board Game/Item Data")]
@@ -24,7 +24,7 @@ public sealed class ItemData : ScriptableObject
     public ItemType ItemType => itemType;
     public IReadOnlyList<EffectData> Effects => effects;
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {

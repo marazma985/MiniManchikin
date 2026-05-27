@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Отвечает за работу карт и логику, связанную с CardData
+/// Настройки карты: название, описание, картинка, редкость и игровые эффекты
 /// </summary>
 
 [CreateAssetMenu(fileName = "CardData", menuName = "Board Game/Card Data")]
@@ -23,7 +23,7 @@ public sealed class CardData : ScriptableObject
     public UsageContext UsageContext => usageContext;
     public IReadOnlyList<EffectData> Effects => effects;
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {

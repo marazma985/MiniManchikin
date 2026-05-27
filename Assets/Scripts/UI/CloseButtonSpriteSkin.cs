@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за часть игровой логики или интерфейса, связанную с CloseButtonSpriteSkin
+/// Автоматически заменяет обычный крестик окна на общий красивый крестик с плавной сменой картинки
 /// </summary>
 
 public sealed class CloseButtonSpriteSkin : MonoBehaviour
@@ -14,28 +14,28 @@ public sealed class CloseButtonSpriteSkin : MonoBehaviour
 
     private SmoothSpriteButton spriteTransition;
     /// <summary>
-    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
     /// </summary>
     private void Reset()
     {
         ResolveReferences();
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
         Apply();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
         ResolveReferences();
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Добавляет выбранной кнопке визуал нового крестика
     /// </summary>
     public static void ApplyTo(Button targetButton)
     {
@@ -50,7 +50,7 @@ public sealed class CloseButtonSpriteSkin : MonoBehaviour
         skin.Apply();
     }
     /// <summary>
-    /// Применяет изменение к игровому или визуальному состоянию
+    /// Настраивает кнопку закрытия на обычный и hover-спрайт крестика
     /// </summary>
     public void Apply()
     {
@@ -83,7 +83,7 @@ public sealed class CloseButtonSpriteSkin : MonoBehaviour
         spriteTransition.Configure(button, targetImage, spriteSet.NormalSprite, spriteSet.HighlightedSprite, spriteSet.PressedSprite, null, spriteSet.FadeDuration);
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     private void ResolveReferences()
     {
@@ -94,7 +94,7 @@ public sealed class CloseButtonSpriteSkin : MonoBehaviour
             targetImage = GetComponent<Image>();
     }
     /// <summary>
-    /// Скрывает нужное окно или визуальное состояние
+    /// Прячет старые текстовые крестики внутри кнопки
     /// </summary>
     private void HideTextMarkers()
     {
@@ -107,7 +107,7 @@ public sealed class CloseButtonSpriteSkin : MonoBehaviour
         }
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода IsCloseMarker
+    /// Проверяет, похож ли текст на старый символ закрытия
     /// </summary>
     private static bool IsCloseMarker(string value)
     {

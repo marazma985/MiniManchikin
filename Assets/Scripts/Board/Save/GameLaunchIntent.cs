@@ -1,5 +1,5 @@
 /// <summary>
-/// Перечисляет варианты game launch mode, которые используются в игровой логике вместо строковых значений
+/// Режим запуска игровой сцены: начать заново или загрузить сохранение
 /// </summary>
 public enum GameLaunchMode
 {
@@ -7,7 +7,7 @@ public enum GameLaunchMode
     Continue
 }
 /// <summary>
-/// Отвечает за сохранение или восстановление данных партии, связанное с GameLaunchIntent
+/// Запоминает, как игрок входит в сцену поля: новая игра или продолжение
 /// </summary>
 public static class GameLaunchIntent
 {
@@ -15,14 +15,14 @@ public static class GameLaunchIntent
 
     public static GameLaunchMode Mode => mode;
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public static void Set(GameLaunchMode launchMode)
     {
         mode = launchMode;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода Consume
+    /// Возвращает выбранный режим запуска игры и сразу сбрасывает его
     /// </summary>
     public static GameLaunchMode Consume()
     {

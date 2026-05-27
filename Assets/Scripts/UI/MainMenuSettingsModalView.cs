@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Строит и обновляет модальное окно настроек главного меню: разрешение, полноэкранный режим и громкость музыки
+/// Модальное окно настроек в главном меню, где игрок меняет окно, полный экран и громкость
 /// </summary>
 
 public sealed class MainMenuSettingsModalView : MonoBehaviour
@@ -29,7 +29,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
     private Coroutine showRoutine;
     private int selectedResolutionIndex = 1;
     /// <summary>
-    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// Собирает окно настроек главного меню и заполняет его текущими значениями
     /// </summary>
     private void Awake()
     {
@@ -38,7 +38,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         Hide();
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -50,7 +50,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
 
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -62,7 +62,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
 
     }
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Открывает окно настроек поверх главного меню
     /// </summary>
     public void Show()
     {
@@ -88,7 +88,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Скрывает нужное окно или визуальное состояние
+    /// Закрывает окно настроек и возвращает фокус главному меню
     /// </summary>
     public void Hide()
     {
@@ -105,7 +105,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
             resolutionOptionsRoot.SetActive(false);
     }
     /// <summary>
-    /// Сохраняет текущее состояние
+    /// Сохраняет данные партии или настроек
     /// </summary>
     private void Save()
     {
@@ -121,7 +121,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         Hide();
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода PopulateResolutionDropdown
+    /// Заполняет список доступных размеров окна в настройках
     /// </summary>
     private void PopulateResolutionDropdown()
     {
@@ -138,7 +138,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         SetSelectedResolutionIndex(selectedResolutionIndex, false);
     }
     /// <summary>
-    /// Гарантирует, что нужный объект, ресурс или ссылка существует
+    /// Создает недостающие элементы окна настроек прямо в сцене
     /// </summary>
     private void EnsureUi()
     {
@@ -154,7 +154,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         if (modalRoot != null)
             return;
 
-        // Модальное окно настроек собирается кодом, поэтому в сцене достаточно ссылок на арт и кнопку открытия
+        // Окно настроек создается кодом, поэтому в сцене не нужно вручную собирать все его дочерние элементы
         var parent = canvas != null ? canvas.transform : transform;
         modalRoot = CreateRect("Settings Modal", parent, Vector2.zero, Vector2.zero).gameObject;
         Stretch(modalRoot.transform as RectTransform);
@@ -190,7 +190,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         saveButton = CreateButton("Save Button", panel.transform, "Сохранить", new Vector2(0f, -175f), new Vector2(220f, 58f));
     }
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Делает снимок фона для размытия и затем показывает окно настроек
     /// </summary>
     private IEnumerator ShowAfterBlurCapture()
     {
@@ -214,7 +214,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         showRoutine = null;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода UpdateResolutionCaption
+    /// Обновляет подпись выбранного размера окна в настройках
     /// </summary>
     private void UpdateResolutionCaption(int optionIndex)
     {
@@ -226,13 +226,13 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         resolutionCaptionText.color = Color.white;
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает выпадающий список размеров окна в настройках
     /// </summary>
     private void CreateResolutionSelector(Transform parent, Vector2 anchoredPosition, Vector2 size)
     {
         resolutionOptionTexts.Clear();
 
-        // Это собственный выпадающий список, потому что меню использует спрайтовые кнопки вместо стандартного Unity Dropdown
+        // Здесь создается собственный список размеров окна в стиле кнопок главного меню
         resolutionButton = CreateButtonSurface("Resolution Dropdown", parent, new Color(0.16f, 0.24f, 0.28f, 0.96f), anchoredPosition, size);
         resolutionButton.onClick.AddListener(ToggleResolutionOptions);
 
@@ -260,7 +260,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
 
         for (var i = 0; i < 3; i++)
         {
-            // Индекс сохраняется в локальную переменную, чтобы каждая кнопка держала свое значение разрешения
+            // Так каждая кнопка размера окна запоминает именно свой вариант
             var optionIndex = i;
             var optionButton = CreateButtonSurface($"Resolution Option {i + 1}", optionsImage.transform, new Color(0.22f, 0.32f, 0.36f, 1f), Vector2.zero, new Vector2(size.x, 42f));
             var optionRect = optionButton.transform as RectTransform;
@@ -283,7 +283,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         resolutionOptionsRoot.SetActive(false);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода ToggleResolutionOptions
+    /// Открывает или закрывает список размеров окна
     /// </summary>
     private void ToggleResolutionOptions()
     {
@@ -300,7 +300,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         resolutionOptionsRoot.SetActive(showOptions);
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Запоминает выбранный размер окна и обновляет подпись
     /// </summary>
     private void SetSelectedResolutionIndex(int optionIndex, bool hideOptions)
     {
@@ -314,7 +314,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
             resolutionOptionsRoot.SetActive(false);
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает RectTransform с нужным размером и позицией для окна настроек
     /// </summary>
     private static RectTransform CreateRect(string name, Transform parent, Vector2 anchoredPosition, Vector2 size)
     {
@@ -330,7 +330,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         return rectTransform;
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает картинку интерфейса внутри окна настроек
     /// </summary>
     private static Image CreateImage(string name, Transform parent, Sprite sprite)
     {
@@ -345,7 +345,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         return image;
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает текстовую подпись или значение внутри окна настроек
     /// </summary>
     private static Text CreateText(string name, Transform parent, string value, Vector2 anchoredPosition, Vector2 size, int fontSize, TextAnchor alignment, FontStyle fontStyle)
     {
@@ -366,7 +366,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         return text;
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает переключатель полного экрана в окне настроек
     /// </summary>
     private static Toggle CreateToggle(string name, Transform parent, Vector2 anchoredPosition, Vector2 size)
     {
@@ -385,7 +385,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         return toggle;
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает ползунок громкости музыки в окне настроек
     /// </summary>
     private static Slider CreateSlider(string name, Transform parent, Vector2 anchoredPosition, Vector2 size)
     {
@@ -422,7 +422,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         return slider;
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает кнопку окна настроек с текстовой подписью
     /// </summary>
     private static Button CreateButton(string name, Transform parent, string label, Vector2 anchoredPosition, Vector2 size)
     {
@@ -433,7 +433,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         return button;
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает основу кнопки с цветом, размером и позицией
     /// </summary>
     private static Button CreateButtonSurface(string name, Transform parent, Color color, Vector2 anchoredPosition, Vector2 size)
     {
@@ -448,7 +448,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         return button;
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     private static void SetCentered(RectTransform rectTransform, Vector2 anchoredPosition, Vector2 size)
     {
@@ -459,7 +459,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         rectTransform.sizeDelta = size;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода Stretch
+    /// Растягивает RectTransform на всю область родителя
     /// </summary>
     private static void Stretch(RectTransform rectTransform)
     {
@@ -469,7 +469,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         rectTransform.offsetMax = Vector2.zero;
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода StretchHorizontally
+    /// Растягивает RectTransform по ширине родителя
     /// </summary>
     private static void StretchHorizontally(RectTransform rectTransform)
     {
@@ -478,7 +478,7 @@ public sealed class MainMenuSettingsModalView : MonoBehaviour
         rectTransform.pivot = new Vector2(0.5f, 0.5f);
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает стандартный шрифт Unity для созданных из кода надписей
     /// </summary>
     private static Font GetDefaultFont()
     {

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 /// <summary>
-/// Отвечает за завершение партии и экран результата, связанные с GameResultSystem
+/// Следит, победил или проиграл игрок, и открывает экран результата
 /// </summary>
 
 public sealed class GameResultSystem : MonoBehaviour
@@ -12,7 +12,7 @@ public sealed class GameResultSystem : MonoBehaviour
 
     private bool resultTriggered;
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -29,14 +29,14 @@ public sealed class GameResultSystem : MonoBehaviour
         EvaluateResult();
     }
     /// <summary>
-    /// Выполняет настройку после того, как Unity инициализировал объекты сцены
+    /// Запускает начальную настройку после загрузки сцены
     /// </summary>
     private void Start()
     {
         EvaluateResult();
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -47,28 +47,28 @@ public sealed class GameResultSystem : MonoBehaviour
         playerStats.OnLevelChanged -= HandleLevelChanged;
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
         winningLevel = Mathf.Max(1, winningLevel);
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleHpChanged(int currentHp, int maxHp)
     {
         EvaluateResult();
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleLevelChanged(int level)
     {
         EvaluateResult();
     }
     /// <summary>
-    /// Проверяет условия и выбирает следующее состояние игры
+    /// Проверяет условия и выбирает дальнейший результат
     /// </summary>
     private void EvaluateResult()
     {
@@ -85,7 +85,7 @@ public sealed class GameResultSystem : MonoBehaviour
             OpenResult(GameResultType.Lose);
     }
     /// <summary>
-    /// Открывает игровой экран, модальное окно или состояние результата
+    /// Открывает окно или экран для игрока
     /// </summary>
     private void OpenResult(GameResultType result)
     {

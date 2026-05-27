@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за базовую механику игрового поля, связанную с InventorySlotView
+/// Один слот предмета в интерфейсе, где показывается экипировка и кнопка снятия предмета
 /// </summary>
 
 public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -30,7 +30,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
     public ItemData Item => item;
     public Sprite ItemIcon => item != null ? item.ItemSprite : itemIcon;
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -40,7 +40,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         Refresh();
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -50,14 +50,14 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         StopRemoveButtonFade();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
         Refresh();
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetItem(ItemData newItem)
     {
@@ -67,7 +67,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         Refresh();
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetItemIcon(Sprite newItemIcon)
     {
@@ -77,7 +77,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         Refresh();
     }
     /// <summary>
-    /// Очищает текущее состояние и возвращает систему к пустому виду
+    /// Очищает ячейку экипировки, когда в ней нет предмета
     /// </summary>
     public void Clear()
     {
@@ -87,7 +87,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         Refresh();
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Обновляет одну ячейку экипировки и ее кнопку снятия
     /// </summary>
     public void Refresh()
     {
@@ -113,7 +113,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         iconImage.color = Color.white;
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleRemoveClicked()
     {
@@ -121,7 +121,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
             RemoveClicked?.Invoke(item);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -129,7 +129,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         SetRemoveButtonVisible(item != null, false);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
@@ -137,7 +137,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         SetRemoveButtonVisible(false, false);
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     private void SetRemoveButtonVisible(bool visible, bool instant)
     {
@@ -157,7 +157,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         removeButtonFade = StartCoroutine(FadeRemoveButton(visible ? 1f : 0f));
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода FadeRemoveButton
+    /// Плавно показывает или скрывает крестик снятия предмета
     /// </summary>
     private IEnumerator FadeRemoveButton(float targetAlpha)
     {
@@ -176,7 +176,7 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
         removeButtonFade = null;
     }
     /// <summary>
-    /// Останавливает текущий процесс, корутину или визуальный переход
+    /// Останавливает текущий процесс или анимацию
     /// </summary>
     private void StopRemoveButtonFade()
     {

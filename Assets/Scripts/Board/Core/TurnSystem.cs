@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 /// <summary>
-/// Управляет ходом игрока на поле: броском кубика, движением, разрешением клетки и продолжением сохраненного хода
+/// Управляет ходом на поле: броском кубика, движением фишки и запуском эффекта клетки
 /// </summary>
 
 public sealed class TurnSystem : MonoBehaviour
@@ -29,7 +29,7 @@ public sealed class TurnSystem : MonoBehaviour
     public TurnState State => state;
     public bool CanRoll => state == TurnState.WaitingForRoll;
     /// <summary>
-    /// Пытается начать обычный ход игрока с броском кубика
+    /// Пробует начать ход игрока обычным броском кубика
     /// </summary>
     public bool TryRollDice()
     {
@@ -43,7 +43,7 @@ public sealed class TurnSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Пытается сдвинуть игрока на заранее известное число клеток без показа анимации броска
+    /// Двигает игрока на заданное число клеток без анимации броска кубика
     /// </summary>
     public bool TryMoveFixedSteps(int steps)
     {
@@ -57,7 +57,7 @@ public sealed class TurnSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetSystems(DiceSystem newDiceSystem, PlayerMover newPlayerMover, BoardManager newBoardManager, TileEffectSystem newTileEffectSystem)
     {
@@ -67,7 +67,7 @@ public sealed class TurnSystem : MonoBehaviour
         tileEffectSystem = newTileEffectSystem;
     }
     /// <summary>
-    /// Собирает снимок текущего состояния, чтобы продолжение игры вернулось к тому же моменту
+    /// Собирает важные данные текущего состояния для файла сохранения
     /// </summary>
     public TurnSaveData CaptureSaveData()
     {
@@ -81,7 +81,7 @@ public sealed class TurnSystem : MonoBehaviour
         };
     }
     /// <summary>
-    /// Восстанавливает состояние из сохранения без повторной генерации случайных исходов
+    /// Возвращает состояние игры из сохранения без новых случайных результатов
     /// </summary>
     public void RestoreFromSave(TurnSaveData saveData, bool hasActiveModal)
     {
@@ -91,7 +91,7 @@ public sealed class TurnSystem : MonoBehaviour
             return;
         }
 
-        // Если ход не заблокирован модальным окном, продолжается именно сохраненное движение с сохраненной стартовой клетки
+        // Если игрок закрыл игру во время хода, движение продолжается с той же клетки
         if (saveData.hasPendingBoardMove && !hasActiveModal)
         {
             hasPendingBoardMove = true;
@@ -100,7 +100,7 @@ public sealed class TurnSystem : MonoBehaviour
             pendingBoardMoveStartTileIndex = saveData.pendingBoardMoveStartTileIndex;
             boardManager?.SetCurrentIndex(pendingBoardMoveStartTileIndex);
             playerMover?.SnapToCurrentTile();
-            // Фиксированное движение используется картами и не должно показывать анимацию броска кубика на поле
+            // Карты могут двигать игрока на фиксированное число клеток без показа кубика
             SetState(TurnState.RollingDice);
             StartCoroutine(ResumePendingMove());
             return;
@@ -112,14 +112,14 @@ public sealed class TurnSystem : MonoBehaviour
             SetState(TurnState.WaitingForRoll);
     }
     /// <summary>
-    /// Доигрывает сохраненное разрешение клетки после загрузки продолжения
+    /// Завершает обработку клетки после восстановления сохранения
     /// </summary>
     public void CompleteRestoredTileResolution()
     {
         EndTurn();
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода StartTurn
+    /// Начинает обычный ход игрока на поле
     /// </summary>
     private void StartTurn()
     {
@@ -131,7 +131,7 @@ public sealed class TurnSystem : MonoBehaviour
 
         SetState(TurnState.RollingDice);
 
-        // Результат кубика сохраняется до анимации, поэтому закрытие процесса не дает перекинуть движение по полю
+        // Результат кубика запоминается до анимации, чтобы перезапуск игры не позволял перекинуть ход
         var steps = diceSystem.Roll();
         SetPendingMove(steps, true);
         DiceRolled?.Invoke(steps);
@@ -139,7 +139,7 @@ public sealed class TurnSystem : MonoBehaviour
         StartCoroutine(PlayDiceAnimationThenMove(steps));
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода StartTurnWithSteps
+    /// Начинает ход с заранее известным числом шагов, например после карты
     /// </summary>
     private void StartTurnWithSteps(int steps)
     {
@@ -155,7 +155,7 @@ public sealed class TurnSystem : MonoBehaviour
         StartMovement(steps);
     }
     /// <summary>
-    /// Запускает музыку, анимацию или другой визуальный процесс
+    /// Проигрывает анимацию выпавшего кубика и затем начинает движение игрока
     /// </summary>
     private IEnumerator PlayDiceAnimationThenMove(int steps)
     {
@@ -163,7 +163,7 @@ public sealed class TurnSystem : MonoBehaviour
         StartMovement(steps);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода StartMovement
+    /// Запускает перемещение игрока на выпавшее количество клеток
     /// </summary>
     private void StartMovement(int steps)
     {
@@ -171,7 +171,7 @@ public sealed class TurnSystem : MonoBehaviour
         playerMover.MoveSteps(steps, OnPlayerMoveCompleted);
     }
     /// <summary>
-    /// Продолжает движение по полю, если игра была закрыта после броска, но до завершения хода
+    /// Продолжает движение после загрузки, если игра была закрыта посреди хода
     /// </summary>
     private IEnumerator ResumePendingMove()
     {
@@ -181,7 +181,7 @@ public sealed class TurnSystem : MonoBehaviour
         StartMovement(pendingBoardMoveSteps);
     }
     /// <summary>
-    /// Реагирует на событие player move completed
+    /// Продолжает ход после того, как фишка дошла до клетки
     /// </summary>
     private void OnPlayerMoveCompleted()
     {
@@ -190,7 +190,7 @@ public sealed class TurnSystem : MonoBehaviour
         var currentTile = boardManager != null ? boardManager.CurrentTile : null;
         PlayerMoveCompleted?.Invoke(currentTile);
 
-        // Эффекты клеток могут открывать окна, поэтому callback завершает ход только после настоящего разрешения эффекта
+        // Клетка может открыть окно, поэтому ход завершается только после окончания эффекта
         SetState(TurnState.ResolvingTile);
         TileResolving?.Invoke(currentTile);
 
@@ -201,7 +201,7 @@ public sealed class TurnSystem : MonoBehaviour
         });
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода EndTurn
+    /// Завершает ход и снова разрешает бросать кубик
     /// </summary>
     private void EndTurn()
     {
@@ -211,7 +211,7 @@ public sealed class TurnSystem : MonoBehaviour
         SetState(TurnState.WaitingForRoll);
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     private void SetPendingMove(int steps, bool showsDice)
     {
@@ -221,7 +221,7 @@ public sealed class TurnSystem : MonoBehaviour
         pendingBoardMoveStartTileIndex = boardManager != null ? boardManager.CurrentIndex : 0;
     }
     /// <summary>
-    /// Очищает текущее состояние и возвращает систему к пустому виду
+    /// Сбрасывает сохраненный незавершенный ход после его завершения
     /// </summary>
     private void ClearPendingMove()
     {
@@ -231,7 +231,7 @@ public sealed class TurnSystem : MonoBehaviour
         pendingBoardMoveStartTileIndex = 0;
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     private void SetState(TurnState newState)
     {
@@ -242,7 +242,7 @@ public sealed class TurnSystem : MonoBehaviour
         StateChanged?.Invoke(state);
     }
     /// <summary>
-    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
     /// </summary>
     private void Reset()
     {
@@ -252,7 +252,7 @@ public sealed class TurnSystem : MonoBehaviour
         tileEffectSystem = FindAnyObjectByType<TileEffectSystem>();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {

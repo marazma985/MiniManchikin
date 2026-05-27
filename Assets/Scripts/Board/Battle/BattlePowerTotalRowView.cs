@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за часть системы боя, связанную с BattlePowerTotalRowView
+/// Визуальная итоговая строка в окне боя, где показывается общая сила игрока или врага
 /// </summary>
 
 public sealed class BattlePowerTotalRowView : MonoBehaviour
@@ -15,7 +15,7 @@ public sealed class BattlePowerTotalRowView : MonoBehaviour
     [SerializeField] private float dividerHeight = 6f;
 
     /// <summary>
-    /// Заполняет итоговую строку силы подписью и суммарным значением
+    /// Заполняет визуальный элемент свежими данными перед показом игроку
     /// </summary>
     public void Bind(string label, int value)
     {
@@ -28,14 +28,14 @@ public sealed class BattlePowerTotalRowView : MonoBehaviour
             valueText.text = value.ToString();
     }
     /// <summary>
-    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// Готовит строку с итоговой силой в окне боя
     /// </summary>
     private void Awake()
     {
         EnsureReferences();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
@@ -49,7 +49,7 @@ public sealed class BattlePowerTotalRowView : MonoBehaviour
         ConfigureText(valueText, TextAlignmentOptions.MidlineRight);
     }
     /// <summary>
-    /// Гарантирует, что нужный объект, ресурс или ссылка существует
+    /// Создает или находит то, без чего объект не сможет работать
     /// </summary>
     private void EnsureReferences()
     {
@@ -73,7 +73,7 @@ public sealed class BattlePowerTotalRowView : MonoBehaviour
         ConfigureText(valueText, TextAlignmentOptions.MidlineRight);
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает разделительную линию перед итоговой силой
     /// </summary>
     private Image CreateDivider()
     {
@@ -83,7 +83,7 @@ public sealed class BattlePowerTotalRowView : MonoBehaviour
         return dividerObject.GetComponent<Image>();
     }
     /// <summary>
-    /// Создает объект или набор данных, который дальше использует система
+    /// Создает текстовую ячейку для подписи или значения итоговой силы
     /// </summary>
     private TextMeshProUGUI CreateText(string textObjectName, TextAlignmentOptions alignment)
     {
@@ -96,7 +96,7 @@ public sealed class BattlePowerTotalRowView : MonoBehaviour
         return text;
     }
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Настраивает разделитель перед итоговой строкой силы
     /// </summary>
     private void ConfigureDivider()
     {
@@ -111,7 +111,7 @@ public sealed class BattlePowerTotalRowView : MonoBehaviour
         rectTransform.offsetMax = Vector2.zero;
     }
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Настраивает текст итоговой строки силы: шрифт, цвет и выравнивание
     /// </summary>
     private void ConfigureText(TextMeshProUGUI text, TextAlignmentOptions alignment)
     {

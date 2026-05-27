@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Отвечает за базовую механику игрового поля, связанную с BoardManager
+/// Хранит маршрут игрового поля и текущую клетку, на которой стоит фишка игрока
 /// </summary>
 
 public sealed class BoardManager : MonoBehaviour
@@ -15,7 +15,7 @@ public sealed class BoardManager : MonoBehaviour
     public int CurrentIndex => currentIndex;
     public BoardTile CurrentTile => GetTile(currentIndex);
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает клетку поля по ее индексу
     /// </summary>
     public BoardTile GetTile(int index)
     {
@@ -31,21 +31,21 @@ public sealed class BoardManager : MonoBehaviour
         return tiles[index];
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает следующую клетку после текущей позиции игрока
     /// </summary>
     public BoardTile GetNextTile()
     {
         return GetNextTile(currentIndex);
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает следующую клетку после текущей позиции игрока
     /// </summary>
     public BoardTile GetNextTile(int fromIndex)
     {
         return GetTile(fromIndex + 1);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода AdvanceToNextTile
+    /// Передвигает текущий индекс поля на следующую клетку
     /// </summary>
     public BoardTile AdvanceToNextTile()
     {
@@ -60,14 +60,14 @@ public sealed class BoardManager : MonoBehaviour
         return GetTile(currentIndex);
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetCurrentIndex(int index)
     {
         currentIndex = cyclePath && tiles.Count > 0 ? WrapIndex(index) : Mathf.Max(0, index);
     }
     /// <summary>
-    /// Пытается выполнить действие и возвращает, получилось ли это сделать
+    /// Ищет ближайшую впереди клетку нужного типа и возвращает расстояние до нее
     /// </summary>
     public bool TryGetForwardDistanceToNearestTileType(TileType tileType, out int steps)
     {
@@ -92,10 +92,10 @@ public sealed class BoardManager : MonoBehaviour
 
         return false;
     }
-    /// <summary>
-    /// Выполняет вспомогательную часть логики метода CollectChildTiles
-    /// </summary>
     [ContextMenu("Collect Child Tiles")]
+    /// <summary>
+    /// Собирает клетки поля из дочерних объектов в сцене
+    /// </summary>
     public void CollectChildTiles()
     {
         tiles.Clear();
@@ -103,10 +103,10 @@ public sealed class BoardManager : MonoBehaviour
         SortTilesByIndex();
         ClampCurrentIndex();
     }
-    /// <summary>
-    /// Выполняет вспомогательную часть логики метода SortTilesByIndex
-    /// </summary>
     [ContextMenu("Sort Tiles By Index")]
+    /// <summary>
+    /// Сортирует клетки поля по их игровому индексу
+    /// </summary>
     public void SortTilesByIndex()
     {
         tiles.Sort((left, right) =>
@@ -122,21 +122,21 @@ public sealed class BoardManager : MonoBehaviour
         });
     }
     /// <summary>
-    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
     /// </summary>
     private void Reset()
     {
         CollectChildTiles();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
         ClampCurrentIndex();
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода WrapIndex
+    /// Заворачивает индекс клетки в границы игрового круга
     /// </summary>
     private int WrapIndex(int index)
     {
@@ -144,7 +144,7 @@ public sealed class BoardManager : MonoBehaviour
         return count == 0 ? 0 : (index % count + count) % count;
     }
     /// <summary>
-    /// Ограничивает значение допустимыми рамками
+    /// Ограничивает число допустимыми рамками
     /// </summary>
     private void ClampCurrentIndex()
     {

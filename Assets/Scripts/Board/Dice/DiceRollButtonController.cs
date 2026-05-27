@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за механику или визуал кубика, связанные с DiceRollButtonController
+/// Кнопка броска кубика на игровом поле, которая запускает ход игрока
 /// </summary>
 
 public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, ISelectHandler, IDeselectHandler
@@ -25,7 +25,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
     private bool isSelected;
     private bool wasInteractable;
     /// <summary>
-    /// Заполняет стандартные ссылки при добавлении компонента в редакторе Unity
+    /// Заполняет удобные значения по умолчанию при добавлении компонента в Unity
     /// </summary>
     private void Reset()
     {
@@ -34,7 +34,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         turnSystem = FindAnyObjectByType<TurnSystem>();
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -60,7 +60,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         RefreshVisualState(true);
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -81,7 +81,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
             spriteTransition.StopTransition();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
@@ -95,7 +95,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
             spriteTransition = GetComponent<SmoothSpriteButton>();
     }
     /// <summary>
-    /// Обновляет визуальное состояние в конце кадра после работы остальных систем
+    /// Обновляет отображение в конце кадра, когда остальные системы уже сработали
     /// </summary>
     private void LateUpdate()
     {
@@ -105,7 +105,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода RequestRoll
+    /// Обрабатывает нажатие кнопки броска кубика
     /// </summary>
     public void RequestRoll()
     {
@@ -122,21 +122,21 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         turnSystem.TryRollDice();
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleTurnStateChanged(TurnState state)
     {
         RefreshButtonState();
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleDiceRolled(int value)
     {
         Debug.Log($"Dice rolled: {value}");
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetTurnSystem(TurnSystem newTurnSystem)
     {
@@ -156,7 +156,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         }
     }
     /// <summary>
-    /// Устанавливает новое значение и при необходимости обновляет связанные системы
+    /// Обновляет данные, чтобы экран и правила игры сразу учитывали изменение
     /// </summary>
     public void SetBattleSystem(BattleSystem newBattleSystem)
     {
@@ -171,7 +171,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         RefreshButtonState();
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Включает или блокирует кнопку кубика по состоянию хода
     /// </summary>
     private void RefreshButtonState()
     {
@@ -189,7 +189,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -197,7 +197,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
@@ -206,7 +206,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -218,7 +218,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Обрабатывает событие указателя мыши и переводит визуальный элемент в нужное состояние
+    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
     /// </summary>
     public void OnPointerUp(PointerEventData eventData)
     {
@@ -227,7 +227,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         releaseVisualRefresh = StartCoroutine(RefreshReleasedVisualNextFrame());
     }
     /// <summary>
-    /// Реагирует на событие select
+    /// Отмечает кнопку кубика как выбранную через клавиатуру или EventSystem
     /// </summary>
     public void OnSelect(BaseEventData eventData)
     {
@@ -235,7 +235,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Реагирует на событие deselect
+    /// Снимает выбранное состояние с кнопки кубика
     /// </summary>
     public void OnDeselect(BaseEventData eventData)
     {
@@ -243,7 +243,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Настраивает визуальную часть кнопки кубика и плавную смену спрайтов
     /// </summary>
     private void ConfigureButtonVisuals()
     {
@@ -263,7 +263,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         wasInteractable = button.interactable;
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Обновляет внешний вид кнопки кубика по наведению, нажатию и блокировке
     /// </summary>
     private void RefreshVisualState(bool instant)
     {
@@ -278,7 +278,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
             spriteTransition.SetInteractionState(isPointerOver, isPointerPressed, isSelected, instant);
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Возвращает кнопку кубика в отпущенный вид на следующем кадре
     /// </summary>
     private IEnumerator RefreshReleasedVisualNextFrame()
     {
@@ -288,7 +288,7 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         RefreshVisualState(false);
     }
     /// <summary>
-    /// Останавливает текущий процесс, корутину или визуальный переход
+    /// Останавливает текущий процесс или анимацию
     /// </summary>
     private void StopReleaseVisualRefresh()
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Отвечает за часть системы боя, связанную с EnemyModifier
+/// Настройка возможного усиления монстра, которое может выпасть при открытии боя
 /// </summary>
 
 [Serializable]

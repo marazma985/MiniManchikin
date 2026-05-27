@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 /// <summary>
-/// Отвечает за клетки поля и их эффекты, связанные с BuffTileEffect
+/// Эффект положительной клетки, который выбирает полезное событие для игрока
 /// </summary>
 
 public sealed class BuffTileEffect : IDeferredTileEffect
@@ -10,7 +10,7 @@ public sealed class BuffTileEffect : IDeferredTileEffect
     private EffectResolver effectResolver;
     private IReadOnlyList<EffectData> buffEvents;
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Подключает список положительных эффектов, которые может выдать бафф-клетка
     /// </summary>
     public void Configure(EffectResolver newEffectResolver, IReadOnlyList<EffectData> newBuffEvents)
     {
@@ -18,14 +18,14 @@ public sealed class BuffTileEffect : IDeferredTileEffect
         buffEvents = newBuffEvents;
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     public void Resolve(BoardTile tile)
     {
         Resolve(tile, null);
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     public void Resolve(BoardTile tile, Action onResolved)
     {
@@ -40,7 +40,7 @@ public sealed class BuffTileEffect : IDeferredTileEffect
         effectResolver.TryApply(effect, "Buff tile", onResolved);
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Выбирает случайный положительный эффект для бафф-клетки
     /// </summary>
     private EffectData GetRandomEffect()
     {

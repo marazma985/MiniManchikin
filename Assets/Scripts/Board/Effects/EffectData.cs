@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 /// <summary>
-/// Описывает или применяет игровой эффект, связанный с EffectData
+/// Описание одного игрового эффекта: лечение, урон, уровень, награда, перемещение или бонус
 /// </summary>
 
 [Serializable]
@@ -18,13 +18,13 @@ public sealed class EffectData
     [SerializeField] private bool restoreToFull;
 
     /// <summary>
-    /// Создает пустой эффект для сериализации Unity и ручной настройки в инспекторе
+    /// Создает пустой эффект для настройки через инспектор Unity
     /// </summary>
     public EffectData()
     {
     }
     /// <summary>
-    /// Создает экземпляр EffectData и заполняет его начальными данными
+    /// Создает обычный эффект с типом и числовым значением
     /// </summary>
     public EffectData(EffectType effectType, int value)
     {
@@ -32,7 +32,7 @@ public sealed class EffectData
         this.value = value;
     }
     /// <summary>
-    /// Создает экземпляр EffectData и заполняет его начальными данными
+    /// Создает эффект, который может выбирать случайную цель нужной редкости
     /// </summary>
     public EffectData(EffectType effectType, int value, Rarity rarityFilter, bool useRandomTarget)
     {
@@ -42,7 +42,7 @@ public sealed class EffectData
         this.useRandomTarget = useRandomTarget;
     }
     /// <summary>
-    /// Создает экземпляр EffectData и заполняет его начальными данными
+    /// Создает эффект лечения с возможностью восстановить здоровье полностью
     /// </summary>
     public EffectData(EffectType effectType, int value, bool restoreToFull)
     {

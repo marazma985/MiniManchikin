@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Перечисляет варианты effect notification status, которые используются в игровой логике вместо строковых значений
+/// Результат применения эффекта для всплывающей подсказки: успешно, заблокировано или без эффекта
 /// </summary>
 
 public enum EffectNotificationStatus
@@ -13,12 +13,12 @@ public enum EffectNotificationStatus
     Failed
 }
 /// <summary>
-/// Отвечает за игровые события и уведомления, связанные с EventNotificationSystem
+/// Создает всплывающие подсказки о событиях, бонусах, уроне и других изменениях
 /// </summary>
 public sealed class EventNotificationSystem : MonoBehaviour
 {
     /// <summary>
-    /// Отвечает за игровые события и уведомления, связанные с EffectNotificationSetting
+    /// Настройки одной всплывающей подсказки: иконка и тексты для разных исходов
     /// </summary>
     [Serializable]
     private sealed class EffectNotificationSetting
@@ -41,7 +41,7 @@ public sealed class EventNotificationSystem : MonoBehaviour
         public string NoEffectMessageTemplate => noEffectMessageTemplate;
         public string FailedMessageTemplate => failedMessageTemplate;
         /// <summary>
-        /// Создает экземпляр EffectNotificationSetting и заполняет его начальными данными
+        /// Создает пустую настройку подсказки для заполнения в инспекторе
         /// </summary>
         public EffectNotificationSetting()
         {
@@ -49,7 +49,7 @@ public sealed class EventNotificationSystem : MonoBehaviour
             ApplyDefaultTemplates();
         }
         /// <summary>
-        /// Создает экземпляр EffectNotificationSetting и заполняет его начальными данными
+        /// Создает настройку подсказки для указанного типа эффекта
         /// </summary>
         public EffectNotificationSetting(EffectType effectType)
         {
@@ -58,7 +58,7 @@ public sealed class EventNotificationSystem : MonoBehaviour
             ApplyDefaultTemplates();
         }
         /// <summary>
-        /// Применяет изменение к игровому или визуальному состоянию
+        /// Заполняет стандартные тексты подсказок для эффектов клеток
         /// </summary>
         public void ApplyDefaultTemplates()
         {
@@ -111,7 +111,7 @@ public sealed class EventNotificationSystem : MonoBehaviour
     [SerializeField] private List<EffectNotificationSetting> notificationSettings = new List<EffectNotificationSetting>();
 
     /// <summary>
-    /// Показывает всплывающее уведомление с иконкой, подходящей под тип эффекта
+    /// Показывает всплывающую подсказку игроку
     /// </summary>
     public void ShowNotification(string message, EffectType effectType)
     {
@@ -136,7 +136,7 @@ public sealed class EventNotificationSystem : MonoBehaviour
         notification.Show(message, GetIcon(effectType));
     }
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Показывает подсказку о полученном или потерянном эффекте
     /// </summary>
     public void ShowEffectNotification(EffectData effect, EffectNotificationStatus status)
     {
@@ -146,7 +146,7 @@ public sealed class EventNotificationSystem : MonoBehaviour
         ShowEffectNotification(effect.EffectType, effect.Value, status);
     }
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Показывает подсказку о полученном или потерянном эффекте
     /// </summary>
     public void ShowEffectNotification(EffectData effect, EffectNotificationStatus status, int displayValue)
     {
@@ -156,7 +156,7 @@ public sealed class EventNotificationSystem : MonoBehaviour
         ShowEffectNotification(effect.EffectType, displayValue, status);
     }
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Показывает подсказку о полученном или потерянном эффекте
     /// </summary>
     public void ShowEffectNotification(EffectType effectType, int value, EffectNotificationStatus status)
     {
@@ -171,7 +171,7 @@ public sealed class EventNotificationSystem : MonoBehaviour
         ShowNotification(FormatTemplate(template, value), effectType);
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Считает, сколько подсказок сейчас видно на экране
     /// </summary>
     private int GetVisibleNotificationCount()
     {
@@ -186,7 +186,7 @@ public sealed class EventNotificationSystem : MonoBehaviour
         return count;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает иконку для указанного типа эффекта
     /// </summary>
     private Sprite GetIcon(EffectType effectType)
     {
@@ -197,7 +197,7 @@ public sealed class EventNotificationSystem : MonoBehaviour
         return defaultIcon;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает настройки подсказки для указанного типа эффекта
     /// </summary>
     private EffectNotificationSetting GetSetting(EffectType effectType)
     {
@@ -214,7 +214,7 @@ public sealed class EventNotificationSystem : MonoBehaviour
         return null;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Выбирает текстовый шаблон подсказки для плюса или минуса эффекта
     /// </summary>
     private static string GetTemplate(EffectNotificationSetting setting, int value, EffectNotificationStatus status)
     {
@@ -231,7 +231,7 @@ public sealed class EventNotificationSystem : MonoBehaviour
         }
     }
     /// <summary>
-    /// Формирует текст для отображения или вывода в лог
+    /// Подставляет число эффекта в текстовый шаблон подсказки
     /// </summary>
     private static string FormatTemplate(string template, int value)
     {
@@ -242,21 +242,21 @@ public sealed class EventNotificationSystem : MonoBehaviour
             .Replace("{signedValue}", signedValue);
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
         EnsureDefaultSettings();
     }
     /// <summary>
-    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// Готовит контейнер, в котором появляются подсказки событий
     /// </summary>
     private void Awake()
     {
         EnsureDefaultSettings();
     }
     /// <summary>
-    /// Гарантирует, что нужный объект, ресурс или ссылка существует
+    /// Создает или находит то, без чего объект не сможет работать
     /// </summary>
     private void EnsureDefaultSettings()
     {

@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Отвечает за часть системы боя, связанную с BattleModalData
+/// Хранит данные боя, которые затем подставляются в модальное окно: имена, картинки и строки силы
 /// </summary>
 
 public sealed class BattleModalData
 {
     /// <summary>
-    /// Создает экземпляр BattleModalData и заполняет его начальными данными
+    /// Собирает все данные, которые окно боя должно показать игроку
     /// </summary>
     public BattleModalData(
         string playerName,

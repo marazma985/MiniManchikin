@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-/// Отвечает за часть системы боя, связанную с BattleBackgroundBlurView
+/// Создает затемненный и размытый фон за окном боя, чтобы внимание игрока было на модальном окне
 /// </summary>
 
 public sealed class BattleBackgroundBlurView : MonoBehaviour
@@ -17,7 +17,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
     private RenderTexture blurTexture;
     private Coroutine captureRoutine;
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Передает камеру и материал, из которых будет собран размытый фон окна боя
     /// </summary>
     public void Configure(Camera newSourceCamera, Material newBlurMaterial)
     {
@@ -25,7 +25,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         blurMaterial = newBlurMaterial;
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -33,7 +33,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         captureRoutine = StartCoroutine(CaptureBackgroundAtEndOfFrame());
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -46,7 +46,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         ReleaseBlurTexture();
     }
     /// <summary>
-    /// Поддерживает корректные значения и ссылки при изменениях в инспекторе Unity
+    /// Помогает держать настройки компонента корректными прямо в инспекторе Unity
     /// </summary>
     private void OnValidate()
     {
@@ -54,7 +54,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         captureHeight = Mathf.Max(64, captureHeight);
     }
     /// <summary>
-    /// Гарантирует, что нужный объект, ресурс или ссылка существует
+    /// Создает или находит то, без чего объект не сможет работать
     /// </summary>
     private void EnsureBlurImage()
     {
@@ -84,7 +84,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         blurImage.transform.SetAsFirstSibling();
     }
     /// <summary>
-    /// Собирает снимок текущего состояния для сохранения
+    /// Запоминает текущее состояние, чтобы его можно было сохранить
     /// </summary>
     private void CaptureBackground()
     {
@@ -112,7 +112,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Собирает снимок текущего состояния для сохранения
+    /// Запоминает текущее состояние, чтобы его можно было сохранить
     /// </summary>
     private IEnumerator CaptureBackgroundAtEndOfFrame()
     {
@@ -121,7 +121,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         captureRoutine = null;
     }
     /// <summary>
-    /// Гарантирует, что нужный объект, ресурс или ссылка существует
+    /// Создает или находит то, без чего объект не сможет работать
     /// </summary>
     private void EnsureRenderTexture()
     {
@@ -139,7 +139,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         blurTexture.Create();
     }
     /// <summary>
-    /// Освобождает временные ресурсы, которые больше не нужны
+    /// Освобождает временные ресурсы
     /// </summary>
     private void ReleaseBlurTexture()
     {

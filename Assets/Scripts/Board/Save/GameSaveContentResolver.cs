@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 /// <summary>
-/// Отвечает за сохранение или восстановление данных партии, связанное с GameSaveContentResolver
+/// Помогает сохранению найти карты, предметы и монстров по их id
 /// </summary>
 
 public sealed class GameSaveContentResolver
@@ -9,7 +9,7 @@ public sealed class GameSaveContentResolver
     private readonly Dictionary<string, ItemData> itemsById = new Dictionary<string, ItemData>();
     private readonly Dictionary<string, EnemyData> enemiesById = new Dictionary<string, EnemyData>();
     /// <summary>
-    /// Добавляет данные в систему и обновляет зависимые представления
+    /// Добавляет новый элемент в игровое состояние
     /// </summary>
     public void AddCard(CardData card)
     {
@@ -19,7 +19,7 @@ public sealed class GameSaveContentResolver
         cardsById[card.CardId] = card;
     }
     /// <summary>
-    /// Добавляет данные в систему и обновляет зависимые представления
+    /// Добавляет новый элемент в игровое состояние
     /// </summary>
     public void AddItem(ItemData item)
     {
@@ -29,7 +29,7 @@ public sealed class GameSaveContentResolver
         itemsById[item.ItemId] = item;
     }
     /// <summary>
-    /// Добавляет данные в систему и обновляет зависимые представления
+    /// Добавляет новый элемент в игровое состояние
     /// </summary>
     public void AddEnemy(EnemyData enemy)
     {
@@ -39,28 +39,28 @@ public sealed class GameSaveContentResolver
         enemiesById[enemy.EnemyId] = enemy;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Находит карту из сохранения по ее id
     /// </summary>
     public CardData GetCard(string cardId)
     {
         return !string.IsNullOrEmpty(cardId) && cardsById.TryGetValue(cardId, out var card) ? card : null;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Находит предмет из сохранения по его id
     /// </summary>
     public ItemData GetItem(string itemId)
     {
         return !string.IsNullOrEmpty(itemId) && itemsById.TryGetValue(itemId, out var item) ? item : null;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Находит монстра из сохранения по его id
     /// </summary>
     public EnemyData GetEnemy(string enemyId)
     {
         return !string.IsNullOrEmpty(enemyId) && enemiesById.TryGetValue(enemyId, out var enemy) ? enemy : null;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Восстанавливает награду из сохраненных данных
     /// </summary>
     public RewardData GetReward(RewardSaveData saveData)
     {

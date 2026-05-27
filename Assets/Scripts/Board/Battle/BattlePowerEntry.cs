@@ -1,10 +1,10 @@
 /// <summary>
-/// Хранит компактные данные battle power entry без собственного жизненного цикла Unity
+/// Одна строка в расчете силы, например уровень игрока, бонус предмета или модификатор монстра
 /// </summary>
 public readonly struct BattlePowerEntry
 {
     /// <summary>
-    /// Создает экземпляр BattlePowerEntry и заполняет его начальными данными
+    /// Создает одну строку расчета силы с подписью и числом
     /// </summary>
     public BattlePowerEntry(string label, int value)
     {

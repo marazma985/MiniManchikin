@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 /// <summary>
-/// Отвечает за клетки поля и их эффекты, связанные с EventTileEffect
+/// Эффект обычной событийной клетки, который запускает случайное событие
 /// </summary>
 
 public sealed class EventTileEffect : IDeferredTileEffect
@@ -11,7 +11,7 @@ public sealed class EventTileEffect : IDeferredTileEffect
     private IReadOnlyList<EffectData> buffEvents;
     private IReadOnlyList<EffectData> debuffEvents;
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Подключает положительные и отрицательные эффекты для случайной event-клетки
     /// </summary>
     public void Configure(EffectResolver newEffectResolver, IReadOnlyList<EffectData> newBuffEvents, IReadOnlyList<EffectData> newDebuffEvents)
     {
@@ -20,14 +20,14 @@ public sealed class EventTileEffect : IDeferredTileEffect
         debuffEvents = newDebuffEvents;
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     public void Resolve(BoardTile tile)
     {
         Resolve(tile, null);
     }
     /// <summary>
-    /// Разрешает игровую ситуацию и переводит ее в следующее состояние
+    /// Доводит текущую игровую ситуацию до следующего шага
     /// </summary>
     public void Resolve(BoardTile tile, Action onResolved)
     {
@@ -42,7 +42,7 @@ public sealed class EventTileEffect : IDeferredTileEffect
         effectResolver.TryApply(effect, "Random event tile", onResolved);
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Выбирает случайный положительный или отрицательный эффект для event-клетки
     /// </summary>
     private EffectData GetRandomEffect()
     {
@@ -61,14 +61,14 @@ public sealed class EventTileEffect : IDeferredTileEffect
         return hasBuffEvents ? GetRandomBuffEffect() : GetRandomDebuffEffect();
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Выбирает случайный положительный эффект для event-клетки
     /// </summary>
     private EffectData GetRandomBuffEffect()
     {
         return buffEvents[UnityEngine.Random.Range(0, buffEvents.Count)];
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Выбирает случайный отрицательный эффект для event-клетки
     /// </summary>
     private EffectData GetRandomDebuffEffect()
     {

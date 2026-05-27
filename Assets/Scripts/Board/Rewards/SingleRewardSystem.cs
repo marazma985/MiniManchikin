@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Управляет получением одиночной награды с клетки поля и проверяет, может ли игрок ее принять
+/// Показывает одиночную награду и проверяет, может ли игрок ее забрать
 /// </summary>
 
 public sealed class SingleRewardSystem : MonoBehaviour
@@ -19,14 +19,14 @@ public sealed class SingleRewardSystem : MonoBehaviour
 
     public RewardData CurrentReward => currentReward;
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Открывает окно одиночной награды и ждет подтверждения игрока
     /// </summary>
     public bool ShowReward(RewardData reward, Action onCompleted)
     {
         return ShowReward(reward, onCompleted, null);
     }
     /// <summary>
-    /// Показывает нужное окно или визуальное состояние игроку
+    /// Открывает окно одиночной награды и ждет подтверждения игрока
     /// </summary>
     public bool ShowReward(RewardData reward, Action onCompleted, Action<RewardData> onClaimed)
     {
@@ -51,14 +51,14 @@ public sealed class SingleRewardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Восстанавливает состояние из сохраненных данных
+    /// Возвращает данные из сохранения или ранее запомненного состояния
     /// </summary>
     public bool RestoreReward(RewardData reward, Action onCompleted)
     {
         return ShowReward(reward, onCompleted, null);
     }
     /// <summary>
-    /// Подписывается на события и обновляет визуальное состояние при включении объекта
+    /// Включает подписки и обновляет отображение, когда объект становится активным
     /// </summary>
     private void OnEnable()
     {
@@ -66,7 +66,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
         SubscribeAvailability();
     }
     /// <summary>
-    /// Отписывается от событий и останавливает временные процессы при выключении объекта
+    /// Отключает подписки и временные процессы, когда объект выключается
     /// </summary>
     private void OnDisable()
     {
@@ -74,7 +74,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
         UnsubscribeAvailability();
     }
     /// <summary>
-    /// Подписывает компонент на события зависимых систем
+    /// Подписывается на события другой системы
     /// </summary>
     private void SubscribeModal()
     {
@@ -85,7 +85,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
         modalView.CloseRequested += HandleCloseRequested;
     }
     /// <summary>
-    /// Снимает подписки, чтобы не оставить устаревшие ссылки
+    /// Отписывается от событий другой системы
     /// </summary>
     private void UnsubscribeModal()
     {
@@ -96,7 +96,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
         modalView.CloseRequested -= HandleCloseRequested;
     }
     /// <summary>
-    /// Подписывает компонент на события зависимых систем
+    /// Подписывается на события другой системы
     /// </summary>
     private void SubscribeAvailability()
     {
@@ -107,7 +107,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
             playerInventory.OnEquipmentChanged += HandleEquipmentChanged;
     }
     /// <summary>
-    /// Снимает подписки, чтобы не оставить устаревшие ссылки
+    /// Отписывается от событий другой системы
     /// </summary>
     private void UnsubscribeAvailability()
     {
@@ -118,7 +118,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
             playerInventory.OnEquipmentChanged -= HandleEquipmentChanged;
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleAcceptRequested()
     {
@@ -138,7 +138,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
         CompleteReward();
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleCloseRequested()
     {
@@ -146,21 +146,21 @@ public sealed class SingleRewardSystem : MonoBehaviour
         CompleteReward();
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleHandChanged(IReadOnlyList<CardData> cards)
     {
         RefreshAcceptState();
     }
     /// <summary>
-    /// Обрабатывает событие от UI или другой игровой системы
+    /// Обрабатывает действие игрока или событие другой системы
     /// </summary>
     private void HandleEquipmentChanged(IReadOnlyList<ItemData> items)
     {
         RefreshAcceptState();
     }
     /// <summary>
-    /// Обновляет отображение на основе текущих данных
+    /// Включает кнопку принятия одиночной награды, когда ее можно забрать
     /// </summary>
     private void RefreshAcceptState()
     {
@@ -171,7 +171,7 @@ public sealed class SingleRewardSystem : MonoBehaviour
         modalView.SetAcceptState(canAccept, status);
     }
     /// <summary>
-    /// Проверяет, разрешено ли выполнить действие в текущем состоянии игры
+    /// Проверяет, можно ли сейчас выполнить это действие
     /// </summary>
     private bool CanAcceptCurrentReward(out string status)
     {
@@ -179,14 +179,14 @@ public sealed class SingleRewardSystem : MonoBehaviour
         return currentReward != null && currentReward.CanClaim(cardSystem, playerInventory, out status);
     }
     /// <summary>
-    /// Пытается выполнить действие и возвращает, получилось ли это сделать
+    /// Пытается выдать текущую одиночную награду игроку
     /// </summary>
     private bool TryClaimCurrentReward()
     {
         return currentReward != null && currentReward.TryClaim(cardSystem, playerInventory);
     }
     /// <summary>
-    /// Выполняет вспомогательную часть логики метода CompleteReward
+    /// Выдает одиночную награду игроку и закрывает окно
     /// </summary>
     private void CompleteReward()
     {

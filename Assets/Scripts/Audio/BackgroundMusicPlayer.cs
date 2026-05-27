@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 /// <summary>
-/// Управляет постоянным проигрывателем фоновой музыки, плейлистом и громкостью через аудио миксер
+/// Хранит музыкальный проигрыватель, который играет плейлист по кругу и слушает громкость из настроек
 /// </summary>
 
 [DisallowMultipleComponent]
@@ -22,7 +22,7 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
 
     public static BackgroundMusicPlayer Instance { get; private set; }
     /// <summary>
-    /// Инициализирует ссылки и внутреннее состояние до запуска сцены
+    /// Настраивает источник звука и сохраняет музыкальный объект между сценами
     /// </summary>
     private void Awake()
     {
@@ -42,7 +42,7 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
             Play();
     }
     /// <summary>
-    /// Каждый кадр проверяет ввод или обновляет визуальное состояние
+    /// Каждый кадр проверяет ввод игрока или обновляет отображение
     /// </summary>
     private void Update()
     {
@@ -52,7 +52,7 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         PlayClip(GetNextClipIndex());
     }
     /// <summary>
-    /// Освобождает подписки и временные ресурсы перед уничтожением объекта
+    /// Убирает ссылки и временные данные перед уничтожением объекта
     /// </summary>
     private void OnDestroy()
     {
@@ -60,7 +60,7 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
             Instance = null;
     }
     /// <summary>
-    /// Запускает музыку, анимацию или другой визуальный процесс
+    /// Запускает фоновую музыку из плейлиста
     /// </summary>
     public void Play()
     {
@@ -74,7 +74,7 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         PlayClip(currentClipIndex);
     }
     /// <summary>
-    /// Настраивает ссылки и параметры, которые нужны компоненту для работы
+    /// Настраивает AudioSource для цикличного проигрывания выбранного трека
     /// </summary>
     private void ConfigureAudioSource()
     {
@@ -88,7 +88,7 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         audioSource.outputAudioMixerGroup = outputMixerGroup;
     }
     /// <summary>
-    /// Запускает музыку, анимацию или другой визуальный процесс
+    /// Включает выбранный трек и подписывается на запуск следующего
     /// </summary>
     private void PlayClip(int clipIndex)
     {
@@ -106,7 +106,7 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         lastPlayedClipIndex = currentClipIndex;
     }
     /// <summary>
-    /// Возвращает сохраненное или рассчитанное значение
+    /// Возвращает следующий трек из перемешанного мешка плейлиста
     /// </summary>
     private int GetNextClipIndex()
     {
@@ -119,7 +119,7 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         return GetNextShuffledClipIndex();
     }
     /// <summary>
-    /// Достает следующий трек из перемешанного мешка плейлиста, чтобы треки не повторялись до конца мешка
+    /// Берет следующий трек из перемешанного плейлиста
     /// </summary>
     private int GetNextShuffledClipIndex()
     {
@@ -135,7 +135,7 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         return shuffledClipOrder[shuffledOrderPosition++];
     }
     /// <summary>
-    /// Собирает новый перемешанный мешок индексов треков для следующего прохода плейлиста
+    /// Перемешивает треки для нового прохода плейлиста
     /// </summary>
     private void RebuildShuffledOrder()
     {
@@ -161,7 +161,7 @@ public sealed class BackgroundMusicPlayer : MonoBehaviour
         shuffledOrderPosition = 0;
     }
     /// <summary>
-    /// Читает сохраненную громкость музыки и применяет ее к параметру AudioMixer
+    /// Применяет к музыке громкость, которую игрок выбрал в настройках
     /// </summary>
     private void ApplySavedMixerVolume()
     {
