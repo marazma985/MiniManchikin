@@ -18,15 +18,45 @@ public sealed class EnemyData : ScriptableObject
     [SerializeField] private List<EnemyModifier> modifiers = new List<EnemyModifier>();
     [SerializeField] private List<EffectData> penaltyEffects = new List<EffectData>();
 
+    /// <summary>
+    /// Id монстра для сохранений и восстановления боя
+    /// </summary>
     public string EnemyId => enemyId;
+    /// <summary>
+    /// Имя монстра для окна боя и логов
+    /// </summary>
     public string EnemyName => enemyName;
+    /// <summary>
+    /// Картинка монстра для окна боя
+    /// </summary>
     public Sprite EnemySprite => enemySprite;
+    /// <summary>
+    /// Базовый уровень монстра без случайных модификаторов
+    /// </summary>
     public int BaseLevel => baseLevel;
+    /// <summary>
+    /// Старое имя уровня, оставленное для совместимости с прежней логикой
+    /// </summary>
     public int Level => baseLevel;
+    /// <summary>
+    /// Постоянный бонус силы монстра сверх базового уровня
+    /// </summary>
     public int BonusPower => bonusPower;
+    /// <summary>
+    /// Тип старого штрафа монстра
+    /// </summary>
     public MonsterPenaltyType PenaltyType => penaltyType;
+    /// <summary>
+    /// Значение старого штрафа монстра
+    /// </summary>
     public int PenaltyValue => penaltyValue;
+    /// <summary>
+    /// Список усилений, которые могут выпасть этому монстру
+    /// </summary>
     public IReadOnlyList<EnemyModifier> Modifiers => modifiers;
+    /// <summary>
+    /// Список эффектов, которые применяются при штрафе от монстра
+    /// </summary>
     public IReadOnlyList<EffectData> PenaltyEffects => penaltyEffects;
     /// <summary>
     /// Исправляет уровень монстра и настройки баланса после правок в инспекторе

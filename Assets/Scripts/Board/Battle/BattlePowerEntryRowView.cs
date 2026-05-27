@@ -16,6 +16,7 @@ public sealed class BattlePowerEntryRowView : MonoBehaviour
     /// <summary>
     /// Заполняет визуальный элемент свежими данными перед показом игроку
     /// </summary>
+    /// <param name="entry">Строка расчета силы, которую нужно показать</param>
     public void Bind(BattlePowerEntry entry)
     {
         EnsureReferences();
@@ -42,7 +43,7 @@ public sealed class BattlePowerEntryRowView : MonoBehaviour
             backgroundImage = GetComponent<Image>();
     }
     /// <summary>
-    /// Создает или находит то, без чего объект не сможет работать
+    /// Создает подпись и значение строки силы, если они еще не назначены
     /// </summary>
     private void EnsureReferences()
     {
@@ -67,6 +68,8 @@ public sealed class BattlePowerEntryRowView : MonoBehaviour
     /// <summary>
     /// Создает текстовую ячейку для строки расчета силы
     /// </summary>
+    /// <param name="textObjectName">Имя создаваемого текстового объекта</param>
+    /// <param name="alignment">Выравнивание текста внутри строки</param>
     private TextMeshProUGUI CreateText(string textObjectName, TextAlignmentOptions alignment)
     {
         var textObject = new GameObject(textObjectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
@@ -82,6 +85,8 @@ public sealed class BattlePowerEntryRowView : MonoBehaviour
     /// <summary>
     /// Настраивает текстовую ячейку строки силы: шрифт, цвет и выравнивание
     /// </summary>
+    /// <param name="text">TMP-текст, в который нужно подставить значение</param>
+    /// <param name="alignment">Выравнивание текста внутри строки</param>
     private void ConfigureText(TextMeshProUGUI text, TextAlignmentOptions alignment)
     {
         if (text == null)

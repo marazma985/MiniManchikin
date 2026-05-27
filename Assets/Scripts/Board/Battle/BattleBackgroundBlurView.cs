@@ -19,6 +19,8 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
     /// <summary>
     /// Передает камеру и материал, из которых будет собран размытый фон окна боя
     /// </summary>
+    /// <param name="newSourceCamera">Камера, с которой делается снимок фона</param>
+    /// <param name="newBlurMaterial">Материал размытия для снимка фона</param>
     public void Configure(Camera newSourceCamera, Material newBlurMaterial)
     {
         sourceCamera = newSourceCamera;
@@ -54,7 +56,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         captureHeight = Mathf.Max(64, captureHeight);
     }
     /// <summary>
-    /// Создает или находит то, без чего объект не сможет работать
+    /// Создает RawImage для размытого фона боя, если он еще не назначен
     /// </summary>
     private void EnsureBlurImage()
     {
@@ -84,7 +86,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         blurImage.transform.SetAsFirstSibling();
     }
     /// <summary>
-    /// Запоминает текущее состояние, чтобы его можно было сохранить
+    /// Делает снимок камеры в RenderTexture для размытого фона боя
     /// </summary>
     private void CaptureBackground()
     {
@@ -112,7 +114,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         }
     }
     /// <summary>
-    /// Запоминает текущее состояние, чтобы его можно было сохранить
+    /// Ждет конец кадра и затем делает снимок фона для окна боя
     /// </summary>
     private IEnumerator CaptureBackgroundAtEndOfFrame()
     {
@@ -121,7 +123,7 @@ public sealed class BattleBackgroundBlurView : MonoBehaviour
         captureRoutine = null;
     }
     /// <summary>
-    /// Создает или находит то, без чего объект не сможет работать
+    /// Создает RenderTexture нужного размера для снимка фона боя
     /// </summary>
     private void EnsureRenderTexture()
     {

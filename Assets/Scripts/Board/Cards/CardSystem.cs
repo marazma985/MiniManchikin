@@ -18,11 +18,18 @@ public sealed class CardSystem : MonoBehaviour
 
     public event Action<IReadOnlyList<CardData>> OnHandChanged;
 
+    /// <summary>
+    /// Карты, которые сейчас находятся в руке игрока
+    /// </summary>
     public IReadOnlyList<CardData> Hand => hand;
+    /// <summary>
+    /// Максимальное количество карт в руке
+    /// </summary>
     public int MaxCards => MaxHandSize;
     /// <summary>
     /// Заменяет руку игрока списком карт из сохранения
     /// </summary>
+    /// <param name="cards">Список карт, который нужно показать или сохранить в руке</param>
     public void SetHand(List<CardData> cards)
     {
         hand.Clear();
@@ -39,8 +46,9 @@ public sealed class CardSystem : MonoBehaviour
         NotifyHandChanged();
     }
     /// <summary>
-    /// Добавляет новый элемент в игровое состояние
+    /// Добавляет карту в руку игрока, если в руке есть место
     /// </summary>
+    /// <param name="card">Карта, которую нужно добавить в руку</param>
     public bool AddCard(CardData card)
     {
         if (card == null)
@@ -60,8 +68,9 @@ public sealed class CardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Удаляет элемент из игрового состояния
+    /// Удаляет указанную карту из руки игрока
     /// </summary>
+    /// <param name="card">Карта, которую нужно удалить из руки</param>
     public bool RemoveCard(CardData card)
     {
         if (card == null || !hand.Remove(card))
@@ -71,8 +80,9 @@ public sealed class CardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Удаляет элемент из игрового состояния
+    /// Удаляет случайную карту указанной редкости из руки игрока
     /// </summary>
+    /// <param name="rarity">Редкость карты для поиска или удаления</param>
     public bool RemoveRandomCard(Rarity rarity)
     {
         var matchingCards = new List<CardData>();
@@ -99,6 +109,7 @@ public sealed class CardSystem : MonoBehaviour
     /// <summary>
     /// Пытается применить выбранную карту из руки игрока
     /// </summary>
+    /// <param name="card">Карта из руки, которую игрок пытается применить</param>
     public bool UseCard(CardData card)
     {
         if (card == null || !hand.Contains(card))
@@ -139,8 +150,9 @@ public sealed class CardSystem : MonoBehaviour
         OnHandChanged?.Invoke(hand);
     }
     /// <summary>
-    /// Доводит текущую игровую ситуацию до следующего шага
+    /// Проверяет карту, применяет ее эффекты и обновляет бой при необходимости
     /// </summary>
+    /// <param name="card">Карта, которую нужно проверить и применить</param>
     private bool ResolveCard(CardData card)
     {
         if (!CanUseCardInCurrentContext(card))
@@ -158,8 +170,9 @@ public sealed class CardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Проверяет, можно ли сейчас выполнить это действие
+    /// Проверяет, разрешено ли использовать карту сейчас: на поле, в бою или везде
     /// </summary>
+    /// <param name="card">Карта, для которой проверяется место использования</param>
     private bool CanUseCardInCurrentContext(CardData card)
     {
         var isBattleActive = battleSystem != null && battleSystem.IsBattleActive;
@@ -185,8 +198,9 @@ public sealed class CardSystem : MonoBehaviour
         }
     }
     /// <summary>
-    /// Проверяет, можно ли сейчас выполнить это действие
+    /// Проверяет, можно ли применить все эффекты выбранной карты
     /// </summary>
+    /// <param name="card">Карта, эффекты которой нужно проверить</param>
     private bool CanApplyAllEffects(CardData card)
     {
         if (card.Effects == null || card.Effects.Count == 0)
@@ -204,8 +218,10 @@ public sealed class CardSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Проверяет, можно ли сейчас выполнить это действие
+    /// Проверяет, можно ли применить один эффект выбранной карты
     /// </summary>
+    /// <param name="card">Карта, к которой относится проверяемый эффект</param>
+    /// <param name="effect">Эффект карты, который нужно проверить</param>
     private bool CanApplyEffect(CardData card, EffectData effect)
     {
         if (effect == null)
@@ -245,6 +261,7 @@ public sealed class CardSystem : MonoBehaviour
     /// <summary>
     /// Применяет все эффекты выбранной карты по очереди
     /// </summary>
+    /// <param name="card">Карта, эффекты которой нужно применить</param>
     private bool ApplyAllEffects(CardData card)
     {
         for (var i = 0; i < card.Effects.Count; i++)
@@ -258,6 +275,7 @@ public sealed class CardSystem : MonoBehaviour
     /// <summary>
     /// Применяет один эффект карты к игроку, бою или полю
     /// </summary>
+    /// <param name="effect">Эффект карты, который нужно применить</param>
     private bool ApplyEffect(EffectData effect)
     {
         switch (effect.EffectType)
@@ -297,8 +315,10 @@ public sealed class CardSystem : MonoBehaviour
         }
     }
     /// <summary>
-    /// Проверяет, можно ли сейчас выполнить это действие
+    /// Проверяет, может ли карта сейчас переместить игрока к нужной клетке
     /// </summary>
+    /// <param name="card">Карта, которая пытается переместить игрока</param>
+    /// <param name="effect">Эффект перемещения, который нужно проверить</param>
     private bool CanApplyChangePosition(CardData card, EffectData effect)
     {
         if (battleSystem != null && battleSystem.IsBattleActive)
@@ -334,6 +354,7 @@ public sealed class CardSystem : MonoBehaviour
     /// <summary>
     /// Перемещает игрока на нужную клетку по эффекту карты
     /// </summary>
+    /// <param name="effect">Эффект перемещения, по которому выбирается целевая клетка</param>
     private bool ApplyChangePosition(EffectData effect)
     {
         if (!boardManager.TryGetForwardDistanceToNearestTileType(effect.TargetTileType, out var steps))
@@ -344,6 +365,8 @@ public sealed class CardSystem : MonoBehaviour
     /// <summary>
     /// Показывает подсказку о результате применения эффекта карты
     /// </summary>
+    /// <param name="effect">Эффект карты, о котором нужно показать подсказку</param>
+    /// <param name="status">Статус применения эффекта для подсказки</param>
     private void NotifyEffect(EffectData effect, EffectNotificationStatus status)
     {
         if (eventNotificationSystem != null)
@@ -352,6 +375,9 @@ public sealed class CardSystem : MonoBehaviour
     /// <summary>
     /// Показывает подсказку о результате эффекта карты с уже посчитанным числом
     /// </summary>
+    /// <param name="effect">Эффект карты, о котором нужно показать подсказку</param>
+    /// <param name="status">Статус применения эффекта для подсказки</param>
+    /// <param name="displayValue">Число, которое нужно показать в подсказке</param>
     private void NotifyEffect(EffectData effect, EffectNotificationStatus status, int displayValue)
     {
         if (eventNotificationSystem != null)

@@ -31,6 +31,9 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public event Action<CardData> Clicked;
     public event Action<CardData> RemoveClicked;
 
+    /// <summary>
+    /// Карта, которую сейчас показывает этот UI-слот
+    /// </summary>
     public CardData CurrentCard => currentCard;
     /// <summary>
     /// Подписывает карту на клики и готовит крестик удаления
@@ -65,6 +68,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// <summary>
     /// Подставляет карту в UI-слот и сразу обновляет ее вид
     /// </summary>
+    /// <param name="card">Карта, которую должен показать этот UI-слот</param>
     public void SetCard(CardData card)
     {
         currentCard = card;
@@ -109,8 +113,9 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
             RemoveClicked?.Invoke(currentCard);
     }
     /// <summary>
-    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
+    /// Показывает подсветку и крестик, когда мышь входит в область карты
     /// </summary>
+    /// <param name="eventData">Данные события наведения от Unity</param>
     public void OnPointerEnter(PointerEventData eventData)
     {
         isPointerOver = currentCard != null;
@@ -118,8 +123,9 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         SetCardHover(isPointerOver, false);
     }
     /// <summary>
-    /// Реагирует на мышь игрока и меняет вид элемента при наведении или нажатии
+    /// Скрывает подсветку и крестик, когда мышь уходит с карты
     /// </summary>
+    /// <param name="eventData">Данные события наведения от Unity</param>
     public void OnPointerExit(PointerEventData eventData)
     {
         isPointerOver = false;
@@ -142,6 +148,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// <summary>
     /// Проверяет, наведена ли мышь именно на эту карту
     /// </summary>
+    /// <param name="screenPosition">Позиция мыши на экране</param>
     private bool IsPointerOverCard(Vector2 screenPosition)
     {
         if (cardRectTransform == null)
@@ -166,6 +173,8 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// <summary>
     /// Включает или выключает подсветку карты при наведении
     /// </summary>
+    /// <param name="highlighted">Должна ли карта быть подсвечена</param>
+    /// <param name="instant">Нужно ли применить изменение сразу, без анимации</param>
     private void SetCardHover(bool highlighted, bool instant)
     {
         if (hoverOverlayImage == null)
@@ -189,6 +198,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// <summary>
     /// Плавно показывает или скрывает подсветку карты при наведении
     /// </summary>
+    /// <param name="targetAlpha">Прозрачность подсветки, к которой идет анимация</param>
     private IEnumerator FadeCardHover(float targetAlpha)
     {
         var startAlpha = hoverOverlayImage.color.a;
@@ -206,7 +216,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
         cardHoverFade = null;
     }
     /// <summary>
-    /// Создает или находит то, без чего объект не сможет работать
+    /// Создает слой подсветки поверх карты, если он еще не назначен
     /// </summary>
     private void EnsureHoverOverlay()
     {
@@ -240,6 +250,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// <summary>
     /// Подставляет спрайт подсветки поверх карты
     /// </summary>
+    /// <param name="sprite">Спрайт, который нужно показать</param>
     private void RefreshHoverOverlaySprite(Sprite sprite)
     {
         if (hoverOverlayImage == null)
@@ -253,6 +264,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// <summary>
     /// Меняет прозрачность подсветки карты через альфа-канал
     /// </summary>
+    /// <param name="alpha">Новая прозрачность через альфа-канал</param>
     private void SetHoverOverlayAlpha(float alpha)
     {
         if (hoverOverlayImage == null)
@@ -263,6 +275,8 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// <summary>
     /// Показывает или скрывает крестик удаления карты
     /// </summary>
+    /// <param name="visible">Должен ли крестик удаления карты быть видимым</param>
+    /// <param name="instant">Нужно ли применить изменение сразу, без анимации</param>
     private void SetRemoveButtonVisible(bool visible, bool instant)
     {
         if (removeButtonCanvasGroup == null)
@@ -291,6 +305,7 @@ public sealed class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// <summary>
     /// Плавно показывает или скрывает крестик удаления карты
     /// </summary>
+    /// <param name="targetAlpha">Прозрачность крестика, к которой идет анимация</param>
     private IEnumerator FadeRemoveButton(float targetAlpha)
     {
         var startAlpha = removeButtonCanvasGroup.alpha;

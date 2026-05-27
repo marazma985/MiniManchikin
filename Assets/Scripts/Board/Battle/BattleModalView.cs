@@ -1,4 +1,3 @@
-// e
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +6,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
-// о
 /// Показывает игроку окно боя, кнопки боя, статусные подсказки и таблицу силы игрока и врага
 /// </summary>
 
@@ -37,6 +35,7 @@ public sealed class BattleModalView : MonoBehaviour
     /// <summary>
     /// Показывает окно боя с монстром, силой сторон и доступными действиями
     /// </summary>
+    /// <param name="data">Данные, которыми нужно заполнить окно боя</param>
     public void Show(BattleModalData data)
     {
         if (data == null)
@@ -56,6 +55,8 @@ public sealed class BattleModalView : MonoBehaviour
     /// <summary>
     /// Обновляет текст состояния боя и подпись главной кнопки
     /// </summary>
+    /// <param name="status">Текст состояния боя для подсказки</param>
+    /// <param name="buttonText">Новая подпись главной кнопки</param>
     public void UpdateState(string status, string buttonText)
     {
         ShowPersistentStatus(status);
@@ -64,6 +65,7 @@ public sealed class BattleModalView : MonoBehaviour
     /// <summary>
     /// Меняет текст главной кнопки в окне боя
     /// </summary>
+    /// <param name="buttonText">Новая подпись главной кнопки</param>
     public void SetActionButtonText(string buttonText)
     {
         SetText(actionButtonText, buttonText);
@@ -71,6 +73,8 @@ public sealed class BattleModalView : MonoBehaviour
     /// <summary>
     /// Показывает временную подсказку в окне боя
     /// </summary>
+    /// <param name="message">Текст подсказки для игрока</param>
+    /// <param name="duration">Время показа подсказки в секундах</param>
     public void ShowTemporaryStatus(string message, float duration)
     {
         StopClearStatusRoutine();
@@ -87,6 +91,7 @@ public sealed class BattleModalView : MonoBehaviour
     /// <summary>
     /// Показывает постоянную подсказку в окне боя
     /// </summary>
+    /// <param name="message">Текст подсказки для игрока</param>
     public void ShowPersistentStatus(string message)
     {
         StopClearStatusRoutine();
@@ -134,8 +139,9 @@ public sealed class BattleModalView : MonoBehaviour
         ResolveRequested?.Invoke();
     }
     /// <summary>
-    /// Очищает данные или визуальное состояние этого элемента
+    /// Ждет указанное время и очищает временную подсказку боя
     /// </summary>
+    /// <param name="duration">Время показа подсказки в секундах</param>
     private IEnumerator ClearStatusAfter(float duration)
     {
         yield return new WaitForSecondsRealtime(duration);
@@ -156,6 +162,8 @@ public sealed class BattleModalView : MonoBehaviour
     /// <summary>
     /// Подставляет строку в TMP-текст, если ссылка на него задана
     /// </summary>
+    /// <param name="text">TMP-текст, в который нужно подставить значение</param>
+    /// <param name="value">Строка, которую нужно показать в тексте</param>
     private static void SetText(TextMeshProUGUI text, string value)
     {
         if (text != null)
@@ -164,6 +172,8 @@ public sealed class BattleModalView : MonoBehaviour
     /// <summary>
     /// Подставляет спрайт в Image и скрывает картинку, если спрайта нет
     /// </summary>
+    /// <param name="image">UI-картинка, в которую нужно подставить спрайт</param>
+    /// <param name="sprite">Спрайт, который нужно показать</param>
     private static void SetImage(Image image, Sprite sprite)
     {
         if (image == null)
@@ -175,6 +185,11 @@ public sealed class BattleModalView : MonoBehaviour
     /// <summary>
     /// Заполняет список строк, из которых складывается сила игрока или монстра
     /// </summary>
+    /// <param name="entries">Строки расчета силы</param>
+    /// <param name="listRoot">Контейнер, в котором создаются строки силы</param>
+    /// <param name="rowPrefab">Префаб одной строки силы</param>
+    /// <param name="fallbackText">Запасной текстовый вывод, если префабные строки не настроены</param>
+    /// <param name="childAlignment">Выравнивание строк внутри контейнера</param>
     private static void RenderPowerEntries(
         IReadOnlyList<BattlePowerEntry> entries,
         Transform listRoot,
@@ -221,6 +236,10 @@ public sealed class BattleModalView : MonoBehaviour
     /// <summary>
     /// Показывает итоговую силу в нижней строке расчета
     /// </summary>
+    /// <param name="label">Подпись, которую увидит игрок</param>
+    /// <param name="value">Итоговая сила, которую нужно показать</param>
+    /// <param name="totalRow">Префабная строка итоговой силы</param>
+    /// <param name="fallbackText">Запасной текстовый вывод, если префабные строки не настроены</param>
     private static void RenderTotal(string label, int value, BattlePowerTotalRowView totalRow, TextMeshProUGUI fallbackText)
     {
         if (totalRow != null)
@@ -245,6 +264,8 @@ public sealed class BattleModalView : MonoBehaviour
     /// <summary>
     /// Настраивает контейнер строк силы, чтобы новые строки выравнивались как нужно окну боя
     /// </summary>
+    /// <param name="listRoot">Контейнер, в котором создаются строки силы</param>
+    /// <param name="childAlignment">Выравнивание строк внутри контейнера</param>
     private static void ConfigurePowerListRoot(Transform listRoot, TextAnchor childAlignment)
     {
         var layoutGroup = listRoot.GetComponent<VerticalLayoutGroup>();
@@ -262,6 +283,7 @@ public sealed class BattleModalView : MonoBehaviour
     /// <summary>
     /// Собирает строки силы в один многострочный текст для старой версии окна боя
     /// </summary>
+    /// <param name="entries">Строки расчета силы</param>
     private static string FormatEntries(IReadOnlyList<BattlePowerEntry> entries)
     {
         if (entries == null || entries.Count == 0)

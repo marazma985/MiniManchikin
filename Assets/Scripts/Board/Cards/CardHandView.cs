@@ -54,6 +54,7 @@ public sealed class CardHandView : MonoBehaviour
     /// <summary>
     /// Перерисовывает карты в руке игрока
     /// </summary>
+    /// <param name="cards">Список карт, который нужно показать или сохранить в руке</param>
     private void Refresh(IReadOnlyList<CardData> cards)
     {
         if (cardViews == null)
@@ -82,6 +83,7 @@ public sealed class CardHandView : MonoBehaviour
     /// <summary>
     /// Передает выбранную игроком карту в систему карт
     /// </summary>
+    /// <param name="card">Карта, на которую нажал игрок</param>
     private void HandleCardClicked(CardData card)
     {
         if (cardSystem != null)
@@ -90,6 +92,7 @@ public sealed class CardHandView : MonoBehaviour
     /// <summary>
     /// Передает запрос игрока на удаление карты из руки
     /// </summary>
+    /// <param name="card">Карта, крестик которой нажал игрок</param>
     private void HandleCardRemoveClicked(CardData card)
     {
         if (cardSystem != null)

@@ -44,7 +44,13 @@ public sealed class BattleSystem : MonoBehaviour
 
     public event Action BattleStateChanged;
 
+    /// <summary>
+    /// Показывает, идет ли сейчас бой
+    /// </summary>
     public bool IsBattleActive => currentBattleData != null;
+    /// <summary>
+    /// Показывает, может ли игрок сейчас бросить боевой кубик
+    /// </summary>
     public bool CanUseBattleDice => IsBattleActive && phase == BattlePhase.WaitingForResolve && !battleDiceUsed && !escapeRollInProgress && GetPowerDifference() >= 0 && GetPowerDifference() < 6;
     /// <summary>
     /// Текущий этап боя: побег, награда, закрытие или обычное решение исхода
@@ -67,6 +73,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Начинает бой и подготавливает все, что игрок увидит в окне боя
     /// </summary>
+    /// <param name="onBattleCompleted">Действие, которое нужно вызвать после закрытия боя</param>
     public void StartBattle(Action onBattleCompleted)
     {
         // Проверки в начале не дают случайно запустить второй бой поверх уже открытого
@@ -174,6 +181,11 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Возвращает состояние игры из сохранения без новых случайных результатов
     /// </summary>
+    /// <param name="saveData">Сохраненные данные активного боя</param>
+    /// <param name="resolver">Каталог ассетов для восстановления сохраненных id</param>
+    /// <param name="restoredRewardSystem">Система наград, в которую нужно вернуть варианты награды</param>
+    /// <param name="rewardOptions">Сохраненные варианты награды после боя</param>
+    /// <param name="onBattleCompleted">Действие, которое нужно вызвать после закрытия боя</param>
     public void RestoreFromSave(
         BattleSaveData saveData,
         GameSaveContentResolver resolver,
@@ -234,6 +246,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Передает системе сохранений данные, которые можно будет найти по id
     /// </summary>
+    /// <param name="resolver">Каталог ассетов для восстановления сохраненных id</param>
     public void RegisterSaveContent(GameSaveContentResolver resolver)
     {
         if (resolver == null || enemies == null)
@@ -270,6 +283,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Дожидается анимации кубика и добавляет выпавшее число к силе игрока в бою
     /// </summary>
+    /// <param name="diceValue">Выпавшее значение боевого кубика</param>
     private IEnumerator ApplyBattleDiceAfterAnimation(int diceValue)
     {
         yield return DiceRollAnimationPlayer.PlayGlobalRoutine(diceValue, DiceRollAnimationContext.Battle);
@@ -288,8 +302,9 @@ public sealed class BattleSystem : MonoBehaviour
         BattleStateChanged?.Invoke();
     }
     /// <summary>
-    /// Добавляет новый элемент в игровое состояние
+    /// Добавляет игроку временный бонус силы от карты на время текущего боя
     /// </summary>
+    /// <param name="value">Размер бонуса силы от карты</param>
     public bool AddTemporaryCardPower(int value)
     {
         if (!IsBattleActive || value <= 0)
@@ -305,8 +320,9 @@ public sealed class BattleSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Добавляет новый элемент в игровое состояние
+    /// Добавляет игроку временный бонус к попытке побега на время текущего боя
     /// </summary>
+    /// <param name="value">Размер бонуса к попытке побега</param>
     public bool AddTemporaryEscapeBonus(int value)
     {
         if (!IsBattleActive || value <= 0)
@@ -324,6 +340,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Перерисовывает открытое окно боя без смены текущего монстра
     /// </summary>
+    /// <param name="status">Подсказка, которую нужно показать после обновления окна боя</param>
     public void RefreshCurrentBattleView(string status)
     {
         RefreshBattleModal(status);
@@ -399,6 +416,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Ждет анимацию кубика побега и затем применяет результат побега
     /// </summary>
+    /// <param name="escapeRoll">Выпавшее значение кубика побега</param>
     private IEnumerator ResolveEscapeAfterAnimation(int escapeRoll)
     {
         yield return DiceRollAnimationPlayer.PlayGlobalRoutine(escapeRoll, DiceRollAnimationContext.Escape);
@@ -428,7 +446,7 @@ public sealed class BattleSystem : MonoBehaviour
         BattleStateChanged?.Invoke();
     }
     /// <summary>
-    /// Доводит текущую игровую ситуацию до следующего шага
+    /// Завершает победу в бою и открывает выбор награды
     /// </summary>
     private void ResolveVictory()
     {
@@ -470,6 +488,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Применяет конкретный эффект штрафа от монстра
     /// </summary>
+    /// <param name="effect">Эффект штрафа монстра, который нужно применить</param>
     private void ApplyPenaltyEffect(EffectData effect)
     {
         if (effect == null)
@@ -497,6 +516,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Отнимает здоровье у игрока по штрафу монстра
     /// </summary>
+    /// <param name="value">Значение штрафа здоровья из эффекта монстра</param>
     private void ApplyHpPenalty(int value)
     {
         if (value >= 0)
@@ -522,6 +542,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Снижает уровень игрока по штрафу монстра
     /// </summary>
+    /// <param name="value">Значение штрафа уровня из эффекта монстра</param>
     private void ApplyLevelPenalty(int value)
     {
         if (value >= 0)
@@ -540,6 +561,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Удаляет карты из руки игрока по штрафу монстра
     /// </summary>
+    /// <param name="value">Количество карт, которое штраф пытается удалить</param>
     private void ApplyRemoveCardPenalty(int value)
     {
         if (cardSystem == null)
@@ -567,6 +589,8 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Выбирает, какие усиления получит монстр в этом бою
     /// </summary>
+    /// <param name="enemy">Монстр, с которым работает текущий бой</param>
+    /// <param name="selectedModifiers">Список усилений, выбранных для текущего боя</param>
     private void SelectRandomModifiers(EnemyData enemy, List<EnemyModifier> selectedModifiers)
     {
         selectedModifiers.Clear();
@@ -599,6 +623,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Возвращает прибавку силы от одного модификатора монстра
     /// </summary>
+    /// <param name="modifier">Усиление монстра</param>
     private static int GetModifierPower(EnemyModifier modifier)
     {
         if (modifier == null || modifier.Effects == null)
@@ -666,6 +691,8 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Восстанавливает модификаторы монстра по индексам из сохранения
     /// </summary>
+    /// <param name="enemy">Монстр, с которым работает текущий бой</param>
+    /// <param name="modifierIndexes">Индексы усилений монстра из сохранения</param>
     private void RestoreModifierIndexes(EnemyData enemy, IReadOnlyList<int> modifierIndexes)
     {
         if (enemy == null || enemy.Modifiers == null || modifierIndexes == null)
@@ -681,6 +708,9 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Возвращает на экран те же награды после продолжения сохранения
     /// </summary>
+    /// <param name="restoredRewardSystem">Система наград, в которую нужно вернуть варианты награды</param>
+    /// <param name="resolver">Каталог ассетов для восстановления сохраненных id</param>
+    /// <param name="rewardOptions">Сохраненные варианты награды после боя</param>
     private void RestoreBattleRewards(RewardSystem restoredRewardSystem, GameSaveContentResolver resolver, IReadOnlyList<RewardSaveData> rewardOptions)
     {
         if (restoredRewardSystem == null || resolver == null || rewardOptions == null)
@@ -733,6 +763,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Находит монстров, подходящих под текущую силу игрока
     /// </summary>
+    /// <param name="validEnemies">Монстры, из которых можно выбрать бой</param>
     private List<EnemyData> GetBalancedEnemies(IReadOnlyList<EnemyData> validEnemies)
     {
         var balancedEnemies = new List<EnemyData>();
@@ -761,6 +792,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Собирает данные, которые будут показаны в окне боя
     /// </summary>
+    /// <param name="enemy">Монстр, с которым работает текущий бой</param>
     private BattleModalData CreateBattleData(EnemyData enemy)
     {
         // Строки силы нужны, чтобы игрок видел из чего сложилась итоговая сила
@@ -809,6 +841,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Складывает все строки силы в одно итоговое число
     /// </summary>
+    /// <param name="entries">Строки расчета силы</param>
     private static int SumEntries(IReadOnlyList<BattlePowerEntry> entries)
     {
         var total = 0;
@@ -820,6 +853,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Собирает имена модификаторов монстра в строку через запятую
     /// </summary>
+    /// <param name="modifiers">Список модификаторов монстра</param>
     private static string FormatModifierNames(IReadOnlyList<EnemyModifier> modifiers)
     {
         if (modifiers == null || modifiers.Count == 0)
@@ -839,6 +873,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Выводит в консоль информацию о монстре и его возможных усилениях
     /// </summary>
+    /// <param name="enemy">Монстр, с которым работает текущий бой</param>
     private void LogBattleOpened(EnemyData enemy)
     {
         if (enemy == null)
@@ -863,6 +898,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Считает бонус нужного типа от надетых предметов
     /// </summary>
+    /// <param name="effectType">Тип эффекта для подсчета или подсказки</param>
     private int GetEquipmentEffectBonus(EffectType effectType)
     {
         return playerInventory != null ? playerInventory.GetTotalEffectValue(effectType) : 0;
@@ -870,6 +906,7 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Обновляет окно боя по текущему монстру, модификаторам и силе сторон
     /// </summary>
+    /// <param name="status">Подсказка, которую нужно показать в обновленном окне боя</param>
     private void RefreshBattleModal(string status)
     {
         if (currentEnemy == null || battleModalView == null)
@@ -885,6 +922,9 @@ public sealed class BattleSystem : MonoBehaviour
     /// <summary>
     /// Показывает всплывающую подсказку о штрафе, бонусе или другом эффекте боя
     /// </summary>
+    /// <param name="effectType">Тип эффекта для подсчета или подсказки</param>
+    /// <param name="value">Число эффекта, которое нужно показать в подсказке</param>
+    /// <param name="status">Статус применения эффекта для всплывающей подсказки</param>
     private void NotifyEffect(EffectType effectType, int value, EffectNotificationStatus status)
     {
         if (eventNotificationSystem != null)

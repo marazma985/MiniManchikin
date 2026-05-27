@@ -17,6 +17,8 @@ public sealed class BattlePowerTotalRowView : MonoBehaviour
     /// <summary>
     /// Заполняет визуальный элемент свежими данными перед показом игроку
     /// </summary>
+    /// <param name="label">Подпись, которую увидит игрок</param>
+    /// <param name="value">Итоговая сила, которую нужно показать</param>
     public void Bind(string label, int value)
     {
         EnsureReferences();
@@ -49,7 +51,7 @@ public sealed class BattlePowerTotalRowView : MonoBehaviour
         ConfigureText(valueText, TextAlignmentOptions.MidlineRight);
     }
     /// <summary>
-    /// Создает или находит то, без чего объект не сможет работать
+    /// Создает разделитель, подпись и значение итоговой строки силы, если они еще не назначены
     /// </summary>
     private void EnsureReferences()
     {
@@ -85,6 +87,8 @@ public sealed class BattlePowerTotalRowView : MonoBehaviour
     /// <summary>
     /// Создает текстовую ячейку для подписи или значения итоговой силы
     /// </summary>
+    /// <param name="textObjectName">Имя создаваемого текстового объекта</param>
+    /// <param name="alignment">Выравнивание текста внутри строки</param>
     private TextMeshProUGUI CreateText(string textObjectName, TextAlignmentOptions alignment)
     {
         var textObject = new GameObject(textObjectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
@@ -113,6 +117,8 @@ public sealed class BattlePowerTotalRowView : MonoBehaviour
     /// <summary>
     /// Настраивает текст итоговой строки силы: шрифт, цвет и выравнивание
     /// </summary>
+    /// <param name="text">TMP-текст, в который нужно подставить значение</param>
+    /// <param name="alignment">Выравнивание текста внутри строки</param>
     private void ConfigureText(TextMeshProUGUI text, TextAlignmentOptions alignment)
     {
         if (text == null)
