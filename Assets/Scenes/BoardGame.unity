@@ -5274,12 +5274,11 @@ MonoBehaviour:
   - effectType: 1
     icon: {fileID: 0}
     showNotification: 1
-    positiveMessageTemplate: "+{value} \u0445\u0438\u0442\u043F\u043E\u0438\u043D\u0442\u043E\u0432"
-    negativeMessageTemplate: "-{value}  \u0445\u0438\u0442\u043F\u043E\u0438\u043D\u0442\u043E\u0432"
-    blockedMessageTemplate: "\u041F\u043E\u0442\u0435\u0440\u044F \u0445\u0438\u0442\u043F\u043E\u0438\u043D\u0442\u043E\u0432
-      \u0437\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u043D\u0430"
+    positiveMessageTemplate: "+{value} \u0425\u041F"
+    negativeMessageTemplate: "-{value}  \u0425\u041F"
+    blockedMessageTemplate: "\u041F\u043E\u0442\u0435\u0440\u044F \u0425\u041F \u0437\u0430\u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u0430\u043D\u0430"
     noEffectMessageTemplate: "\u0412\u043E\u0441\u043F\u043E\u043B\u043D\u0435\u043D\u0438\u0435
-      \u0445\u0438\u0442\u043F\u043E\u0438\u043D\u0442\u043E\u0432"
+      \u0425\u041F"
     failedMessageTemplate: 
   - effectType: 2
     icon: {fileID: 0}
@@ -5295,8 +5294,8 @@ MonoBehaviour:
     positiveMessageTemplate: "+{value} \u0443\u0440\u043E\u0432\u0435\u043D\u044C"
     negativeMessageTemplate: "-{value} \u0443\u0440\u043E\u0432\u0435\u043D\u044C"
     blockedMessageTemplate: 
-    noEffectMessageTemplate: "\u041D\u0438\u0436\u0435 \u0443\u0436\u0435 \u043D\u0435\u043A\u0443\u0434\u0430
-      :("
+    noEffectMessageTemplate: "\u041C\u0435\u043D\u044C\u0448\u0435 \u0443\u0440\u043E\u0432\u043D\u044F
+      \u043D\u0435\u0442 :("
     failedMessageTemplate: 
   - effectType: 4
     icon: {fileID: 0}
