@@ -38,7 +38,7 @@ public sealed class BattleSystem : MonoBehaviour
     public event Action BattleStateChanged;
 
     public bool IsBattleActive => currentBattleData != null;
-    public bool CanUseBattleDice => IsBattleActive && phase == BattlePhase.WaitingForResolve && !battleDiceUsed && !escapeRollInProgress && GetPowerDifference() >= 0 && GetPowerDifference() <= 6;
+    public bool CanUseBattleDice => IsBattleActive && phase == BattlePhase.WaitingForResolve && !battleDiceUsed && !escapeRollInProgress && GetPowerDifference() >= 0 && GetPowerDifference() < 6;
 
     private enum BattlePhase
     {
