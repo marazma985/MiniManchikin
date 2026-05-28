@@ -67,39 +67,4 @@ public class BoardTile : MonoBehaviour
     {
         gameObject.name = $"Tile_{index:00}";
     }
-    /// <summary>
-    /// Рисует подсказку клетки в окне сцены Unity
-    /// </summary>
-    private void OnDrawGizmos()
-    {
-        var color = GetGizmoColor(tileType);
-        color.a = 0.35f;
-        Gizmos.color = color;
-        Gizmos.DrawCube(transform.position, new Vector3(1.8f, 0.8f, 0.05f));
-
-        color.a = 1f;
-        Gizmos.color = color;
-        Gizmos.DrawWireCube(transform.position, new Vector3(1.8f, 0.8f, 0.05f));
-    }
-    /// <summary>
-    /// Возвращает цвет gizmo для типа клетки в редакторе
-    /// </summary>
-    private static Color GetGizmoColor(TileType type)
-    {
-        switch (type)
-        {
-            case TileType.RandomEvent:
-                return new Color(1f, 0.75f, 0.2f);
-            case TileType.Debuff:
-                return new Color(0.55f, 0.2f, 0.9f);
-            case TileType.Battle:
-                return new Color(1f, 0.25f, 0.2f);
-            case TileType.RareEvent:
-                return new Color(0.2f, 0.75f, 1f);
-            case TileType.Buff:
-                return new Color(0.25f, 0.85f, 0.35f);
-            default:
-                return Color.white;
-        }
-    }
 }

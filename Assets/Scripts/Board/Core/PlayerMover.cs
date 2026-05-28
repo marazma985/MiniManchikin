@@ -52,13 +52,6 @@ public sealed class PlayerMover : MonoBehaviour
         moveCoroutine = StartCoroutine(MoveStepsRoutine(Mathf.Max(0, steps)));
     }
     /// <summary>
-    /// Подключает движение фишки к указанному менеджеру поля
-    /// </summary>
-    public void SetBoardManager(BoardManager newBoardManager)
-    {
-        boardManager = newBoardManager;
-    }
-    /// <summary>
     /// Мгновенно ставит фигурку игрока на текущую клетку поля
     /// </summary>
     public void SnapToCurrentTile()

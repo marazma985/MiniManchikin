@@ -57,16 +57,6 @@ public sealed class TurnSystem : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Подключает систему хода к кубику, фишке, полю и эффектам клеток
-    /// </summary>
-    public void SetSystems(DiceSystem newDiceSystem, PlayerMover newPlayerMover, BoardManager newBoardManager, TileEffectSystem newTileEffectSystem)
-    {
-        diceSystem = newDiceSystem;
-        playerMover = newPlayerMover;
-        boardManager = newBoardManager;
-        tileEffectSystem = newTileEffectSystem;
-    }
-    /// <summary>
     /// Собирает важные данные текущего состояния для файла сохранения
     /// </summary>
     public TurnSaveData CaptureSaveData()

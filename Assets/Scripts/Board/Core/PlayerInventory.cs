@@ -56,18 +56,6 @@ public sealed class PlayerInventory : MonoBehaviour
         return true;
     }
     /// <summary>
-    /// Очищает данные или визуальное состояние этого элемента
-    /// </summary>
-    public void ClearEquipment()
-    {
-        if (equippedItems.Count == 0)
-            return;
-
-        equippedItems.Clear();
-        Debug.Log("Equipment cleared.");
-        NotifyEquipmentChanged();
-    }
-    /// <summary>
     /// Заменяет экипировку игрока списком предметов из сохранения
     /// </summary>
     public void SetEquipment(IReadOnlyList<ItemData> items)

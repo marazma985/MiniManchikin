@@ -53,16 +53,6 @@ public sealed class BattleModalView : MonoBehaviour
         gameObject.SetActive(true);
     }
     /// <summary>
-    /// Обновляет текст состояния боя и подпись главной кнопки
-    /// </summary>
-    /// <param name="status">Текст состояния боя для подсказки</param>
-    /// <param name="buttonText">Новая подпись главной кнопки</param>
-    public void UpdateState(string status, string buttonText)
-    {
-        ShowPersistentStatus(status);
-        SetActionButtonText(buttonText);
-    }
-    /// <summary>
     /// Меняет текст главной кнопки в окне боя
     /// </summary>
     /// <param name="buttonText">Новая подпись главной кнопки</param>

@@ -34,32 +34,6 @@ public sealed class HudView : MonoBehaviour
         UnsubscribeSlots();
     }
     /// <summary>
-    /// Подключает HUD к здоровью и уровню указанного игрока
-    /// </summary>
-    public void SetPlayerStats(PlayerStats newPlayerStats)
-    {
-        if (playerStats == newPlayerStats)
-            return;
-
-        Unsubscribe();
-        playerStats = newPlayerStats;
-        Subscribe();
-        RefreshAll();
-    }
-    /// <summary>
-    /// Подключает HUD к экипировке указанного игрока
-    /// </summary>
-    public void SetPlayerInventory(PlayerInventory newPlayerInventory)
-    {
-        if (playerInventory == newPlayerInventory)
-            return;
-
-        UnsubscribeInventory();
-        playerInventory = newPlayerInventory;
-        SubscribeInventory();
-        RefreshSlots();
-    }
-    /// <summary>
     /// Полностью обновляет HUD игрока: здоровье, уровень и предметы
     /// </summary>
     public void RefreshAll()

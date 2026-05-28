@@ -4303,7 +4303,6 @@ MonoBehaviour:
   removeButtonCanvasGroup: {fileID: 2141000069}
   removeButtonFadeDuration: 0.15
   item: {fileID: 0}
-  itemIcon: {fileID: 0}
   emptyColor: {r: 1, g: 1, b: 1, a: 1}
   occupiedColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1097353837
@@ -4712,7 +4711,6 @@ MonoBehaviour:
   removeButtonCanvasGroup: {fileID: 2141000089}
   removeButtonFadeDuration: 0.15
   item: {fileID: 0}
-  itemIcon: {fileID: 0}
   emptyColor: {r: 1, g: 1, b: 1, a: 1}
   occupiedColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1225239075
@@ -7446,7 +7444,6 @@ MonoBehaviour:
   removeButtonCanvasGroup: {fileID: 2141000109}
   removeButtonFadeDuration: 0.15
   item: {fileID: 0}
-  itemIcon: {fileID: 0}
   emptyColor: {r: 1, g: 1, b: 1, a: 1}
   occupiedColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1907612431

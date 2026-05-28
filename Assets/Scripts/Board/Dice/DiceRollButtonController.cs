@@ -136,26 +136,6 @@ public sealed class DiceRollButtonController : MonoBehaviour, IPointerEnterHandl
         Debug.Log($"Dice rolled: {value}");
     }
     /// <summary>
-    /// Подключает кнопку кубика к указанной системе хода
-    /// </summary>
-    public void SetTurnSystem(TurnSystem newTurnSystem)
-    {
-        if (turnSystem != null && isActiveAndEnabled)
-        {
-            turnSystem.StateChanged -= HandleTurnStateChanged;
-            turnSystem.DiceRolled -= HandleDiceRolled;
-        }
-
-        turnSystem = newTurnSystem;
-
-        if (turnSystem != null && isActiveAndEnabled)
-        {
-            turnSystem.StateChanged += HandleTurnStateChanged;
-            turnSystem.DiceRolled += HandleDiceRolled;
-            HandleTurnStateChanged(turnSystem.State);
-        }
-    }
-    /// <summary>
     /// Подключает кнопку кубика к указанной системе боя
     /// </summary>
     public void SetBattleSystem(BattleSystem newBattleSystem)

@@ -17,7 +17,6 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
     [SerializeField] private CanvasGroup removeButtonCanvasGroup;
     [SerializeField, Min(0f)] private float removeButtonFadeDuration = 0.15f;
     [SerializeField] private ItemData item;
-    [SerializeField] private Sprite itemIcon;
     [SerializeField] private Color emptyColor = Color.white;
     [SerializeField] private Color occupiedColor = Color.white;
 
@@ -26,9 +25,9 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
 
     public event Action<ItemData> RemoveClicked;
 
-    public bool IsOccupied => item != null || itemIcon != null;
+    public bool IsOccupied => item != null;
     public ItemData Item => item;
-    public Sprite ItemIcon => item != null ? item.ItemSprite : itemIcon;
+    public Sprite ItemIcon => item != null ? item.ItemSprite : null;
     /// <summary>
     /// Подписывает крестик ячейки предмета на нажатие и обновляет вид
     /// </summary>
@@ -62,17 +61,6 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
     public void SetItem(ItemData newItem)
     {
         item = newItem;
-        itemIcon = null;
-        isPointerOver = false;
-        Refresh();
-    }
-    /// <summary>
-    /// Подставляет отдельную иконку в ячейку без привязки к предмету
-    /// </summary>
-    public void SetItemIcon(Sprite newItemIcon)
-    {
-        item = null;
-        itemIcon = newItemIcon;
         isPointerOver = false;
         Refresh();
     }
@@ -82,7 +70,6 @@ public sealed class InventorySlotView : MonoBehaviour, IPointerEnterHandler, IPo
     public void Clear()
     {
         item = null;
-        itemIcon = null;
         isPointerOver = false;
         Refresh();
     }

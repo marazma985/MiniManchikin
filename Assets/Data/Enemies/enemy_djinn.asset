@@ -17,8 +17,6 @@ MonoBehaviour:
   enemySprite: {fileID: 487474113782423144, guid: ad1bf1965d722ac4ba90cf5c0497c960, type: 3}
   baseLevel: 22
   bonusPower: 0
-  penaltyType: 0
-  penaltyValue: 1
   modifiers:
   - modifierName: "\u0414\u0440\u0435\u0432\u043D\u0438\u0439"
     effects:

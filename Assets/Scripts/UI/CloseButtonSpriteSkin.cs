@@ -35,21 +35,6 @@ public sealed class CloseButtonSpriteSkin : MonoBehaviour
         ResolveReferences();
     }
     /// <summary>
-    /// Добавляет выбранной кнопке визуал нового крестика
-    /// </summary>
-    public static void ApplyTo(Button targetButton)
-    {
-        if (targetButton == null)
-            return;
-
-        var skin = targetButton.GetComponent<CloseButtonSpriteSkin>();
-        if (skin == null)
-            skin = targetButton.gameObject.AddComponent<CloseButtonSpriteSkin>();
-
-        skin.button = targetButton;
-        skin.Apply();
-    }
-    /// <summary>
     /// Настраивает кнопку закрытия на обычный и hover-спрайт крестика
     /// </summary>
     public void Apply()

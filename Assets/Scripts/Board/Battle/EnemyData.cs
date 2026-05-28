@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 /// <summary>
 /// Настройки конкретного монстра: его имя, картинка, уровень, возможные усиления, награды и штрафы
 /// </summary>
@@ -11,10 +10,8 @@ public sealed class EnemyData : ScriptableObject
     [SerializeField] private string enemyId;
     [SerializeField] private string enemyName;
     [SerializeField] private Sprite enemySprite;
-    [SerializeField, FormerlySerializedAs("level"), Min(1)] private int baseLevel = 1;
+    [SerializeField, Min(1)] private int baseLevel = 1;
     [SerializeField, Min(0)] private int bonusPower;
-    [SerializeField] private MonsterPenaltyType penaltyType;
-    [SerializeField, Min(0)] private int penaltyValue = 1;
     [SerializeField] private List<EnemyModifier> modifiers = new List<EnemyModifier>();
     [SerializeField] private List<EffectData> penaltyEffects = new List<EffectData>();
 
@@ -35,21 +32,9 @@ public sealed class EnemyData : ScriptableObject
     /// </summary>
     public int BaseLevel => baseLevel;
     /// <summary>
-    /// Старое имя уровня, оставленное для совместимости с прежней логикой
-    /// </summary>
-    public int Level => baseLevel;
-    /// <summary>
     /// Постоянный бонус силы монстра сверх базового уровня
     /// </summary>
     public int BonusPower => bonusPower;
-    /// <summary>
-    /// Тип старого штрафа монстра
-    /// </summary>
-    public MonsterPenaltyType PenaltyType => penaltyType;
-    /// <summary>
-    /// Значение старого штрафа монстра
-    /// </summary>
-    public int PenaltyValue => penaltyValue;
     /// <summary>
     /// Список усилений, которые могут выпасть этому монстру
     /// </summary>
@@ -65,7 +50,6 @@ public sealed class EnemyData : ScriptableObject
     {
         baseLevel = Mathf.Max(1, baseLevel);
         bonusPower = Mathf.Max(0, bonusPower);
-        penaltyValue = Mathf.Max(0, penaltyValue);
         if (modifiers == null)
             modifiers = new List<EnemyModifier>();
         if (penaltyEffects == null)
