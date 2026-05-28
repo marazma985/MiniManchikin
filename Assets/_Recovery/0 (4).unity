@@ -830,11 +830,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 200684498}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a86001b013d50404f8eb4df527ab2c30, type: 3}
+  m_Script: {fileID: 11500000, guid: 9fed715271bd4a8dbf6f5c8cadc14222, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BoardTile
+  m_EditorClassIdentifier: Assembly-CSharp::DebuffTile
   index: 7
-  tileType: 4
   entered:
     m_PersistentCalls:
       m_Calls: []
@@ -881,11 +880,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 201410751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a86001b013d50404f8eb4df527ab2c30, type: 3}
+  m_Script: {fileID: 11500000, guid: 064fe3513b974ed2a0e494a514b1cf0d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BoardTile
+  m_EditorClassIdentifier: Assembly-CSharp::BattleTile
   index: 9
-  tileType: 2
   entered:
     m_PersistentCalls:
       m_Calls: []
@@ -1847,11 +1845,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 395492562}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a86001b013d50404f8eb4df527ab2c30, type: 3}
+  m_Script: {fileID: 11500000, guid: 064fe3513b974ed2a0e494a514b1cf0d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BoardTile
+  m_EditorClassIdentifier: Assembly-CSharp::BattleTile
   index: 3
-  tileType: 2
   entered:
     m_PersistentCalls:
       m_Calls: []
@@ -2527,11 +2524,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 625262726}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a86001b013d50404f8eb4df527ab2c30, type: 3}
+  m_Script: {fileID: 11500000, guid: c48c1df0df39458399574ab631ce0c37, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BoardTile
+  m_EditorClassIdentifier: Assembly-CSharp::BuffTile
   index: 8
-  tileType: 3
   entered:
     m_PersistentCalls:
       m_Calls: []
@@ -2578,11 +2574,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 633469384}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a86001b013d50404f8eb4df527ab2c30, type: 3}
+  m_Script: {fileID: 11500000, guid: c48c1df0df39458399574ab631ce0c37, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BoardTile
+  m_EditorClassIdentifier: Assembly-CSharp::BuffTile
   index: 5
-  tileType: 3
   entered:
     m_PersistentCalls:
       m_Calls: []
@@ -2721,11 +2716,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 749592871}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a86001b013d50404f8eb4df527ab2c30, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d3cf2e940664bb1aebf85f3f8ec7c4d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BoardTile
+  m_EditorClassIdentifier: Assembly-CSharp::RareTile
   index: 0
-  tileType: 1
   entered:
     m_PersistentCalls:
       m_Calls: []
@@ -3395,11 +3389,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 876559913}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a86001b013d50404f8eb4df527ab2c30, type: 3}
+  m_Script: {fileID: 11500000, guid: 064fe3513b974ed2a0e494a514b1cf0d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BoardTile
+  m_EditorClassIdentifier: Assembly-CSharp::BattleTile
   index: 6
-  tileType: 2
   entered:
     m_PersistentCalls:
       m_Calls: []
@@ -3697,11 +3690,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000925890}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a86001b013d50404f8eb4df527ab2c30, type: 3}
+  m_Script: {fileID: 11500000, guid: 707e9def66cf4212b1954cf5e5565b51, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BoardTile
+  m_EditorClassIdentifier: Assembly-CSharp::RandomEventTile
   index: 4
-  tileType: 0
   entered:
     m_PersistentCalls:
       m_Calls: []
@@ -4069,11 +4061,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1087986375}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a86001b013d50404f8eb4df527ab2c30, type: 3}
+  m_Script: {fileID: 11500000, guid: c48c1df0df39458399574ab631ce0c37, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BoardTile
+  m_EditorClassIdentifier: Assembly-CSharp::BuffTile
   index: 1
-  tileType: 3
   entered:
     m_PersistentCalls:
       m_Calls: []
@@ -4476,11 +4467,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1207298098}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a86001b013d50404f8eb4df527ab2c30, type: 3}
+  m_Script: {fileID: 11500000, guid: 9fed715271bd4a8dbf6f5c8cadc14222, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BoardTile
+  m_EditorClassIdentifier: Assembly-CSharp::DebuffTile
   index: 2
-  tileType: 4
   entered:
     m_PersistentCalls:
       m_Calls: []
@@ -4867,7 +4857,7 @@ MonoBehaviour:
     value: 1
     contentId: 
     rarityFilter: 0
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0
@@ -4876,7 +4866,7 @@ MonoBehaviour:
     value: 2
     contentId: 
     rarityFilter: 0
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0
@@ -4885,7 +4875,7 @@ MonoBehaviour:
     value: 1
     contentId: 
     rarityFilter: 0
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 1
     isInstant: 0
@@ -4894,7 +4884,7 @@ MonoBehaviour:
     value: 1
     contentId: 
     rarityFilter: 0
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0
@@ -4904,7 +4894,7 @@ MonoBehaviour:
     value: -1
     contentId: 
     rarityFilter: 0
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0
@@ -4913,7 +4903,7 @@ MonoBehaviour:
     value: -2
     contentId: 
     rarityFilter: 0
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0
@@ -4922,7 +4912,7 @@ MonoBehaviour:
     value: -1
     contentId: 
     rarityFilter: 0
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0
@@ -4931,7 +4921,7 @@ MonoBehaviour:
     value: 1
     contentId: 
     rarityFilter: 0
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 1
     isInstant: 0
@@ -4941,7 +4931,7 @@ MonoBehaviour:
     value: 1
     contentId: 
     rarityFilter: 1
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 1
     isInstant: 0
@@ -4950,7 +4940,7 @@ MonoBehaviour:
     value: 1
     contentId: 
     rarityFilter: 1
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 1
     isInstant: 0
@@ -4959,7 +4949,7 @@ MonoBehaviour:
     value: 0
     contentId: 
     rarityFilter: 0
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0
@@ -4968,7 +4958,7 @@ MonoBehaviour:
     value: 2
     contentId: 
     rarityFilter: 0
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0

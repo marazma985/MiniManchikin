@@ -24,7 +24,7 @@ MonoBehaviour:
       value: 2
       contentId: 
       rarityFilter: 0
-      targetTileType: 0
+      targetTileId: ""
       useNearestMatchingTile: 0
       useRandomTarget: 0
       isInstant: 0
@@ -35,7 +35,7 @@ MonoBehaviour:
       value: 2
       contentId: 
       rarityFilter: 0
-      targetTileType: 0
+      targetTileId: ""
       useNearestMatchingTile: 0
       useRandomTarget: 0
       isInstant: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
     value: -1
     contentId: 
     rarityFilter: 0
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0

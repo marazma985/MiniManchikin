@@ -41,26 +41,10 @@ public sealed class TileEffectSystem : MonoBehaviour
     };
 
     private readonly EffectResolver effectResolver = new EffectResolver();
-    private readonly HealTileEffect healTileEffect = new HealTileEffect();
-    private readonly DebuffTileEffect debuffTileEffect = new DebuffTileEffect();
-    private readonly BattleTileEffect battleTileEffect = new BattleTileEffect();
-    private readonly EventTileEffect eventTileEffect = new EventTileEffect();
-    private readonly RareTileEffect rareTileEffect = new RareTileEffect();
-    private readonly BuffTileEffect buffTileEffect = new BuffTileEffect();
-    private readonly Dictionary<TileType, ITileEffect> effectsByTileType = new Dictionary<TileType, ITileEffect>();
+    private TileResolutionContext resolutionContext;
 
     public event Action<BoardTile> TileResolving;
     public event Action<BoardTile> TileResolved;
-    /// <summary>
-    /// Передает данные другой системе, чтобы она могла ими пользоваться
-    /// </summary>
-    public void RegisterEffect(TileType tileType, ITileEffect effect)
-    {
-        if (effect == null)
-            return;
-
-        effectsByTileType[tileType] = effect;
-    }
     /// <summary>
     /// Передает системе сохранений данные, которые можно будет найти по id
     /// </summary>
@@ -89,15 +73,11 @@ public sealed class TileEffectSystem : MonoBehaviour
 
         if (tile != null)
         {
+            EnsureDefaultEvents();
+            InitializeContext();
             tile.Enter();
-            var effect = GetEffect(tile.TileType);
-            if (effect is IDeferredTileEffect deferredTileEffect)
-            {
-                deferredTileEffect.Resolve(tile, () => CompleteTileResolution(tile, onResolved));
-                return;
-            }
-
-            effect.Resolve(tile);
+            tile.Resolve(resolutionContext, () => CompleteTileResolution(tile, onResolved));
+            return;
         }
         else
         {
@@ -120,7 +100,7 @@ public sealed class TileEffectSystem : MonoBehaviour
     private void Awake()
     {
         EnsureDefaultEvents();
-        InitializeEffects();
+        InitializeContext();
     }
     /// <summary>
     /// Пересобирает обработчики клеток после правок в инспекторе
@@ -128,40 +108,18 @@ public sealed class TileEffectSystem : MonoBehaviour
     private void OnValidate()
     {
         EnsureDefaultEvents();
-        InitializeEffects();
-    }
-    /// <summary>
-    /// Возвращает обработчик эффекта для типа клетки
-    /// </summary>
-    private ITileEffect GetEffect(TileType tileType)
-    {
-        if (effectsByTileType.Count == 0)
-            InitializeEffects();
-
-        return effectsByTileType.TryGetValue(tileType, out var effect) ? effect : eventTileEffect;
+        InitializeContext();
     }
     /// <summary>
     /// Подготавливает объект к работе
     /// </summary>
-    private void InitializeEffects()
+    private void InitializeContext()
     {
         var resolvedSingleRewardSystem = ResolveSingleRewardSystem();
         var resolvedEventNotificationSystem = ResolveEventNotificationSystem();
 
-        effectsByTileType.Clear();
         effectResolver.Configure(playerStats, playerInventory, cardSystem, resolvedSingleRewardSystem, resolvedEventNotificationSystem, possibleCommonCards, possibleRareCards, possibleRareItems);
-        eventTileEffect.Configure(effectResolver, buffEvents, debuffEvents);
-        buffTileEffect.Configure(effectResolver, buffEvents);
-        debuffTileEffect.Configure(effectResolver, debuffEvents);
-        rareTileEffect.Configure(effectResolver, rareEvents);
-        battleTileEffect.SetBattleSystem(battleSystem);
-        RegisterEffect(TileType.RandomEvent, eventTileEffect);
-        RegisterEffect(TileType.RareEvent, rareTileEffect);
-        RegisterEffect(TileType.Battle, battleTileEffect);
-        RegisterEffect(TileType.Buff, buffTileEffect);
-        RegisterEffect(TileType.Debuff, debuffTileEffect);
-
-        _ = healTileEffect;
+        resolutionContext = new TileResolutionContext(battleSystem, effectResolver, buffEvents, debuffEvents, rareEvents);
     }
     /// <summary>
     /// Доводит текущую игровую ситуацию до следующего шага

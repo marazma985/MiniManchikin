@@ -24,7 +24,7 @@ MonoBehaviour:
     value: 4
     contentId: 
     rarityFilter: 0
-    targetTileType: 0
+    targetTileId: ""
     useNearestMatchingTile: 0
     useRandomTarget: 0
     isInstant: 0

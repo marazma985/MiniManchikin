@@ -67,13 +67,13 @@ public sealed class BoardManager : MonoBehaviour
         currentIndex = cyclePath && tiles.Count > 0 ? WrapIndex(index) : Mathf.Max(0, index);
     }
     /// <summary>
-    /// Ищет ближайшую впереди клетку нужного типа и возвращает расстояние до нее
+    /// Ищет ближайшую впереди клетку по запросу и возвращает расстояние до нее
     /// </summary>
-    public bool TryGetForwardDistanceToNearestTileType(TileType tileType, out int steps)
+    public bool TryGetForwardDistanceToNearestTile(TileTargetQuery query, out int steps)
     {
         steps = 0;
 
-        if (tiles.Count == 0)
+        if (tiles.Count == 0 || query == null || !query.IsValid)
             return false;
 
         var maxSteps = cyclePath ? tiles.Count : tiles.Count - currentIndex - 1;
@@ -83,7 +83,7 @@ public sealed class BoardManager : MonoBehaviour
             if (tile == null)
                 continue;
 
-            if (tile.TileType != tileType)
+            if (!tile.Matches(query))
                 continue;
 
             steps = step;
