@@ -345,17 +345,17 @@ public sealed class CardSystem : MonoBehaviour
             return false;
         }
 
-        var targetQuery = effect.TargetTileQuery;
-        if (targetQuery == null || !targetQuery.IsValid)
+        var targetTileType = effect.TargetTileType;
+        if (targetTileType == TileType.None)
         {
             Debug.LogWarning($"Card '{card.CardName}' movement effect has no target tile.");
             return false;
         }
 
-        if (boardManager.TryGetForwardDistanceToNearestTile(targetQuery, out _))
+        if (boardManager.TryGetForwardDistanceToNearestTile(targetTileType, out _))
             return true;
 
-        Debug.LogWarning($"Card '{card.CardName}' could not find a {targetQuery.Description} tile.");
+        Debug.LogWarning($"Card '{card.CardName}' could not find a {targetTileType} tile.");
         return false;
     }
     /// <summary>
@@ -364,7 +364,7 @@ public sealed class CardSystem : MonoBehaviour
     /// <param name="effect">Эффект перемещения, по которому выбирается целевая клетка</param>
     private bool ApplyChangePosition(EffectData effect)
     {
-        if (!boardManager.TryGetForwardDistanceToNearestTile(effect.TargetTileQuery, out var steps))
+        if (!boardManager.TryGetForwardDistanceToNearestTile(effect.TargetTileType, out var steps))
             return false;
 
         return turnSystem.TryMoveFixedSteps(steps);

@@ -2,10 +2,7 @@ using System;
 
 public sealed class RareTile : BoardTile
 {
-    public override bool MatchesTargetId(string targetTileId)
-    {
-        return TileTargetIds.Matches(targetTileId, TileTargetIds.RareEvent);
-    }
+    public override TileType Type => TileType.RareEvent;
 
     public override void Resolve(TileResolutionContext context, Action onResolved)
     {

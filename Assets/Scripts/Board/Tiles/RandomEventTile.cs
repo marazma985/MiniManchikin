@@ -3,10 +3,7 @@ using System.Collections.Generic;
 
 public sealed class RandomEventTile : BoardTile
 {
-    public override bool MatchesTargetId(string targetTileId)
-    {
-        return TileTargetIds.Matches(targetTileId, TileTargetIds.RandomEvent);
-    }
+    public override TileType Type => TileType.RandomEvent;
 
     public override void Resolve(TileResolutionContext context, Action onResolved)
     {

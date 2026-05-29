@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 
+/// <summary>
+/// класс для предоставления данных и систем для выполнения действия (объект-контейнер с зависимостями)
+/// </summary>
 public sealed class TileResolutionContext
 {
     public TileResolutionContext(

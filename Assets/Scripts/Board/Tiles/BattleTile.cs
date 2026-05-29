@@ -3,10 +3,7 @@ using UnityEngine;
 
 public sealed class BattleTile : BoardTile
 {
-    public override bool MatchesTargetId(string targetTileId)
-    {
-        return TileTargetIds.Matches(targetTileId, TileTargetIds.Battle);
-    }
+    public override TileType Type => TileType.Battle;
 
     public override void Resolve(TileResolutionContext context, Action onResolved)
     {

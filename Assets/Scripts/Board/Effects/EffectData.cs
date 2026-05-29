@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 /// <summary>
 /// Описание одного игрового эффекта: лечение, урон, уровень, награда, перемещение или бонус
 /// </summary>
@@ -11,7 +12,7 @@ public sealed class EffectData
     [SerializeField] private int value;
     [SerializeField] private string contentId;
     [SerializeField] private Rarity rarityFilter;
-    [SerializeField] private string targetTileId;
+    [SerializeField, FormerlySerializedAs("targetTileId")] private TileType targetTileType;
     [SerializeField] private bool useNearestMatchingTile;
     [SerializeField] private bool useRandomTarget;
     [SerializeField] private bool isInstant;
@@ -55,8 +56,7 @@ public sealed class EffectData
     public int Value => value;
     public string ContentId => contentId;
     public Rarity RarityFilter => rarityFilter;
-    public string TargetTileId => targetTileId;
-    public TileTargetQuery TargetTileQuery => TileTargetQuery.ForId(targetTileId);
+    public TileType TargetTileType => targetTileType;
     public bool UseNearestMatchingTile => useNearestMatchingTile;
     public bool UseRandomTarget => useRandomTarget;
     public bool IsInstant => isInstant;

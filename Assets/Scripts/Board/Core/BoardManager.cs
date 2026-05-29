@@ -69,11 +69,11 @@ public sealed class BoardManager : MonoBehaviour
     /// <summary>
     /// Ищет ближайшую впереди клетку по запросу и возвращает расстояние до нее
     /// </summary>
-    public bool TryGetForwardDistanceToNearestTile(TileTargetQuery query, out int steps)
+    public bool TryGetForwardDistanceToNearestTile(TileType targetTileType, out int steps)
     {
         steps = 0;
 
-        if (tiles.Count == 0 || query == null || !query.IsValid)
+        if (tiles.Count == 0 || targetTileType == TileType.None)
             return false;
 
         var maxSteps = cyclePath ? tiles.Count : tiles.Count - currentIndex - 1;
@@ -83,7 +83,7 @@ public sealed class BoardManager : MonoBehaviour
             if (tile == null)
                 continue;
 
-            if (!tile.Matches(query))
+            if (!tile.Matches(targetTileType))
                 continue;
 
             steps = step;

@@ -2,10 +2,7 @@ using System;
 
 public sealed class BuffTile : BoardTile
 {
-    public override bool MatchesTargetId(string targetTileId)
-    {
-        return TileTargetIds.Matches(targetTileId, TileTargetIds.Buff);
-    }
+    public override TileType Type => TileType.Buff;
 
     public override void Resolve(TileResolutionContext context, Action onResolved)
     {

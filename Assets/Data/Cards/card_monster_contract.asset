@@ -24,7 +24,7 @@ MonoBehaviour:
     value: 0
     contentId: 
     rarityFilter: 0
-    targetTileId: Battle
+    targetTileType: 3
     useNearestMatchingTile: 1
     useRandomTarget: 0
     isInstant: 0
