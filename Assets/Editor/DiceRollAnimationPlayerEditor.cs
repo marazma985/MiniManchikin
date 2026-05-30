@@ -4,8 +4,8 @@ using UnityEngine;
 [CustomEditor(typeof(DiceRollAnimationPlayer))]
 public sealed class DiceRollAnimationPlayerEditor : Editor
 {
-    private SerializedProperty diceFolderRelativeToAssets;
-    private SerializedProperty diceFileNameFormat;
+    private SerializedProperty clipsResourcePath;
+    private SerializedProperty rollClips;
     private SerializedProperty boardAnimation;
     private SerializedProperty battleAnimation;
     private SerializedProperty escapeAnimation;
@@ -13,8 +13,8 @@ public sealed class DiceRollAnimationPlayerEditor : Editor
 
     private void OnEnable()
     {
-        diceFolderRelativeToAssets = serializedObject.FindProperty("diceFolderRelativeToAssets");
-        diceFileNameFormat = serializedObject.FindProperty("diceFileNameFormat");
+        clipsResourcePath = serializedObject.FindProperty("clipsResourcePath");
+        rollClips = serializedObject.FindProperty("rollClips");
         boardAnimation = serializedObject.FindProperty("boardAnimation");
         battleAnimation = serializedObject.FindProperty("battleAnimation");
         escapeAnimation = serializedObject.FindProperty("escapeAnimation");
@@ -25,9 +25,15 @@ public sealed class DiceRollAnimationPlayerEditor : Editor
     {
         serializedObject.Update();
 
-        EditorGUILayout.PropertyField(diceFolderRelativeToAssets);
-        EditorGUILayout.PropertyField(diceFileNameFormat);
+        EditorGUILayout.PropertyField(clipsResourcePath);
+        EditorGUILayout.PropertyField(rollClips, true);
         EditorGUILayout.PropertyField(fallbackDisplaySeconds);
+
+        using (new EditorGUILayout.HorizontalScope())
+        {
+            if (GUILayout.Button("Rebuild Animation Clips"))
+                DiceRollAnimationAssetBuilder.Rebuild();
+        }
 
         DrawAnimationBlock(boardAnimation, "Test Board Animation", player => player.TestBoardAnimation());
         DrawAnimationBlock(battleAnimation, "Test Battle Animation", player => player.TestBattleAnimation());
